@@ -24,7 +24,7 @@ upgrades = [
     ItemData(OFFSET.UPGRADES + 1, "Reinforced index finger", ItemClassification.useful),
     ItemData(OFFSET.UPGRADES + 2, "Carpal tunnel prevention cream", ItemClassification.useful),
     ItemData(OFFSET.UPGRADES + 3, "Ambidextrous", ItemClassification.useful),
-    ItemData(OFFSET.UPGRADES + 4, "Thousand fingers", ItemClassification.useful),
+    # Thousand fingers
     ItemData(OFFSET.UPGRADES + 5, "Million fingers", ItemClassification.useful),
     ItemData(OFFSET.UPGRADES + 6, "Billion fingers", ItemClassification.useful),
     ItemData(OFFSET.UPGRADES + 7, "Trillion fingers", ItemClassification.useful),
@@ -471,7 +471,11 @@ building_fortunes = [
     ItemData(OFFSET.UPGRADES + 862, "Fortune #020", ItemClassification.useful),
 ]
 
-synergies = [
+can_become_progressive = [
+    ItemData(OFFSET.UPGRADES + 4, "Thousand fingers", ItemClassification.useful),
+    # Not in the default item pool for now
+    # ItemData(OFFSET.UPGRADES + 288, "Starter kit", ItemClassification.useful),
+
     # Tier I
     ItemData(OFFSET.UPGRADES + 370, "Future almanacs", ItemClassification.useful),
     ItemData(OFFSET.UPGRADES + 372, "Seismic magic", ItemClassification.useful),
@@ -521,16 +525,18 @@ cookie_multiplier = [
     ItemData(OFFSET.FILLERS + 1, "Random Cookie Multiplier 999x", ItemClassification.filler),
     ItemData(OFFSET.FILLERS + 2, "Random Cookie Multiplier 9999x", ItemClassification.filler),
     ItemData(OFFSET.FILLERS + 3, "Random Cookie Multiplier 9999999x", ItemClassification.filler),
-    ItemData(OFFSET.FILLERS + 4, "Random Cookie Multiplier 0.5x", ItemClassification.filler)
+    # ItemData(OFFSET.FILLERS + 4, "Random Cookie Multiplier 0.5x", ItemClassification.filler),
+    ItemData(OFFSET.FILLERS + 5, "Random Cookie Multiplier 10x", ItemClassification.filler),
     # ItemData(42069649, "No Cookies for U", ItemClassification.filler)
 ]
 
 cookie_multiplier_weights = {
     "Random Cookie Multiplier 2x": 50,
+    "Random Cookie Multiplier 10x": 10,
     "Random Cookie Multiplier 999x": 25,
     "Random Cookie Multiplier 9999x": 10,
     "Random Cookie Multiplier 9999999x": 5,
-    "Random Cookie Multiplier 0.5x": 10,
+    # "Random Cookie Multiplier 0.5x": 10,
     # "No Cookies for U": 50
 }
 
@@ -576,7 +582,8 @@ structures = [
 ]
 
 progressive_structures = [
-    # Cursor and grandmas don't have synergy upgrades
+    ItemData(OFFSET.BUILDINGS + 0, "Progressive Cursor", ItemClassification.progression),
+    # Grandmas don't have synergy upgrades
     ItemData(OFFSET.BUILDINGS + 2, "Progressive Farm", ItemClassification.progression),
     ItemData(OFFSET.BUILDINGS + 3, "Progressive Mine", ItemClassification.progression),
     ItemData(OFFSET.BUILDINGS + 4, "Progressive Factory", ItemClassification.progression),
@@ -599,7 +606,7 @@ progressive_structures = [
 
 item_list = []
 item_list += upgrades
-item_list += synergies
+item_list += can_become_progressive
 item_list += cookie_multiplier
 item_list += traps
 item_list += structures

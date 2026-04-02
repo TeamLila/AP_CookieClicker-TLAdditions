@@ -640,7 +640,7 @@ achievements = {
     "All hail Santa": 42069111,
     "Let it snow": 42069112,
     "Oh deer": 42069113,
-    "Sleigh of hand]": 42069114,
+    "Sleigh of hand": 42069114,
     "Reindeer sleigher": 42069115,
     "Eldeer": 42069266,
     "Baby it's old outside": 42069581,

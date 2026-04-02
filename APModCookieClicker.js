@@ -57,8 +57,8 @@ apMenuContainer.id = "apMenu";
 apMenuContainer.innerHTML = `
    <div id="apMenuArrow"> < </div>
    <form id="apConnectionForm">
-    <span>Connect to your AP server </span>
     <fieldset id="apConnectionFields">
+      <legend>Connect to your AP server</legend>
       <input name="hostname" placeholder="Address"/>
       <input name="port" placeholder="Port (38281 for local games)"/>
       <input name="slot" placeholder="Slot Name"/>
@@ -79,7 +79,6 @@ apMenuContainer.innerHTML = `
 
 
 const formStyle = `
-  fieldset { border: none;}
   #apMenu {
     margin: 0;
     padding: 15px;
@@ -128,6 +127,45 @@ consoleInput.addEventListener("keypress", function (event) {
   }
 });
 apMenuContainer.append(consoleInput);
+
+// Settings panel
+let apClientSettings = { // init for code completion <3
+  hideHints: '',
+  hideConnection: '',
+  hideOtherItems: '',
+}
+apClientSettings = JSON.parse(localStorage.apClientSettings || "{}");
+
+const settingsPanel = document.createElement("div");
+settingsPanel.id = "apSettingsPanel";
+
+settingsPanel.innerHTML = `
+<details><summary>AP client settings</summary>
+  <fieldset><legend>Notification filters</legend>
+    <label><input type="checkbox" name="hideHints" ${apClientSettings.hideHints && "checked"} />Hide hints</label>
+    <label><input type="checkbox" name="hideConnection" ${apClientSettings.hideConnection && "checked"} />Hide players joining and leaving</label>
+    <label><input type="checkbox" name="hideOtherItems" ${apClientSettings.hideOtherItems && "checked"} />Hide checks for other games</label>
+  </fieldset>
+</details>
+`
+const settingsStyle = `
+  #apSettingsPanel { 
+    & label {
+      display: block;
+    }
+    & summary {
+      margin-bottom: 10px;
+    }
+  }
+`;
+
+settingsPanel.querySelectorAll('input').forEach(input => input.addEventListener("change", e => {
+  settingsPanel[e.target.name] = e.target.checked;
+  localStorage.apClientSettings = JSON.stringify(settingsPanel);
+}));
+
+apMenuContainer.append(settingsPanel);
+
 document.body.prepend(apMenuContainer);
 
 // Injecting AP client style
@@ -135,7 +173,7 @@ const style = document.createElement("style");
 style.textContent = `
   .hinted { opacity: 1 !important }
   .APhide { display: none !important }
-` + formStyle;
+` + formStyle + settingsStyle;
 document.head.append(style);
 
 function typeToText(element) {
@@ -407,20 +445,18 @@ function load() {
 
 load();
 
-function randomProperty(obj) {
-  let keys = Object.keys(obj);
-  return obj[keys[(keys.length * Math.random()) << 0]];
-}
-
 // For this game we use the Games Chat, not the default Toast
 // TODO add a toggle somewhere to filter notifications
-function toast(message, {receiving: receiving, item: item, type: type} = {}) {
+function toast(message, {receiving, item, type} = {}) {
 
   if (type === "error") {
     Game.Notify("Error", message, [1, 7]); // "!" icon
     return;
   }
-  if (receiving === window.client.players.self.slot) {
+
+  const me = window.client.players.self;
+
+  if (receiving === me.slot) {
     if (type === "ItemSend") {
       const sender = window.client.players.findPlayer(item.player);
       const senderName = sender.slot === window.client.players.self.slot ? "You" : sender.alias;
@@ -438,6 +474,12 @@ function toast(message, {receiving: receiving, item: item, type: type} = {}) {
         id = upgrade.id;
         name = upgrade.name;
         icon = upgrade.icon;
+      } else if (OFFSET.ITEMS.isFiller(item.item)) {
+        name = window.client.package.lookupItemName(gameName, item.item);
+        icon = [18,10];
+      } else if (OFFSET.ITEMS.isTrap(item.item)) {
+        name = window.client.package.lookupItemName(gameName, item.item);
+        icon = [12,8];
       } else {
         message && Game.Notify("Archipelago", message);
         return;
@@ -452,12 +494,29 @@ function toast(message, {receiving: receiving, item: item, type: type} = {}) {
     const icon = [0, 8]; // Question marks
     const receiver = window.client.players.findPlayer(receiving);
     const sender = window.client.players.findPlayer(item.player);
-    const itemName = window.client.package.lookupItemName(sender.game, item.item);
+    const itemName = window.client.package.lookupItemName(receiver.game, item.item);
     const locationName = window.client.package.lookupLocationName(sender.game, item.location);
 
+    if (apClientSettings.hideHints) {
+      console.debug("Skipped hint notification (user settings)");
+      return;
+    }
+
     Game.Notify("Hint", `${receiver.alias}'s <b>${itemName}</b> is located at <b>${locationName}</b> in ${sender.alias}'s world</div>`, icon);
+    item.player === window.client.players.self.slot
+      && Game.NotifyTooltip('function(){return Game.crateTooltip(Game.AchievementsById['+(item.location-OFFSET.ACHIEVEMENTS)+']);}');
     return;
   }
+
+  if (apClientSettings.hideOtherItems && type === "ItemSend") {
+      console.debug("Skipped check notification (user settings)");
+      return;
+  }
+  if (apClientSettings.hideConnection && (type === "Join" || type === "Part")) {
+      console.debug("Skipped join/leave notification (user settings)");
+      return;
+  }
+
   Game.Notify("Archipelago", message);
 
   /*
@@ -483,7 +542,6 @@ const OFFSET = {
 }
 
 function receiveItem(itemId, firstTime) {
-  let building = randomProperty(Game.Objects); // FIXME should exclude locked buildings
   itemId = parseInt(itemId);
 
   function receiveUpgrade(upgrade) {
@@ -505,24 +563,28 @@ function receiveItem(itemId, firstTime) {
   if (OFFSET.ITEMS.isFiller(itemId) && firstTime) {
     switch (itemId) {
       case OFFSET.ITEMS.FILLERS + 0 :
-        Game.cookies *= 2;
+        Game.Earn(Game.cookies * 2 - Game.cookies);
         console.log("*2 Cookies");
         break;
       case OFFSET.ITEMS.FILLERS + 1 :
-        Game.cookies *= 999;
+        Game.Earn(Game.cookies * 999 - Game.cookies);
         console.log("*999 Cookies");
         break;
       case OFFSET.ITEMS.FILLERS + 2 :
-        Game.cookies *= 9999;
+        Game.Earn(Game.cookies * 9999 - Game.cookies);
         console.log("*9999 Cookies");
         break;
       case OFFSET.ITEMS.FILLERS + 3 :
-        Game.cookies *= 9999999;
+        Game.Earn(Game.cookies * 9999999 - Game.cookies);
         console.log("*9999999 Cookies");
         break;
-      case OFFSET.ITEMS.FILLERS + 4 :
-        Game.cookies *= 0.5;
+      case OFFSET.ITEMS.FILLERS + 4 : // TODO remove before release (kept for alpha retrocompat)
+        Game.Earn(Game.cookies * 0.5 - Game.cookies);
         console.log("*0.5 Cookies");
+        break;
+      case OFFSET.ITEMS.FILLERS + 5 :
+        Game.Earn(Game.cookies * 10 - Game.cookies);
+        console.log("*10 Cookies");
         break;
     }
   }
@@ -668,6 +730,9 @@ function receiveItem(itemId, firstTime) {
     receiveUpgrade();
   }
   if (OFFSET.ITEMS.isTrap(itemId) && firstTime) {
+    const buildings = Game.ObjectsById.filter(a => a.amount);
+    let building = buildings[Math.floor(Math.random() * buildings.length)];
+
     switch (itemId) {
       case OFFSET.ITEMS.TRAPS + 0 :
         building.amount = Math.max(building.amount - 1, 0);
@@ -752,7 +817,7 @@ function debounceAndMergeInputs(func, delay) {
 */
 const scoutLocations = debounceAndMergeInputs((...locations) => {
   console.log("Scouting locations ", locations);
-  window.client.scout(locations.map(me => me.id + OFFSET.ACHIEVEMENTS), 2)
+  window.client.scout(locations.filter(me => !me.won).map(me => me.id + OFFSET.ACHIEVEMENTS), 2)
 }, 3000); // 500 deemed not enough by testers
 
 // Reveal item locked behind adjacent achievements when completing one
@@ -769,9 +834,6 @@ async function appendFunctions() {
   //enable CookieClicker
   document.getElementById("wrapper").style.visibility = "visible";
 
-  //disable Buying of Upgrades
-  //FIXME : some upgrades are not in the item pool and player should be able to buy them
-  //document.getElementById("upgrades").style.pointerEvents = "none";
 
   //lock all Stores
   document.getElementById("product0").dataset["aphide"] = "1";
@@ -838,7 +900,7 @@ async function appendFunctions() {
       if (!!h) {
         str = str
           .replace(mysterious, `${h.item.locationName}`)
-          .replace(mysterious, `Will send item <b>${h.item.name}</b> to <b>${h.item.receiver.name}</b><br>---<br><b>Condition: </b>${me.desc}`)
+          .replace(mysterious, `Will send item <b>${h.item.name}</b> to <b>${h.item.receiver.name}</b><div class="line"></div><b>Condition: </b>${me.ddesc}`)
       }
     }
     return str
@@ -977,7 +1039,8 @@ async function appendFunctions() {
   // Extend
   const CCReincarnate = Game.Reincarnate;
   Game.Reincarnate = function (bypass) {
-      CCReincarnate(bypass);
+    CCReincarnate(bypass);
+    if (bypass) {
       // Reapply custom buffs cleared during ascension
       if (gameOptions.production_multiplier && gameOptions.production_multiplier > 0) applyProductionMultiplier();
       if (gameOptions.lump_multiplier && gameOptions.lump_multiplier > 1) applyLumpMultiplier();
@@ -986,6 +1049,7 @@ async function appendFunctions() {
         receiveItem(id, false);
       });
     }
+  }
 
   // Boost lump times by default. Max ripe time is 10mn instead of 24h
   Game.computeLumpTimes = function () {
@@ -1022,10 +1086,19 @@ async function appendFunctions() {
   Game.Unlock = (what) => {
     if (typeof what==='string') {
       // If item is in the AP pool, then prevent unlocking it (so it won't display in shop)
-      if (window.client.package.findPackage(gameName).reverseItemTable[Game.Upgrades[what].id + OFFSET.ITEMS.UPGRADES]) {
+      if (window.client.package.findPackage(gameName).reverseItemTable[Game.Upgrades[what].id + OFFSET.ITEMS.UPGRADES + 1]) {
         return;
       }
     }
     CCUnlock(what)
   }
+
+  // Disable buying upgrades that are in the item pool.
+  // Must stay after Game.Unlock override to prevent re-unlock happening during init
+  Object.values(window.client.package.findPackage(gameName).itemTable)
+    .forEach(apId => {
+      if (OFFSET.ITEMS.isUpgrade(apId)) Game.UpgradesById[apId - OFFSET.ITEMS.UPGRADES - 1].unlocked = 0;
+    });
+  Game.RebuildUpgrades();
+
 }

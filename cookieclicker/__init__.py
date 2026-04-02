@@ -5,7 +5,7 @@ from Utils import visualize_regions
 from worlds.AutoWorld import World
 from worlds.generic.Rules import add_rule
 from Options import PerGameCommonOptions
-from .Items import CCItem, traps, item_table, upgrades, structures, synergies, cookie_multiplier, \
+from .Items import CCItem, traps, item_table, upgrades, structures, can_become_progressive, cookie_multiplier, \
     cookie_multiplier_weights, progressive_structures
 from .Locations import CCLocation, location_table
 from .Options import CCOptions
@@ -49,10 +49,8 @@ class CookieClicker(World):
         for upgrade in upgrades:
             self.multiworld.itempool.append(self.create_item(upgrade.item_name))
 
+        placed_structures = 0
         if self.options.enable_progressive_buildings.value:
-            # Manually add Unlock Cursor since it doesn't have synergy upgrades
-            self.multiworld.itempool.append(self.create_item(structures[0].item_name))
-
             # We skipp all the others and use progressive structures instead
             for structure_unlock in progressive_structures:
                 progressive_item = self.create_item(structure_unlock.item_name)
@@ -61,16 +59,19 @@ class CookieClicker(World):
                 self.multiworld.itempool.append(progressive_item)
                 self.multiworld.itempool.append(progressive_item)
                 self.multiworld.itempool.append(progressive_item)
+                placed_structures += 3
 
         else:
             for structure_unlock in structures:
                 self.multiworld.itempool.append(self.create_item(structure_unlock.item_name))
 
-            for synergy in synergies:
-                self.multiworld.itempool.append(self.create_item(synergy.item_name))
+            for item in can_become_progressive:
+                self.multiworld.itempool.append(self.create_item(item.item_name))
+
+            placed_structures = len(structures) + len(can_become_progressive)
 
         total_locations = len(self.multiworld.get_unfilled_locations(self.player))
-        placed_items_count = len(upgrades) + len(structures)
+        placed_items_count = len(upgrades) + placed_structures
         remaining_locations = total_locations - placed_items_count
 
         if remaining_locations < 0:
