@@ -11,7 +11,7 @@ from .Regions import create_regions
 
 class CookieClicker(World):
     game = "Cookie Clicker"
-    worldversion = "0.8.0a3"
+    worldversion = "0.8.0-b1"
     location_name_to_id = { f"{location.name}": location.id for location in locations["valid"] }
     options_dataclass = CCOptions
     options: CCOptions
@@ -20,6 +20,9 @@ class CookieClicker(World):
     cookie_weights = [ cookie_multiplier_weights.get(item.item_name, 1) for item in cookie_multiplier ]
     start_inventory = {}
     trashitems = 0
+
+    print("ℹ️🍪 This Cookie Clicker apworld does not include a manifest file, and will not until this issue is resolved > https://github.com/ArchipelagoMW/Archipelago/issues/5585")
+
 
     def create_regions(self):
         create_regions(self)

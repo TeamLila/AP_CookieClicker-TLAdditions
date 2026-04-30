@@ -9,7 +9,7 @@ def create_regions(world: "CookieClicker "):
     multiworld = world.multiworld
     player = world.player
 
-    region = Region("No cookies... yet!", player, multiworld)
+    region = Region("Menu", player, multiworld)
     multiworld.regions.append(region)
 
     menu = region
