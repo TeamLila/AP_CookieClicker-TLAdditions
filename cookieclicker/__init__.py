@@ -1,15 +1,13 @@
 import random
 from dataclasses import asdict
-from BaseClasses import Tutorial, Region, MultiWorld, Item, CollectionState, ItemClassification
-from Utils import visualize_regions
+from BaseClasses import Item
 from worlds.AutoWorld import World
-from worlds.generic.Rules import add_rule
-from Options import PerGameCommonOptions
 from .Items import CCItem, traps, item_table, upgrades, structures, can_become_progressive, cookie_multiplier, \
     cookie_multiplier_weights, progressive_structures
 from .Locations import CCLocation, locations, SPHERE
 from .Options import CCOptions
 from .Rules import set_rules
+from .Regions import create_regions
 
 class CookieClicker(World):
     game = "Cookie Clicker"
@@ -24,20 +22,7 @@ class CookieClicker(World):
     trashitems = 0
 
     def create_regions(self):
-        region = Region("Menu", self.player, self.multiworld)
-        self.multiworld.regions.append(region)
-
-        achievement_region = Region("Achievements Region", self.player, self.multiworld)
-        self.multiworld.regions.append(achievement_region)
-        for location in locations["valid"]:
-            achievement_region.add_locations({ f"{location.name}":location.id}, CCLocation)
-        # Just one region for now, but we should add more later for sanity checks
-        region.connect(achievement_region, "Achievements")
-
-        # Special virtual item (event) to check victory. Think of it as a flag item
-        event_location = CCLocation(self.player, "Victory location", 42000000, achievement_region)
-        event_location.place_locked_item(CCItem("Victory", ItemClassification.progression, 42000000, self.player))
-        achievement_region.locations.append(event_location)
+        create_regions(self)
 
     def create_item(self, name: str) -> CCItem:
         item_data = item_table.get(name)

@@ -1,6 +1,5 @@
 from enum import Enum
 from BaseClasses import Location
-from typing import Dict, NamedTuple, Optional
 
 class CCLocation(Location):
     game = "Cookie Clicker"
