@@ -130,11 +130,13 @@ apMenuContainer.append(consoleInput);
 
 // Settings panel
 let apClientSettings = { // init for code completion <3
+  splitNotifications: '',
   hideHints: '',
   hideConnection: '',
   hideOtherItems: '',
 }
 apClientSettings = JSON.parse(localStorage.apClientSettings || "{}");
+let onApClientSettingUpdate = setting => {};
 
 const settingsPanel = document.createElement("div");
 settingsPanel.id = "apSettingsPanel";
@@ -142,9 +144,10 @@ settingsPanel.id = "apSettingsPanel";
 settingsPanel.innerHTML = `
 <details><summary>AP client settings</summary>
   <fieldset><legend>Notification filters</legend>
-    <label><input type="checkbox" name="hideHints" ${apClientSettings.hideHints && "checked"} />Hide hints</label>
-    <label><input type="checkbox" name="hideConnection" ${apClientSettings.hideConnection && "checked"} />Hide players joining and leaving</label>
-    <label><input type="checkbox" name="hideOtherItems" ${apClientSettings.hideOtherItems && "checked"} />Hide checks for other games</label>
+    <label><input type="checkbox" name="splitNotifications" ${apClientSettings.splitNotifications ? "checked" : ""} />Use 2 columns</label>
+    <label><input type="checkbox" name="hideHints" ${apClientSettings.hideHints ? "checked" : ""} />Hide hints</label>
+    <label><input type="checkbox" name="hideConnection" ${apClientSettings.hideConnection ? "checked" : ""} />Hide players joining and leaving</label>
+    <label><input type="checkbox" name="hideOtherItems" ${apClientSettings.hideOtherItems ? "checked" : ""} />Hide checks for other games</label>
   </fieldset>
 </details>
 `
@@ -160,8 +163,9 @@ const settingsStyle = `
 `;
 
 settingsPanel.querySelectorAll('input').forEach(input => input.addEventListener("change", e => {
-  settingsPanel[e.target.name] = e.target.checked;
-  localStorage.apClientSettings = JSON.stringify(settingsPanel);
+  apClientSettings[e.target.name] = e.target.checked;
+  onApClientSettingUpdate(e.target.name)
+  localStorage.apClientSettings = JSON.stringify(apClientSettings);
 }));
 
 apMenuContainer.append(settingsPanel);
@@ -380,6 +384,17 @@ CCStyleOverrides.textContent = `
   .product { display: block !important }
   .product.toggledOff { opacity: 0.6 } /* Ugly magic number from CC code */ 
   .product[data-aphide="1"] { display: none !important; }
+  #notes.split { left: calc(50% - 142px) }
+  #notes.split>.sidenote { right: unset; left: -40px; }
+  #apNotes { display: none }
+  #apNotes.split { 
+    display: unset;
+    left: calc(50% + 142px);
+    position: absolute;
+    margin-left: -125px;
+    bottom: 0px;
+    z-index: 100000001;
+  } 
 `;
 document.head.append(CCStyleOverrides);
 
@@ -445,12 +460,149 @@ function load() {
 
 load();
 
+
+/*** SECOND NOTE ROLLER ***/
+class APNotes {
+  constructor() {
+    const apNotes = document.createElement("div");
+    apNotes.id = "apNotes"
+    document.getElementById("notes").insertAdjacentElement("afterend", apNotes)
+
+    Game.APNotes = [];
+    Game.APNotesById = [];
+    Game.apNoteId = 0;
+    Game.apNoteL = l('apNotes');
+    Game.APNote = function (title, desc, pic, quick) {
+      this.title = title;
+      this.desc = desc || '';
+      this.pic = pic || '';
+      this.id = Game.apNoteId;
+      this.date = Date.now();
+      this.quick = quick || 0;
+      this.life = (this.quick || 1) * Game.fps;
+      this.l = 0;
+      this.height = 0;
+      this.tooltip = 0;
+      Game.apNoteId++;
+      Game.APNotesById[this.id] = this;
+      Game.APNotes.unshift(this);
+      if (Game.APNotes.length > 50) Game.APNotes.pop();
+      //Game.APNotes.push(this);
+      //if (Game.APNotes.length>50) Game.APNotes.shift();
+      Game.UpdateAPNotes();
+    }
+    Game.CloseAPNote = function (id) {
+      var me = Game.APNotesById[id];
+      if (Game.tooltip.from && Game.tooltip.from.id.indexOf('apnote-') == 0) Game.tooltip.hide();
+      Game.setOnCrate(0);
+      Game.APNotes.splice(Game.APNotes.indexOf(me), 1);
+      //Game.APNotesById.splice(Game.APNotesById.indexOf(me),1);
+      Game.APNotesById[id] = null;
+      Game.UpdateAPNotes();
+    }
+    Game.CloseAPNotes = function () {
+      Game.setOnCrate(0);
+      Game.APNotes = [];
+      Game.APNotesById = [];
+      Game.tooltip.hide();
+      Game.UpdateAPNotes();
+    }
+    Game.UpdateAPNotes = function () {
+      var str = '';
+      var remaining = Game.APNotes.length;
+      for (var i in Game.APNotes) {
+        if (i < 5) {
+          var me = Game.APNotes[i];
+          var pic = '';
+          if (me.pic != '') pic = '<div class="icon" style="' + writeIcon(me.pic) + '"></div>';
+          str = '<div id="apnote-' + me.id + '" ' + (me.tooltip ? Game.getDynamicTooltip(me.tooltip, 'this', true) + ' ' : '') + 'class="framed note ' + (me.pic != '' ? 'haspic' : 'nopic') + ' ' + (me.desc != '' ? 'hasdesc' : 'nodesc') + '"><div class="close" onclick="PlaySound(\'snd/tick.mp3\');Game.CloseAPNote(' + me.id + ');">x</div>' + pic + '<div class="text"><h3>' + me.title + '</h3>' + (me.desc != '' ? '<div class="line"></div><h5>' + me.desc + '</h5>' : '') + '</div></div>' + str;
+          remaining--;
+        }
+      }
+      if (remaining > 0) str = '<div class="remaining">' + loc("+%1 more notification.", LBeautify(remaining)) + '</div>' + str;
+      if (Game.APNotes.length > 1) {
+        str += '<div class="framed close sidenote" onclick="PlaySound(\'snd/tick.mp3\');Game.CloseAPNotes();">x</div>';
+      }
+      Game.apNoteL.innerHTML = str;
+      for (var i in Game.APNotes) {
+        me.l = 0;
+        if (i < 5) {
+          var me = Game.APNotes[i];
+          me.l = l('apnote-' + me.id);
+        }
+      }
+    }
+    Game.APNotesLogic = function () {
+      for (var i in Game.APNotes) {
+        if (Game.APNotes[i].quick > 0) {
+          var me = Game.APNotes[i];
+          me.life--;
+          if (me.life <= 0) Game.CloseAPNote(me.id);
+        }
+      }
+    }
+    Game.APNotesDraw = function () {
+      for (var i in Game.APNotes) {
+        if (Game.APNotes[i].quick > 0) {
+          var me = Game.APNotes[i];
+          if (me.l) {
+            if (me.life < 10) {
+              me.l.style.opacity = (me.life / 10);
+            }
+          }
+        }
+      }
+    }
+
+    this.disable();
+    if(apClientSettings.splitNotifications) this.enable();
+  }
+
+  APNotify = function (title, desc, pic, quick, noLog) {
+    if (Game.prefs.notifs) {
+      quick = Math.min(6, quick);
+      if (!quick) quick = 6;
+    }
+    desc = replaceAll('==CLOSETHIS()==', 'Game.CloseNote(' + Game.apNoteId + ');', desc);
+    if (Game.popups) new Game.APNote(title, desc, pic, quick);
+    if (!noLog) Game.AddToLog('<b>' + title + '</b> | ' + desc);
+  }
+  APNotifyTooltip = function (content) {
+    //attaches a tooltip to the last spawned note
+    if (!Game.APNotesById[Game.apNoteId - 1]) return false;
+    var me = Game.APNotesById[Game.apNoteId - 1];
+    me.tooltip = content;
+    Game.UpdateAPNotes();
+  }
+
+  enable = () => {
+    Game.APNotify = this.APNotify;
+    Game.APNotifyTooltip = this.APNotifyTooltip;
+    Game.apNoteL?.classList.add("split");
+    Game.noteL?.classList.add("split");
+  }
+  disable = () => {
+    Game.APNotify = Game.Notify;
+    Game.APNotifyTooltip = Game.NotifyTooltip;
+    Game.apNoteL?.classList.remove("split");
+    Game.noteL?.classList.remove("split");
+  }
+}
+const apNotes = new APNotes();
+
+onApClientSettingUpdate = setting => {
+  console.debug(`Setting "${setting}" changed to ${apClientSettings[setting]}`);
+  if (setting === "splitNotifications") {
+    apClientSettings.splitNotifications ? apNotes?.enable() : apNotes?.disable();
+  }
+}
+
+
 // For this game we use the Games Chat, not the default Toast
-// TODO add a toggle somewhere to filter notifications
 function toast(message, {receiving, item, type} = {}) {
 
   if (type === "error") {
-    Game.Notify("Error", message, [1, 7]); // "!" icon
+    Game.APNotify("Error", message, [1, 7]); // "!" icon
     return;
   }
 
@@ -502,13 +654,13 @@ function toast(message, {receiving, item, type} = {}) {
       return;
     }
 
-    Game.Notify("Hint", `${receiver.alias}'s <b>${itemName}</b> is located at <b>${locationName}</b> in ${sender.alias}'s world</div>`, icon);
+    Game.APNotify("Hint", `${receiver.alias}'s <b>${itemName}</b> is located at <b>${locationName}</b> in ${sender.alias}'s world</div>`, icon);
     item.player === window.client.players.self.slot
-      && Game.NotifyTooltip('function(){return Game.crateTooltip(Game.AchievementsById['+(item.location-OFFSET.ACHIEVEMENTS)+']);}');
+      && Game.APNotifyTooltip('function(){return Game.crateTooltip(Game.AchievementsById['+(item.location-OFFSET.ACHIEVEMENTS)+']);}');
     return;
   }
 
-  if (apClientSettings.hideOtherItems && type === "ItemSend") {
+  if (apClientSettings.hideOtherItems && type === "ItemSend" && item.player !== me.slot) {
       console.debug("Skipped check notification (user settings)");
       return;
   }
@@ -517,7 +669,8 @@ function toast(message, {receiving, item, type} = {}) {
       return;
   }
 
-  Game.Notify("Archipelago", message);
+  Game.APNotify("Archipelago", message);
+  if (type === "ItemSend" && item.player === me.slot) Game.APNotifyTooltip("function(){return Game.crateTooltip(Game.AchievementsById[" + (item.location - OFFSET.ACHIEVEMENTS) + "]);}");
 
   /*
   Toastify({
@@ -900,7 +1053,7 @@ async function appendFunctions() {
       if (!!h) {
         str = str
           .replace(mysterious, `${h.item.locationName}`)
-          .replace(mysterious, `Will send item <b>${h.item.name}</b> to <b>${h.item.receiver.name}</b><div class="line"></div><b>Condition: </b>${me.ddesc}`)
+          .replace(mysterious, `<b>Condition: </b>${me.ddesc}<div class="line"></div>Will send item <b>${h.item.name}</b> to <b>${h.item.receiver.name}</b>`)
       }
     }
     return str
@@ -1100,5 +1253,4 @@ async function appendFunctions() {
       if (OFFSET.ITEMS.isUpgrade(apId)) Game.UpgradesById[apId - OFFSET.ITEMS.UPGRADES - 1].unlocked = 0;
     });
   Game.RebuildUpgrades();
-
 }
