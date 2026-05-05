@@ -390,26 +390,32 @@ document.getElementById("apMenuArrow").addEventListener("click", toggleMenu);
 const CCStyleOverrides = document.createElement("style");
 CCStyleOverrides.textContent = `
   .product { display: block !important }
-  .product.toggledOff { opacity: 0.6 } /* Ugly magic number from CC code */ 
+  .product.toggledOff { opacity: 0.6 } /* Ugly magic number from CC code */
   .product[data-aphide="1"] { display: none !important; }
   #notes:has(+ #apNotes.split) { left: calc(50% - 142px) }
   #notes:has(+ #apNotes.split)>.sidenote { right: unset; left: -40px; }
   #apNotes { display: none }
-  #apNotes.split { 
+  #apNotes.split {
     display: unset;
     left: calc(50% + 142px);
     position: absolute;
     margin-left: -125px;
     bottom: 0px;
     z-index: 100000001;
-  } 
-  .note:has(.itemSend) {
-    text-align: right;
+  }
+  .note {
+    display: flex;
+    gap:8px;
+    align-items: center;
     & .icon {
-      float: rigth;
-      margin-right: -4px;
-      margin-left: 4px;
+      min-width: 48px;
+      min-heigth: 48px;
+      margin:0;
     }
+  }
+  .note:has(.itemSend) {
+    flex-direction: row-reverse;
+    text-align: right;
   }
 `;
 document.head.append(CCStyleOverrides);
