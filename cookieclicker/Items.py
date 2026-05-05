@@ -608,6 +608,8 @@ progressive_structures = [
 
 progressive_heavens = ItemData(OFFSET.PROGRESSIVE + 0, "Heavenly progress", ItemClassification.progression)
 
+victory = ItemData(42000000, "Victory", ItemClassification.progression)
+
 item_list = []
 item_list += upgrades
 item_list += can_become_progressive
@@ -615,6 +617,7 @@ item_list += cookie_multiplier
 item_list += traps
 item_list += structures
 item_list += [progressive_heavens]
+item_list += [victory]
 
 items_by_id = {item.code: item for item in item_list}
 

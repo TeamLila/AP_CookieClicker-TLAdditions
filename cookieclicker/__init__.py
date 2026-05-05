@@ -12,7 +12,7 @@ from .Regions import create_regions
 class CookieClicker(World):
     game = "Cookie Clicker"
     worldversion = "0.8.0-b1"
-    location_name_to_id = { f"{location.name}": location.id for location in locations["valid"] }
+    location_name_to_id = locations["name_to_id"]
     options_dataclass = CCOptions
     options: CCOptions
     item_name_to_id = { name: data.code for name, data in item_table.items() }

@@ -716,6 +716,11 @@ achievements = [
     CCAchievement(639, "Cookie Clicker", 19, 5),
 ]
 
+victory_achievement = CCAchievement(0, "Victory Location", -1, -1)
+victory_achievement.id = 42000000
+victory_achievement.sphere = 42000000
+achievements += [victory_achievement]
+
 valid_locations = list(filter(lambda achv: achv.sphere != SPHERE.EXCLUDED.value, achievements))
 
 locations = {
@@ -724,7 +729,7 @@ locations = {
     'by_building': { building: list(filter( lambda achv: achv.building == building.value, valid_locations )) for building in BUILDING },
     'by_sphere': { sphere: list(filter( lambda achv: achv.sphere == sphere.value, valid_locations )) for sphere in SPHERE },
 
-    'name_to_id': { location.name: location.id for location in achievements },
+    'name_to_id': { f"{location.name}": location.id for location in achievements },
     'id_to_name': { location.id: location.name for location in achievements },
 }
 

@@ -50,6 +50,13 @@ document.head.append(scriptToast);
     }).showToast();
 */
 
+Game.APReset = () => {
+  console.log("=== GAME RESET ===");
+  Game.HardReset(2);
+  receivedItems = [];
+  localStorage.setItem('receivedItems', "[]")
+}
+
 // Input fields
 const apMenuContainer = document.createElement("div");
 apMenuContainer.id = "apMenu";
@@ -149,6 +156,8 @@ settingsPanel.innerHTML = `
     <label><input type="checkbox" name="hideConnection" ${apClientSettings.hideConnection ? "checked" : ""} />Hide players joining and leaving</label>
     <label><input type="checkbox" name="hideOtherItems" ${apClientSettings.hideOtherItems ? "checked" : ""} />Hide checks for other games</label>
   </fieldset>
+  <br/>
+  <button onclick="if(confirm('This will reset your CC save and received AP items. Continue?')===true) {Game.APReset()}">RESET SAVE</button>
 </details>
 `
 const settingsStyle = `
@@ -247,11 +256,10 @@ function connectAP(e) {
   if (parseInt(port.value) !== parseInt(localStorage.getItem("port"))) {
     if (
       confirm(
-        "Your Port changed, so this might be a new Game. DELETE LOCAL SAVE GAME?",
-      ) == true
+        "Your Port changed, so this might be a new Game. DELETE LOCAL SAVE GAME?\nCancel to load your save normally.",
+      ) === true
     ) {
-      Game.HardReset(2);
-      receivedItems = [];
+      Game.APReset();
     }
   }
 
@@ -395,6 +403,14 @@ CCStyleOverrides.textContent = `
     bottom: 0px;
     z-index: 100000001;
   } 
+  .note:has(.itemSend) {
+    text-align: right;
+    & .icon {
+      float: rigth;
+      margin-right: -4px;
+      margin-left: 4px;
+    }
+  }
 `;
 document.head.append(CCStyleOverrides);
 
@@ -588,7 +604,7 @@ class APNotes {
     Game.noteL?.classList.remove("split");
   }
 }
-const apNotes = new APNotes();
+let apNotes;
 
 onApClientSettingUpdate = setting => {
   console.debug(`Setting "${setting}" changed to ${apClientSettings[setting]}`);
@@ -650,7 +666,7 @@ function toast(message, {receiving, item, type} = {}) {
         return;
       }
 
-      Game.Notify("Item received", `${senderName} just found your <b>${name}</b> at ${locationName} !</div>`, icon);
+      Game.Notify("Item received", `<span class="itemSend">${senderName} just found your <b>${name}</b> at ${locationName} !</span>`, icon);
       OFFSET.ITEMS.isUpgrade(item.item) && Game.NotifyTooltip("function(){return Game.crateTooltip(Game.UpgradesById[" + id + "]);}");
       return;
     }
@@ -1016,6 +1032,8 @@ async function appendFunctions() {
   //enable CookieClicker
   document.getElementById("wrapper").style.visibility = "visible";
 
+  apNotes = new APNotes();
+
 
   //lock all Stores
   document.getElementById("product0").dataset["aphide"] = "1";
@@ -1271,6 +1289,7 @@ async function appendFunctions() {
       if (window.client.package.findPackage(gameName).reverseItemTable[Game.Upgrades[what].id + OFFSET.ITEMS.UPGRADES + 1]) {
         return;
       }
+      if (["Heavenly chip secret", "Heavenly cookie stand", "Heavenly bakery", "Heavenly confectionery", "Heavenly key"].find(x => x === what)) return;
     }
     CCUnlock(what)
   }
