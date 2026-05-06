@@ -11,7 +11,7 @@ from .Regions import create_regions
 
 class CookieClicker(World):
     game = "Cookie Clicker"
-    worldversion = "0.8.0-b1"
+    worldversion = "0.8.0"
     location_name_to_id = locations["name_to_id"]
     options_dataclass = CCOptions
     options: CCOptions
