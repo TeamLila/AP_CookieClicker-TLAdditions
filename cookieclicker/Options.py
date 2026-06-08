@@ -63,3 +63,4 @@ class CCOptions(PerGameCommonOptions):
     production_multiplier: ProductionMultiplier
     lump_multiplier: LumpMultiplier
     enable_progressive_buildings: SynergyAsProgressiveBuildings
+    additional_building_copys: AddAditionalBuildingCopy
