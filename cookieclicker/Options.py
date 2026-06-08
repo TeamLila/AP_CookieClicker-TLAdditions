@@ -47,7 +47,7 @@ class SynergyAsProgressiveBuildings(Toggle):
     """
     display_name = "Synergy as Progressive Buildings"
 
-class AddAditionalBuildingCopy(Rage):
+class AddAditionalBuildingCopy(Range):
     """Add additional Copys of the Buildings into the Itempool, allowing you to more easily find and unlock them"""
     display_name = "Additional Building Copy's"
     rage_start = 0
