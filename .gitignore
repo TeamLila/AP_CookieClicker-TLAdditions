@@ -7,3 +7,6 @@ ArchipelagoGenerate.exe - Shortcut.lnk
 ArchipelagoTextClient.lnk
 cookieclicker.apworld
 __pycache__/
+
+#Added By TeamLila
+build_TLTest.sh
