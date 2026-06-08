@@ -1,1 +1,1 @@
-zip cookieclicker_TLTest.apworld ./cookieclicker -r -x "*__pycache__*"
+zip cookieclicker.apworld ./cookieclicker -r -x "*__pycache__*"
