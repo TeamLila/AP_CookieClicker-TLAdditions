@@ -64,8 +64,8 @@ class CookieClicker(World):
             self.multiworld.itempool.append(self.create_item(progressive_heavens.item_name))
             placed_structures += 1
 
-        total_locations = len(self.multiworld.get_unfilled_locations(self.player))
-        placed_items_count = len(upgrades) + placed_structures
+        total_locations = len(self.multiworld.get_unfilled_locations(self.player)) #Note To Charlignon: This is called unfilled locations for a reason, this num already includes the placed Unlocks (leading to More often than not (especialy with a lot of duplicate building unlocks) for the gen to fail)
+        placed_items_count = len(upgrades) # + placed_structures
         remaining_locations = total_locations - placed_items_count
 
         if remaining_locations < 0:
