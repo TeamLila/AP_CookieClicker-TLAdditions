@@ -792,33 +792,63 @@ function receiveItem(itemId, firstTime) {
         break;
     }
   }
+  //TODO: Someone might want to refactor this in the future, im sorry Charlignon {From: TeamLila}
   if (OFFSET.ITEMS.isBuilding(itemId)) {
     const receivedCount = Object.groupBy(receivedItems, x => x)[itemId]?.length || 0;
+    let progressiveBuildings = gameOptions.enable_progressive_buildings
     switch (itemId) {
       case OFFSET.ITEMS.BUILDINGS + 0 : // Unlock Cursor
-        [
-          () => document.getElementById("product0").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Thousand fingers"]),
-          () => receiveUpgrade(Game.Upgrades["Starter kit"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
+        if (progressiveBuildings) {
+          try {
+            [
+              () => document.getElementById("product0").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Thousand fingers"]),
+              () => receiveUpgrade(Game.Upgrades["Starter kit"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } catch (unused) {
+            break;
+          }
+        } else {
+          () => document.getElementByID("product0").dataset.aphide = "";
+          break;
+        }
       case OFFSET.ITEMS.BUILDINGS + 1 : // Unlock Grandma (just in case)
         document.getElementById("product1").dataset.aphide = "";
+        console.log("I guess we are unlocking grandma's again, someone might want to check that out");
         break;
       case OFFSET.ITEMS.BUILDINGS + 2 : // Unlock Farm
-        [
-          () => document.getElementById("product2").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Future almanacs"]),
-          () => receiveUpgrade(Game.Upgrades["Rain prayer"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
+        if (progressiveBuildings) {
+          try {
+            [
+              () => document.getElementById("product2").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Future almanacs"]),
+              () => receiveUpgrade(Game.Upgrades["Rain prayer"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } catch (unused) {
+            break;
+          } else {
+          () => document.getElementById("product2").dataset.aphide = "";
+          break;
+        }
       case OFFSET.ITEMS.BUILDINGS + 3 : // Unlock Mine
-        [
-          () => document.getElementById("product3").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Seismic magic"]),
-          () => receiveUpgrade(Game.Upgrades["Asteroid mining"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
+        if (progressiveBuildings) {
+          try {
+            [
+              () => document.getElementById("product3").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Seismic magic"]),
+              () => receiveUpgrade(Game.Upgrades["Asteroid mining"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } catch (unused) {
+            break;
+          }
+        } else {
+          () => document.getElementById("product3").dataset.aphide = "";
+          break;
+        }
+        //TODO: Continue
       case OFFSET.ITEMS.BUILDINGS + 4 : // Unlock Factory
         [
           () => document.getElementById("product4").dataset.aphide = "",
