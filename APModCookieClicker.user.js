@@ -828,7 +828,8 @@ function receiveItem(itemId, firstTime) {
             break;
           } catch (unused) {
             break;
-          } else {
+          } 
+        } else {
           () => document.getElementById("product2").dataset.aphide = "";
           break;
         }
@@ -848,28 +849,52 @@ function receiveItem(itemId, firstTime) {
           () => document.getElementById("product3").dataset.aphide = "";
           break;
         }
-        //TODO: Continue
       case OFFSET.ITEMS.BUILDINGS + 4 : // Unlock Factory
-        [
-          () => document.getElementById("product4").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Quantum electronics"]),
-          () => receiveUpgrade(Game.Upgrades["Temporal overclocking"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
+        if (progressiveBuildings) {
+          try {
+            [
+              () => document.getElementById("product4").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Quantum electronics"]),
+              () => receiveUpgrade(Game.Upgrades["Temporal overclocking"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } catch (unused) {
+            break;
+          }
+        } else {
+          () => document.getElementById("product4").dataset.aphide = "";
+        }
       case OFFSET.ITEMS.BUILDINGS + 5 : // Unlock Bank
-        [
-          () => document.getElementById("product5").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Contracts from beyond"]),
-          () => receiveUpgrade(Game.Upgrades["Printing presses"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
+        if (progressiveBuildings) {
+          try {
+            [
+              () => document.getElementById("product5").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Contracts from beyond"]),
+              () => receiveUpgrade(Game.Upgrades["Printing presses"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } catch (unused) {
+            break;
+          }
+        } else {
+          () => document.getElementById("product5").dataset.aphide = "";
+        }
       case OFFSET.ITEMS.BUILDINGS + 6 : // Unlock Temple
-        [
-          () => document.getElementById("product6").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Paganism"]),
-          () => receiveUpgrade("God particle")
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
+        if (progressiveBuildings) {
+          try {
+            [
+              () => document.getElementById("product6").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Paganism"]),
+              () => receiveUpgrade("God particle")
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } catch (unused) {
+            break;
+          }
+        } else {
+          () => document.getElementById("product6").dataset.aphide = "";
+        }
+        //TODO: Continue
       case OFFSET.ITEMS.BUILDINGS + 7 : // Unlock Wizard Tower
         [
           () => document.getElementById("product7").dataset.aphide = "",
