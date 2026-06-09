@@ -678,7 +678,7 @@ achievements = [
     CCAchievement(159, "God complex", -1, 0),
     CCAchievement(160, "Third-party", -1, -1),
     CCAchievement(397, "When the cookies ascend just right", -1, -1),
-    CCAchievement(92, "Hardcore", -1, 1),
+    CCAchievement(92, "Hardcore", -1, 2),
     CCAchievement(93, "Speed baking I", -1, 1),
     CCAchievement(94, "Speed baking II", -1, 1),
     CCAchievement(95, "Speed baking III", -1, 1),

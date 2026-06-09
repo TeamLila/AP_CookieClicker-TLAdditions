@@ -1056,6 +1056,16 @@ async function appendFunctions() {
   //enable CookieClicker
   document.getElementById("wrapper").style.visibility = "visible";
 
+  function fixedHardcore() {
+	  hasCookieUpgrade = Game.UpgradesByPool["cookie"].some(me => me.bought);
+	if (Game.cookiesEarned>=1000000000000000 && !hasCookieUpgrade && (Game.ascensionMode==1 || Game.resets==0)) Game.Win('Hardcore');
+}
+
+//add hardcore logic
+Game.registerHook('logic', fixedHardcore);
+
+Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked with <b>no cookie upgrades purchased</b>.';
+
   apNotes = new APNotes();
 
   // Override debug functions
