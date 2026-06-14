@@ -792,19 +792,13 @@ function receiveItem(itemId, firstTime) {
         break;
     }
   }
-  //TODO: Someone might want to refactor this in the future, im sorry Charlignon {From: TeamLila}
-  //Example for refactor:
-  /* Product unlock: document.getElementById("product{idOfBuilding}")...
-   * upgrades: reciveUpgrade(ListOfFirstProgressiveItems[BuildingID])
-   *
-   * Could make future modifications easier
-  */
+
   if (OFFSET.ITEMS.isBuilding(itemId)) {
     const receivedCount = Object.groupBy(receivedItems, x => x)[itemId]?.length || 0;
-    let progressiveBuildings = gameOptions.enable_progressive_buildings
+    let progressiveBuildingsEnabled = gameOptions.enable_progressive_buildings 
     switch (itemId) {
       case OFFSET.ITEMS.BUILDINGS + 0 : // Unlock Cursor
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product0").dataset.aphide = "",
@@ -821,10 +815,10 @@ function receiveItem(itemId, firstTime) {
         }
       case OFFSET.ITEMS.BUILDINGS + 1 : // Unlock Grandma (just in case)
         document.getElementById("product1").dataset.aphide = "";
-        console.log("I guess we are unlocking grandma's again, someone might want to check that out");
+        console.warn("I guess we are unlocking grandma's again, someone might want to check that out");
         break;
       case OFFSET.ITEMS.BUILDINGS + 2 : // Unlock Farm
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product2").dataset.aphide = "",
@@ -840,7 +834,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 3 : // Unlock Mine
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product3").dataset.aphide = "",
@@ -856,7 +850,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 4 : // Unlock Factory
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product4").dataset.aphide = "",
@@ -872,7 +866,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 5 : // Unlock Bank
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product5").dataset.aphide = "",
@@ -888,7 +882,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 6 : // Unlock Temple
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product6").dataset.aphide = "",
@@ -904,7 +898,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 7 : // Unlock Wizard Tower
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product7").dataset.aphide = "",
@@ -920,7 +914,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 8 : // Unlock Shipment
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product8").dataset.aphide = "",
@@ -936,7 +930,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 9 : // Unlock Alchemy Lab
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product9").dataset.aphide = "",
@@ -952,7 +946,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 10 : // Unlock Portal
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product10").dataset.aphide = "",
@@ -968,7 +962,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 11 : // Unlock Time Machine
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product11").dataset.aphide = "",
@@ -984,7 +978,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 12 : // Unlock Antimatter Condenser
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product12").dataset.aphide = "",
@@ -1000,7 +994,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 13 : // Unlock Prism
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product13").dataset.aphide = "",
@@ -1016,7 +1010,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 14 : // Unlock Chancemaker
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product14").dataset.aphide = "",
@@ -1032,7 +1026,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 15 : // Unlock Fractal Engine
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product15").dataset.aphide = "",
@@ -1048,7 +1042,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 16 : // Unlock Javascript Console
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product16").dataset.aphide = "",
@@ -1064,7 +1058,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 17 : // Unlock Idleverse
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product17").dataset.aphide = "",
@@ -1080,7 +1074,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 18 : // Unlock Cortex Baker
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product18").dataset.aphide = "",
@@ -1096,7 +1090,7 @@ function receiveItem(itemId, firstTime) {
           break;
         }
       case OFFSET.ITEMS.BUILDINGS + 19 : // Unlock You
-        if (progressiveBuildings) {
+        if (progressiveBuildingsEnabled) {
           try {
             [
               () => document.getElementById("product19").dataset.aphide = "",
