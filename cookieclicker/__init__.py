@@ -69,7 +69,7 @@ class CookieClicker(World):
         remaining_locations = total_locations - placed_items_count
 
         if remaining_locations < 0:
-            raise Exception(f"More upgrades and structures than locations! (missing {remaining_locations*-1} locations)") #For non-math people: *-1 inverts the answer (-3 becomes 3)
+            raise Exception(f"More upgrades and structures than locations! (missing {remaining_locations*-1} locations)")
 
         trap_percent = self.options.traps_percentage.value / 100.0
         trap_count = int(remaining_locations * trap_percent)
