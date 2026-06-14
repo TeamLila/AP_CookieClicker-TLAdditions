@@ -43,14 +43,14 @@ class CookieClicker(World):
             for progressive_structure_unlock in progressive_structures:
 
                 # Loops once per extra copy and 3 base times
-                for _ in range(self.options.additional_building_copys + 3):
+                for _ in range(self.options.plentiful_buildings + 3):
                     progressive_item = self.create_item(progressive_structure_unlock.item_name)
                     self.multiworld.itempool.append(progressive_item)
                     placed_structures += 1
 
         else:
             for structure_unlock in structures:
-                for _ in range(self.options.additional_building_copys + 1):
+                for _ in range(self.options.plentiful_buildings + 1):
                     self.multiworld.itempool.append(self.create_item(structure_unlock.item_name))
                     placed_structures += 1
     
