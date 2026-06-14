@@ -47,9 +47,10 @@ class SynergyAsProgressiveBuildings(Toggle):
     """
     display_name = "Synergy as Progressive Buildings"
 
-class AddAditionalBuildingCopy(Range):
-    """Add additional Copys of the Buildings into the Itempool, allowing you to more easily find and unlock them"""
-    display_name = "Additional Building Copy's"
+class PlentifulBuildings(Range):
+    """Add additional copies of the Buildings into the Itempool, allowing you to more easily find and unlock them  
+    Stacks with Progressive Buildings"""
+    display_name = "Plentiful buildings"
     rage_start = 0
     range_end = 5
     default = 1
@@ -63,4 +64,4 @@ class CCOptions(PerGameCommonOptions):
     production_multiplier: ProductionMultiplier
     lump_multiplier: LumpMultiplier
     enable_progressive_buildings: SynergyAsProgressiveBuildings
-    additional_building_copys: AddAditionalBuildingCopy
+    plentiful_buildings: PlentifulBuildings
