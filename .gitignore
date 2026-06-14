@@ -6,6 +6,4 @@ make_apworld_and_copy_to_AP.bat
 ArchipelagoGenerate.exe - Shortcut.lnk
 ArchipelagoTextClient.lnk
 cookieclicker.apworld
-
-#Added By TeamLila
-build_TLTest.sh
+__pycache__/
