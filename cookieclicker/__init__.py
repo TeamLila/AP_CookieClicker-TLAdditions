@@ -40,34 +40,36 @@ class CookieClicker(World):
         placed_structures = 0
         if self.options.enable_progressive_buildings.value:
             # We skipp all the others and use progressive structures instead
-            for structure_unlock in progressive_structures:
+            for progressive_structure_unlock in progressive_structures:
 
-                # ugly 3x lines because only for synergy for now
-                for _ in range(3):
-                    progressive_item = self.create_item(structure_unlock.item_name)
+                # Loops once per extra copy and 3 base times
+                for _ in range(self.options.plentiful_buildings + 3):
+                    progressive_item = self.create_item(progressive_structure_unlock.item_name)
                     self.multiworld.itempool.append(progressive_item)
-                placed_structures += 3
+                    placed_structures += 1
 
         else:
             for structure_unlock in structures:
-                self.multiworld.itempool.append(self.create_item(structure_unlock.item_name))
-
+                for _ in range(self.options.plentiful_buildings + 1):
+                    self.multiworld.itempool.append(self.create_item(structure_unlock.item_name))
+                    placed_structures += 1
+    
             for item in can_become_progressive:
                 self.multiworld.itempool.append(self.create_item(item.item_name))
+                placed_structures += 1
 
-            placed_structures = len(structures) + len(can_become_progressive)
 
         # Very ugly code
-        placed_structures += 5
         for _ in range(5):
             self.multiworld.itempool.append(self.create_item(progressive_heavens.item_name))
+            placed_structures += 1
 
-        total_locations = len(self.multiworld.get_unfilled_locations(self.player))
+        total_locations = len(self.multiworld.get_unfilled_locations(self.player)) #Note To Charlignon: This is called unfilled locations for a reason, this num already includes the placed Unlocks (leading to More often than not (especialy with a lot of duplicate building unlocks) for the gen to fail)
         placed_items_count = len(upgrades) + placed_structures
         remaining_locations = total_locations - placed_items_count
 
         if remaining_locations < 0:
-            raise Exception("More upgrades and structures than locations!")
+            raise Exception(f"More upgrades and structures than locations! (missing {remaining_locations*-1} locations)")
 
         trap_percent = self.options.traps_percentage.value / 100.0
         trap_count = int(remaining_locations * trap_percent)

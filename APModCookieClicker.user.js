@@ -792,145 +792,247 @@ function receiveItem(itemId, firstTime) {
         break;
     }
   }
+
   if (OFFSET.ITEMS.isBuilding(itemId)) {
     const receivedCount = Object.groupBy(receivedItems, x => x)[itemId]?.length || 0;
-    switch (itemId) {
-      case OFFSET.ITEMS.BUILDINGS + 0 : // Unlock Cursor
-        [
-          () => document.getElementById("product0").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Thousand fingers"]),
-          () => receiveUpgrade(Game.Upgrades["Starter kit"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 1 : // Unlock Grandma (just in case)
-        document.getElementById("product1").dataset.aphide = "";
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 2 : // Unlock Farm
-        [
-          () => document.getElementById("product2").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Future almanacs"]),
-          () => receiveUpgrade(Game.Upgrades["Rain prayer"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 3 : // Unlock Mine
-        [
-          () => document.getElementById("product3").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Seismic magic"]),
-          () => receiveUpgrade(Game.Upgrades["Asteroid mining"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 4 : // Unlock Factory
-        [
-          () => document.getElementById("product4").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Quantum electronics"]),
-          () => receiveUpgrade(Game.Upgrades["Temporal overclocking"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 5 : // Unlock Bank
-        [
-          () => document.getElementById("product5").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Contracts from beyond"]),
-          () => receiveUpgrade(Game.Upgrades["Printing presses"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 6 : // Unlock Temple
-        [
-          () => document.getElementById("product6").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Paganism"]),
-          () => receiveUpgrade("God particle")
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 7 : // Unlock Wizard Tower
-        [
-          () => document.getElementById("product7").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Arcane knowledge"]),
-          () => receiveUpgrade(Game.Upgrades["Magical botany"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 8 : // Unlock Shipment
-        [
-          () => document.getElementById("product8").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Fossil fuels"]),
-          () => receiveUpgrade(Game.Upgrades["Shipyards"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 9 : // Unlock Alchemy Lab
-        [
-          () => document.getElementById("product9").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Primordial ores"]),
-          () => receiveUpgrade(Game.Upgrades["Gold fund"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 10 : // Unlock Portal
-        [
-          () => document.getElementById("product10").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Infernal crops"]),
-          () => receiveUpgrade(Game.Upgrades["Abysmal glimmer"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 11 : // Unlock Time Machine
-        [
-          () => document.getElementById("product11").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Relativistic parsec-skipping"]),
-          () => receiveUpgrade(Game.Upgrades["Primeval glow"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 12 : // Unlock Antimatter Condenser
-        [
-          () => document.getElementById("product12").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Extra physics funding"]),
-          () => receiveUpgrade(Game.Upgrades["Chemical proficiency"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 13 : // Unlock Prism
-        [
-          () => document.getElementById("product13").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Light magic"]),
-          () => receiveUpgrade(Game.Upgrades["Mystical energies"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 14 : // Unlock Chancemaker
-        [
-          () => document.getElementById("product14").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Gemmed talismans"]),
-          () => receiveUpgrade(Game.Upgrades["Charm quarks"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 15 : // Unlock Fractal Engine
-        [
-          () => document.getElementById("product15").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Recursive mirrors"]),
-          () => receiveUpgrade(Game.Upgrades["Mice clicking mice"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 16 : // Unlock Javascript Console
-        [
-          () => document.getElementById("product16").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Script grannies"]),
-          () => receiveUpgrade(Game.Upgrades["Tombola computing"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 17 : // Unlock Idleverse
-        [
-          () => document.getElementById("product17").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Perforated mille-feuille cosmos"]),
-          () => receiveUpgrade(Game.Upgrades["Infraverses and superverses"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 18 : // Unlock Cortex Baker
-        [
-          () => document.getElementById("product18").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Thoughts & prayers"]),
-          () => receiveUpgrade(Game.Upgrades["Fertile minds"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
-      case OFFSET.ITEMS.BUILDINGS + 19 : // Unlock You
-        [
-          () => document.getElementById("product19").dataset.aphide = "",
-          () => receiveUpgrade(Game.Upgrades["Accelerated development"]),
-          () => receiveUpgrade(Game.Upgrades["Peer review"])
-        ].slice(0,receivedCount).forEach(callback => callback());
-        break;
+    let progressiveBuildingsEnabled = gameOptions.enable_progressive_buildings 
+    try {
+      switch (itemId) {
+        case OFFSET.ITEMS.BUILDINGS + 0 : // Unlock Cursor
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product0").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Thousand fingers"]),
+              () => receiveUpgrade(Game.Upgrades["Starter kit"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementByID("product0").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 1 : // Unlock Grandma (just in case)
+          document.getElementById("product1").dataset.aphide = "";
+          console.warn("I guess we are unlocking grandma's again, someone might want to check that out");
+          break;
+        case OFFSET.ITEMS.BUILDINGS + 2 : // Unlock Farm
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product2").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Future almanacs"]),
+              () => receiveUpgrade(Game.Upgrades["Rain prayer"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product2").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 3 : // Unlock Mine
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product3").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Seismic magic"]),
+              () => receiveUpgrade(Game.Upgrades["Asteroid mining"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product3").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 4 : // Unlock Factory
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product4").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Quantum electronics"]),
+              () => receiveUpgrade(Game.Upgrades["Temporal overclocking"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product4").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 5 : // Unlock Bank
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product5").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Contracts from beyond"]),
+              () => receiveUpgrade(Game.Upgrades["Printing presses"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product5").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 6 : // Unlock Temple
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product6").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Paganism"]),
+              () => receiveUpgrade("God particle")
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product6").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 7 : // Unlock Wizard Tower
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product7").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Arcane knowledge"]),
+              () => receiveUpgrade(Game.Upgrades["Magical botany"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product7").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 8 : // Unlock Shipment
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product8").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Fossil fuels"]),
+              () => receiveUpgrade(Game.Upgrades["Shipyards"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product8").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 9 : // Unlock Alchemy Lab
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product9").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Primordial ores"]),
+              () => receiveUpgrade(Game.Upgrades["Gold fund"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product9").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 10 : // Unlock Portal
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product10").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Infernal crops"]),
+              () => receiveUpgrade(Game.Upgrades["Abysmal glimmer"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product10").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 11 : // Unlock Time Machine
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product11").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Relativistic parsec-skipping"]),
+              () => receiveUpgrade(Game.Upgrades["Primeval glow"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product11").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 12 : // Unlock Antimatter Condenser
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product12").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Extra physics funding"]),
+              () => receiveUpgrade(Game.Upgrades["Chemical proficiency"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product12").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 13 : // Unlock Prism
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product13").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Light magic"]),
+              () => receiveUpgrade(Game.Upgrades["Mystical energies"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product13").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 14 : // Unlock Chancemaker
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product14").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Gemmed talismans"]),
+              () => receiveUpgrade(Game.Upgrades["Charm quarks"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product14").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 15 : // Unlock Fractal Engine
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product15").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Recursive mirrors"]),
+              () => receiveUpgrade(Game.Upgrades["Mice clicking mice"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product15").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 16 : // Unlock Javascript Console
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product16").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Script grannies"]),
+              () => receiveUpgrade(Game.Upgrades["Tombola computing"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product16").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 17 : // Unlock Idleverse
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product17").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Perforated mille-feuille cosmos"]),
+              () => receiveUpgrade(Game.Upgrades["Infraverses and superverses"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product17").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 18 : // Unlock Cortex Baker
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product18").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Thoughts & prayers"]),
+              () => receiveUpgrade(Game.Upgrades["Fertile minds"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product18").dataset.aphide = "";
+            break;
+          }
+        case OFFSET.ITEMS.BUILDINGS + 19 : // Unlock You
+          if (progressiveBuildingsEnabled) {
+            [
+              () => document.getElementById("product19").dataset.aphide = "",
+              () => receiveUpgrade(Game.Upgrades["Accelerated development"]),
+              () => receiveUpgrade(Game.Upgrades["Peer review"])
+            ].slice(0,receivedCount).forEach(callback => callback());
+            break;
+          } else {
+            document.getElementById("product19").dataset.aphide = "";
+            break;
+          }
+      }
+    } catch (_) {
+      //Not handled since current implementation expects it to error (This shal be refactored...)
     }
   }
 
