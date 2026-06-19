@@ -3,10 +3,12 @@ from dataclasses import dataclass
 from Options import Choice, Option, Toggle, DefaultOnToggle, Range, OptionList, DeathLink, PerGameCommonOptions
 
 class Goal(Range):
-    """Achievement Goal"""
+    """Achievement Goal
+        100 is pretty easy, 300 is average and 500 is very hard.
+        Achievement count include shadow achievements"""
     display_name = "Achievement Goal"
     range_start = 1
-    range_end = 639 # TODO len(Locations) ?
+    range_end = 643 # Note: there are fewer locations than achievements, but the goal is checked on *achievements* client-side
     default = 100
 
 class Traps(Range):
@@ -41,14 +43,14 @@ class EnableAutoHints(Toggle):
     display_name = "Enable Auto Hints"
 
 class SynergyAsProgressiveBuildings(Toggle):
-    """When enabled, this option makes Synergy upgrades behave like a Unlock Building item.
+    """When enabled, this option makes Synergy upgrades behave like an Unlock Building item.
         This mean you get 3x Unlock Building instead of 1x, and subsequent unlocks will
         turn into a synergy upgrade instead.
     """
     display_name = "Synergy as Progressive Buildings"
 
 class PlentifulBuildings(Range):
-    """Add additional copies of the Buildings into the Itempool, allowing you to more easily find and unlock them  
+    """Add additional copies of the Buildings into the item pool, allowing you to more easily find and unlock them
     Stacks with Progressive Buildings"""
     display_name = "Plentiful buildings"
     rage_start = 0

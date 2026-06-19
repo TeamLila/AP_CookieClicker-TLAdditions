@@ -18,8 +18,9 @@ class OFFSET():
     FILLERS = 50000000
     TRAPS = 60000000
 
-# TODO: missing flavored cookies? https://cookieclicker.fandom.com/wiki/Flavored_Cookies
 # Upgrades START ID 10000000
+# List of all regular upgrades (ie all non-cookie upgrades)
+# Not exhaustive, because special upgrades such as progressive items are in their own list
 # FIXME all ids are offset by 1, it's pretty error-prone
 upgrades = [
     ItemData(OFFSET.UPGRADES + 1, "Reinforced index finger", ItemClassification.useful),
@@ -527,7 +528,7 @@ cookie_multiplier = [
     ItemData(OFFSET.FILLERS + 1, "Random Cookie Multiplier 999x", ItemClassification.filler),
     ItemData(OFFSET.FILLERS + 2, "Random Cookie Multiplier 9999x", ItemClassification.filler),
     ItemData(OFFSET.FILLERS + 3, "Random Cookie Multiplier 9999999x", ItemClassification.filler),
-    # ItemData(OFFSET.FILLERS + 4, "Random Cookie Multiplier 0.5x", ItemClassification.filler),
+    # ItemData(OFFSET.FILLERS + 4, "Random Cookie Multiplier 0.5x", ItemClassification.filler), LEGACY
     ItemData(OFFSET.FILLERS + 5, "Random Cookie Multiplier 10x", ItemClassification.filler),
     # ItemData(42069649, "No Cookies for U", ItemClassification.filler)
 ]

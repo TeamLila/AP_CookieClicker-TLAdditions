@@ -27,7 +27,7 @@ class SPHERE(Enum):
 
     # Special sphere
     ENDGAME = 10 # A bit different from progression because we need specifically everything
-    GRANDMA = 66
+    GRANDMAPO = 66
 
 class BUILDING(Enum):
     NOTHING = -1
@@ -52,6 +52,10 @@ class BUILDING(Enum):
     CORTEX_BAKER = 18
     YOU = 19
 
+###
+# This list of achievements is generated from the Cookie Clicker data sheet (see cell I2)
+# > https://docs.google.com/spreadsheets/d/1HYuVLp_hS5lWVtr4BB9W804vrGcqpTBCUhjOf4bIq9g/edit?usp=sharing
+###
 achievements = [
     # Total baked
     CCAchievement(0, "Wake and bake", -1, 0),
@@ -131,8 +135,7 @@ achievements = [
     CCAchievement(241, "Fast", -1, 6),
     CCAchievement(274, "Knead for speed", -1, 6),
     CCAchievement(275, "Well the cookies start coming and they don't stop coming", -1, 6),
-    CCAchievement(276, "I don't know if you've noticed but all these icons are very slightly off-center", -1,
-                  6),
+    CCAchievement(276, "I don't know if you've noticed but all these icons are very slightly off-center", -1, 6),
     CCAchievement(277, "The proof of the cookie is in the baking", -1, 6),
     CCAchievement(278, "If it's worth doing, it's worth overdoing", -1, 6),
     CCAchievement(368, "Running with scissors", -1, 6),
@@ -690,31 +693,34 @@ achievements = [
     CCAchievement(456, "O Fortuna", -1, 10),
     CCAchievement(262, "Last Chance to See", -1, -1),
     CCAchievement(367, "So much to do so much to see", -1, -1),
-    CCAchievement(96, "Getting even with the oven", -1, -1),
-    CCAchievement(97, "Now this is pod-smashing", -1, -1),
-    CCAchievement(98, "Chirped out", -1, -1),
-    CCAchievement(99, "Follow the white rabbit", -1, -1),
+    CCAchievement(96, "Getting even with the oven", 4, -1),
+    CCAchievement(97, "Now this is pod-smashing", 4, -1),
+    CCAchievement(98, "Chirped out", 4, -1),
+    CCAchievement(99, "Follow the white rabbit", 4, -1),
     CCAchievement(321, "Bibbidi-bobbidi-boo", 7, 1),
     CCAchievement(322, "I'm the wiz", 7, 4),
-    CCAchievement(323, "A wizard is you", -1, -1),
+    CCAchievement(323, "A wizard is you", 7, -1),
     CCAchievement(378, "Botany enthusiast", 2, 3),
-    CCAchievement(379, "Green, aching thumb", -1, -1),
-    CCAchievement(380, "In the garden of Eden (baby)", -1, 3),
-    CCAchievement(381, "Keeper of the conservatory", -1, -1),
-    CCAchievement(382, "Seedless to nay", -1, -1),
-    CCAchievement(457, "Initial public offering", -1, 1),
-    CCAchievement(458, "Rookie numbers", -1, 10),
-    CCAchievement(459, "No nobility in poverty", -1, 10),
-    CCAchievement(460, "Full warehouses", -1, 5),
-    CCAchievement(461, "Make my day", -1, 4),
-    CCAchievement(462, "Buy buy buy", -1, 4),
-    CCAchievement(463, "Gaseous assets", -1, -1),
-    CCAchievement(464, "Pyramid scheme", -1, 10),
-    CCAchievement(537, "Liquid assets", -1, 10),
-    CCAchievement(637, "Debt evasion", -1, 2),
+    CCAchievement(379, "Green, aching thumb", 2, -1),
+    CCAchievement(380, "In the garden of Eden (baby)", 2, 3),
+    CCAchievement(381, "Keeper of the conservatory", 2, -1),
+    CCAchievement(382, "Seedless to nay", 2, -1),
+    CCAchievement(457, "Initial public offering", 5, 1),
+    CCAchievement(458, "Rookie numbers", 5, 10),
+    CCAchievement(459, "No nobility in poverty", 5, 10),
+    CCAchievement(460, "Full warehouses", 5, 5),
+    CCAchievement(461, "Make my day", 5, 4),
+    CCAchievement(462, "Buy buy buy", 5, 4),
+    CCAchievement(463, "Gaseous assets", 5, -1),
+    CCAchievement(464, "Pyramid scheme", 5, 10),
+    CCAchievement(537, "Liquid assets", 5, 10),
+    CCAchievement(637, "Debt evasion", 5, 2),
     CCAchievement(133, "You win a cookie", -1, 2),
     CCAchievement(639, "Cookie Clicker", 19, 5),
 ]
+###
+# End of generated section
+###
 
 victory_achievement = CCAchievement(0, "Victory Location", -1, -1)
 victory_achievement.id = 42000000

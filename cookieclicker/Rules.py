@@ -37,29 +37,23 @@ class BUILDING_NAME(Enum):
         return "Progressive " + self.value
 
 
-def set_rules(self: "CookieClicker"):
-    world = self.multiworld
-    player = self.player
+def set_rules(world: "CookieClicker"):
+    multiworld = world.multiworld
+    player = world.player
 
     # 1) Prevent each “Unlock Building” item from ever appearing in any of that building’s own-achievement locations.
     for building in BUILDING_NAME:
         for location in locations['by_building'][BUILDING[building.name]]:
-            cclocation = world.get_location(location.name, player)
-            self.set_rule(cclocation, HasAny(building.unlock_item(), building.progressive_item()))
+            cclocation = multiworld.get_location(location.name, player)
+            world.set_rule(cclocation, HasAny(building.unlock_item(), building.progressive_item()))
             forbid_item(cclocation, building.unlock_item(), player)
             forbid_item(cclocation, building.progressive_item(), player)
 
-    # 2) Make the “sphere 0” achievements always available
-    # 3) Rough sphere implementation. Don't ask how it's balanced
-
-    # INFO : step 2 & 3 are handled directly during Region creation.
-
-
-    # 4) Standard completion check. Due to AP limitations, the achievement count check is done client-side
+    # 2) Standard completion check. Due to AP limitations, the achievement count check is done client-side
     #    and a special Victory item is unlocked if conditions are met
-    self.multiworld.completion_condition[player] = lambda state: state.has("Victory", self.player)
+    world.multiworld.completion_condition[player] = lambda state: state.has("Victory", world.player)
 
-
+# Export rules applied to regions during create_regions()
 RULES = {
     SPHERE.ZERO: True_(),
     SPHERE.ONE: HasAny(BUILDING_NAME.TEMPLE.unlock_item(), BUILDING_NAME.TEMPLE.progressive_item(),
@@ -73,5 +67,5 @@ RULES = {
     SPHERE.ENDGAME: Has("A crumbly egg") &
                     (HasAll(*[b.unlock_item() for b in BUILDING_NAME])
                      | HasAll(*[b.progressive_item() for b in BUILDING_NAME])),
-    SPHERE.GRANDMA: HasAny("One Mind", "Communal brainsweep", "Elder Pact")
+    SPHERE.GRANDMAPO: HasAny("One Mind", "Communal brainsweep", "Elder Pact")
 }

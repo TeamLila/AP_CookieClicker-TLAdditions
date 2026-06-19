@@ -9,10 +9,11 @@ def create_regions(world: "CookieClicker "):
     multiworld = world.multiworld
     player = world.player
 
-    region = Region("Menu", player, multiworld)
-    multiworld.regions.append(region)
+    menu = Region("Menu", player, multiworld)
+    multiworld.regions.append(menu)
 
-    menu = region
+    region = menu
+    # Create region for each sphere, and then connect it to the previous sphere
     for sphere in SPHERE:
         if sphere == SPHERE.EXCLUDED:
             continue
@@ -29,8 +30,9 @@ def create_regions(world: "CookieClicker "):
             event_location.place_locked_item(CCItem("Victory", ItemClassification.progression, 42000000, player))
             region.locations.append(event_location)
 
-        if sphere == SPHERE.GRANDMA:
-            menu.connect(region, rule=RULES[sphere])
+        sphere_rules = RULES[sphere]
+        if sphere == SPHERE.GRANDMAPO:
+            menu.connect(region, rule=sphere_rules)
         else:
-            previous.connect(region, rule=RULES[sphere])
+            previous.connect(region, rule=sphere_rules)
         multiworld.regions.append(region)
