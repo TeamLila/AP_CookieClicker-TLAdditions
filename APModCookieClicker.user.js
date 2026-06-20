@@ -850,7 +850,7 @@ function receiveItem(itemId, firstTime) {
         [
           () => document.getElementById("product6").dataset.aphide = "",
           () => receiveUpgrade(Game.Upgrades["Paganism"]),
-          () => receiveUpgrade("God particle")
+          () => receiveUpgrade(Game.Upgrades["God particle"])
         ].slice(0, receivedCount).forEach(callback => callback());
         break;
       case OFFSET.ITEMS.BUILDINGS + 7 : // Unlock Wizard Tower
