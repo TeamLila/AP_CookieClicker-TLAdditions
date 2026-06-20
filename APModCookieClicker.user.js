@@ -804,7 +804,7 @@ function receiveItem(itemId, firstTime) { //NOSONAR (To Cognitive Complex, but h
      *    Note: 3 is an ugly magic number because at the moment ALL progressive buildings have *exactly* 3 tiers
      * Otherwise more copy's will do nothing (except re-unlock the building again and again)
      */
-    const receivedCount = Math.max(Object.groupBy(receivedItems, x => x)[itemId]?.length || 0, 3);
+    let receivedCount = Math.max(Object.groupBy(receivedItems, x => x)[itemId]?.length || 0, 3);
 
 
       //Create the 2 Synergy Upgrade Lists (Sorted By Buildings (INCLUDING GRANDMA!))
@@ -859,7 +859,7 @@ function receiveItem(itemId, firstTime) { //NOSONAR (To Cognitive Complex, but h
       }
 
       let buildingID = itemId - OFFSET.ITEMS.BUILDINGS
-      console.log("Unlocking Building Nr:" + buildingID.toString())
+      console.log("Unlocking Building Nr: " + buildingID.toString() + ", currently having This many Progressives: " + receivedCount.toString())
       if (receivedCount >= 1) { //initial Unlock
         let producerInternalName = "product" + buildingID.toString();
         document.getElementById(producerInternalName).dataset.aphide = "";
