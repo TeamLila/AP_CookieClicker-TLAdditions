@@ -553,7 +553,7 @@ class APNotes {
       let remaining = Game.APNotes.length;
       for (let i in Game.APNotes) {
         if (i < 5) {
-          let me = Game.APNotes[i];
+          var me = Game.APNotes[i];
           let pic = '';
           if (me.pic != '') pic = '<div class="icon" style="' + writeIcon(me.pic) + '"></div>';
           str = '<div id="apnote-' + me.id + '" ' + (me.tooltip ? Game.getDynamicTooltip(me.tooltip, 'this', true) + ' ' : '') + 'class="framed note ' + (me.pic != '' ? 'haspic' : 'nopic') + ' ' + (me.desc != '' ? 'hasdesc' : 'nodesc') + '"><div class="close" onclick="PlaySound(\'snd/tick.mp3\');Game.CloseAPNote(' + me.id + ');">x</div>' + pic + '<div class="text"><h3>' + me.title + '</h3>' + (me.desc != '' ? '<div class="line"></div><h5>' + me.desc + '</h5>' : '') + '</div></div>' + str;
@@ -568,7 +568,7 @@ class APNotes {
       for (let i in Game.APNotes) {
         me.l = 0;
         if (i < 5) {
-          let me = Game.APNotes[i];
+          var me = Game.APNotes[i];
           me.l = l('apnote-' + me.id);
         }
       }
@@ -576,7 +576,7 @@ class APNotes {
     Game.APNotesLogic = function () {
       for (let i in Game.APNotes) {
         if (Game.APNotes[i].quick > 0) {
-          let me = Game.APNotes[i];
+          var me = Game.APNotes[i];
           me.life--;
           if (me.life <= 0) Game.CloseAPNote(me.id);
         }
@@ -585,7 +585,7 @@ class APNotes {
     Game.APNotesDraw = function () {
       for (let i in Game.APNotes) {
         if (Game.APNotes[i].quick > 0) {
-          let me = Game.APNotes[i];
+          var me = Game.APNotes[i];
           if (me.l) {
             if (me.life < 10) {
               me.l.style.opacity = (me.life / 10);
@@ -858,8 +858,8 @@ function receiveItem(itemId, firstTime) { //NOSONAR (To Cognitive Complex, but h
         console.warn("I guess we are unlocking grandma's again, someone might want to check that out");
       }
 
-      
       let buildingID = itemId - OFFSET.ITEMS.BUILDINGS
+      console.log("Unlocking Building Nr:" + buildingID.toString)
       if (receivedCount >= 1) { //initial Unlock
         let producerInternalName = "product" + buildingID.toString;
         document.getElementById(producerInternalName).dataset.aphide = "";
