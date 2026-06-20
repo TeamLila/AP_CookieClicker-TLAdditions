@@ -804,36 +804,54 @@ function receiveItem(itemId, firstTime) { //NOSONAR (To Cognitive Complex, but h
      * If no progressive buildings, then any additional copy will just re-unlock the building (ie do nothing)
      */
     const receivedCount = progressiveBuildingsEnabled
-      ? Math.max(Object.groupBy(receivedItems, x => x)[itemId]?.length || 0, 3)
+      ? Math.max(Object.groupBy(receivedItems, x => x)[itemId]?.length || 0, 3) //Tecnicaly Obsoleet now
       : 0;
 
 
-      //TODO [SELFNOTE-TEAM_LILA] Refactor this beheamoth
       //Create the 2 Synergy Upgrade Lists (Sorted By Buildings (INCLUDING GRANDMA!))
       const PROGRESSIVE_ITEMS_T1 = [
-        "Thousand fingers",
-        null,
-        "Future almanacs",
-        "Seismic magic",
-        "Quantum electronics",
-        "Contracts from beyond",
-        "Paganism",
-        "Arcane knowledge",
-        "Fossil fuels",
-        "Primordial ores",
-        "Infernal crops",
-        "Relativistic parsec-skipping",
-        "Extra physics funding",
-        "Light magic",
-        "Gemmed talismans",
-        "Recursive mirrors",
-        "Script grannies",
-        "Perforated mille-feuille cosmos",
-        "Thoughts & prayers",
-        "Accelerated development"
+        "Thousand fingers",                     //Cursor
+        null,                                   //Grandma (unused)
+        "Future almanacs",                      //Farm
+        "Seismic magic",                        //Mine
+        "Quantum electronics",                  //Factory
+        "Contracts from beyond",                //bank
+        "Paganism",                             //Temple
+        "Arcane knowledge",                     //Wizard Tower
+        "Fossil fuels",                         //Shipment
+        "Primordial ores",                      //Alchemy lab
+        "Infernal crops",                       //Portal
+        "Relativistic parsec-skipping",         //Time Machine
+        "Extra physics funding",                //Antimatter-Condenser
+        "Light magic",                          //Prism
+        "Gemmed talismans",                     //Chancemaker
+        "Recursive mirrors",                    //Fractal Engin
+        "Script grannies",                      //Javascript Console
+        "Perforated mille-feuille cosmos",      //Idleverse
+        "Thoughts & prayers",                   //Cortex Baker
+        "Accelerated development"               //You
       ]
       const PROGRESSIVE_ITEMS_T2 = [
-
+        "Starter kit",                          //Cursor
+        null,                                   //Grandma (unused)
+        "Rain prayer",                          //Farm
+        "Asteroid mining",                      //Mine
+        "Temporal overclocking",                //Factory
+        "Printing presses",                     //bank
+        "God particle",                         //Temple
+        "Magical botany",                       //Wizard Tower
+        "Shipyards",                            //Shipment
+        "Gold fund",                            //Alchemy lab
+        "Abysmal glimmer",                      //Portal
+        "Primeval glow",                        //Time Machine
+        "Chemical proficiency",                 //Antimatter-Condenser
+        "Mystical energies",                    //Prism
+        "Charm quarks",                         //Chancemaker
+        "Mice clicking mice",                   //Fractal Engin
+        "Tombola computing",                    //Javascript Console
+        "Infraverses and superverses",          //Idleverse
+        "Fertile minds",                        //Cortex Baker
+        "Peer review"                           //You
       ]
 
       //Current Safty message, may be removed if Grandma is (intentionaly) added to the itempool
@@ -841,7 +859,7 @@ function receiveItem(itemId, firstTime) { //NOSONAR (To Cognitive Complex, but h
         console.warn("I guess we are unlocking grandma's again, someone might want to check that out");
       }
 
-
+      
       let buildingID = itemId - OFFSET.ITEMS.BUILDINGS
       if (receivedCount >= 1) { //initial Unlock
         let producerInternalName = "product" + buildingID.toString;
@@ -851,19 +869,20 @@ function receiveItem(itemId, firstTime) { //NOSONAR (To Cognitive Complex, but h
         let t1UpgradeName = PROGRESSIVE_ITEMS_T1[buildingID];
 
         if (t1UpgradeName !== null) {
-          
+          let upgrade = Game.Upgrades[t1UpgradeName];
+          receiveUpgrade(upgrade);
         }
       }
       if (receivedCount >= 3) { //Synergy Unlock 2 (Progressive item T2)
         let t2UpgradeName = PROGRESSIVE_ITEMS_T2[buildingID];
 
         if (t2UpgradeName !== null) {
-
+          let upgrade = Game.Upgrades[t2UpgradeName];
+          receiveUpgrade(upgrade);
         }
       }
       
-
-      //OLD UNLOCK BELOW
+      /* //OLD CODE TO UNLOCK
     switch (itemId) {
       case OFFSET.ITEMS.BUILDINGS + 0 : // Unlock Cursor
         [
@@ -1002,7 +1021,7 @@ function receiveItem(itemId, firstTime) { //NOSONAR (To Cognitive Complex, but h
           () => receiveUpgrade(Game.Upgrades["Peer review"])
         ].slice(0, receivedCount).forEach(callback => callback());
         break;
-    }
+    } */
   }
 
   if (OFFSET.ITEMS.isUpgrade(itemId)) {
