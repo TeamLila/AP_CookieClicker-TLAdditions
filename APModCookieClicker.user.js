@@ -10,7 +10,7 @@
 // @top-level-await
 // ==/UserScript==
 
-const {AP_CLIENT, ITEMS_HANDLING_FLAGS} = await import(
+const {Client, itemsHandlingFlags} = await import(
   // Switched to a fork because main repo has a bug on hint ordering
   "https://unpkg.com/@airbreather/archipelago.js@2.0.5-airbreather"
   );
@@ -247,7 +247,7 @@ function sendCheckIdToAp(id) {
 function connectAP(e) {
   e.preventDefault();
   console.debug("CONNECTION ATTEMPT", e);
-  window.client = new AP_CLIENT();
+  window.client = new Client();
 
   const fields = document.getElementById("apConnectionFields");
   const apFormError = document.getElementById("apFormError");
@@ -281,7 +281,7 @@ function connectAP(e) {
   // let self = this; #UNUSED
   const connectionInfo = {
     password: password.value,
-    items_handling: ITEMS_HANDLING_FLAGS.all,
+    items_handling: itemsHandlingFlags.all,
   };
   const url = hostname.value + ":" + port.value;
 
