@@ -859,9 +859,9 @@ function receiveItem(itemId, firstTime) { //NOSONAR (To Cognitive Complex, but h
       }
 
       let buildingID = itemId - OFFSET.ITEMS.BUILDINGS
-      console.log("Unlocking Building Nr:" + buildingID.toString)
+      console.log("Unlocking Building Nr:" + buildingID.toString())
       if (receivedCount >= 1) { //initial Unlock
-        let producerInternalName = "product" + buildingID.toString;
+        let producerInternalName = "product" + buildingID.toString();
         document.getElementById(producerInternalName).dataset.aphide = "";
       }
       if (receivedCount >= 2 & progressiveBuildingsEnabled) { //Synergy Unlock 1 (Progressive item T1)
