@@ -298,7 +298,11 @@ function connectAP(e) {
     console.log("Room update: ", packet);
   });
 
-  window.client.socket.on("receivedItems", (packet) => {
+  window.client.socket.on("receivedItems", async (packet) => {
+    while (!Game.ApReady) {
+      console.debug("Game data not ready... delaying item receiving")
+      await new Promise(res => setTimeout(res, 100));
+    }
     console.log("Received Items: ", packet);
 
     // When items.length > 1 its an reconnect
@@ -1288,10 +1292,30 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     }
   };
 
+  // Setup for later
+  let prestigeUps = ["How to bake your dragon", "Synergies Vol. I", "Synergies Vol. II"];
+  if (gameOptions.enable_progressive_buildings) prestigeUps.push("Starter kit");
+
   // Extend
+  const CCAscend = Game.Ascend;
+  Game.Ascend = function (bypass) {
+    // Force display and prevent buying prestige upgrades handled directly in AP
+    if (bypass) prestigeUps.forEach(u => Game.Upgrades[u].bought = 1);
+    CCAscend(bypass);
+  }
+
   const CCReincarnate = Game.Reincarnate;
   Game.Reincarnate = function (bypass) {
+    // Disable these upgrades again so their effect is not applied by accident
+    if (bypass) prestigeUps.forEach(u => {
+      // Don't relock items that were received for real
+      if (!Game.Upgrades[u].unlocked) {
+        Game.Upgrades[u].bought = 0
+      }
+    });
+
     CCReincarnate(bypass);
+
     if (bypass) {
       // Reapply custom buffs cleared during ascension
       if (gameOptions.production_multiplier && gameOptions.production_multiplier > 0) applyProductionMultiplier();
@@ -1368,12 +1392,10 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     "Heavenly key"
   ].forEach(up => Game.Upgrades[up].unlocked = 0);
   // Same for  Prestige upgrades linked to pool items, or used as progressive buildings but not in the item pool
-  let prestigeUps = ["How to bake your dragon", "Synergies Vol. I", "Synergies Vol. II"];
-  if (gameOptions.enable_progressive_buildings) prestigeUps.push("Starter kit");
   prestigeUps.forEach(up => {
-        Game.Upgrades[up].unlocked = 0;
-        Game.Upgrades[up].bought = 1;
         Game.Upgrades[up].basePrice = -1;
+        Game.Upgrades[up].parents = [];
       })
   Game.RebuildUpgrades();
+  Game.ApReady = true;
 }

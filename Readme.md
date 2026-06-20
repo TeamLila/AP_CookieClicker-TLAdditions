@@ -2,7 +2,7 @@
 
 Everyone should know the little idle game named Cookie Clicker.
 In CookieClicker Archipelago every building and upgrade has to be unlocked by a check
-Every Achievement you make in the Game is a location, which unlock other's items
+Every Achievement you make in the Game is a location, which unlock other's items. Read more details [here](./Archipelago.md) !
 
 Have fun and feel free to make any pull requests 🍪
 
