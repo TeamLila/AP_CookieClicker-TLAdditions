@@ -206,22 +206,22 @@ document.head.append(style);
 function typeToText(element) {
   const id = Number(element.text);
 
-  if (element.type === "player_id" && !isNaN(id)) {
-    return window.client.players.findPlayer(parseInt(element.text, 10))?.alias;
-  } else if (element.type === "item_id" && !isNaN(id)) {
+  if (element.type === "player_id" && !Number.isNaN(id)) {
+    return window.client.players.findPlayer(Number.parseInt(element.text, 10))?.alias;
+  } else if (element.type === "item_id" && !Number.isNaN(id)) {
     return window.client.package.lookupItemName(
       window.client.players.findPlayer(element.player)?.game ?? "",
-      parseInt(element.text, 10),
+      Number.parseInt(element.text, 10),
     );
-  } else if (element.type === "location_id" && !isNaN(id)) {
+  } else if (element.type === "location_id" && !Number.isNaN(id)) {
     return window.client.package.lookupLocationName(
       window.client.players.findPlayer(element.player)?.game ?? "",
-      parseInt(element.text, 10),
+      Number.parseInt(element.text, 10),
     );
-  } else if (element.text !== undefined) {
-    return element.text;
-  } else {
+  } else if (element.text === undefined) {
     return element;
+  } else {
+    return element.text;
   }
 }
 
@@ -267,7 +267,7 @@ function connectAP(e) {
     return;
   }
 
-  if (parseInt(port.value) !== parseInt(localStorage.getItem("port"))) {
+  if (Number.parseInt(port.value) !== Number.parseInt(localStorage.getItem("port"))) {
     if (
       confirm(
         "Your Port changed, so this might be a new Game. DELETE LOCAL SAVE GAME?\nCancel to load your save normally.",
@@ -277,7 +277,7 @@ function connectAP(e) {
     }
   }
 
-  let self = this;
+  // let self = this; #UNUSED
   const connectionInfo = {
     password: password.value,
     items_handling: itemsHandlingFlags.all,
@@ -324,12 +324,12 @@ function connectAP(e) {
       for (let id in networkItemsById) {
         if (!receivedItemsById[id]) {
           // New item
-          networkItemsById[id].forEach(i => receiveNewItem(i, true));
+          networkItemsById[id].forEach(i => receiveNewItem(i, true)); //has 2 Params, Expects 1? but works?
         } else if (receivedItemsById[id].length < networkItemsById[id].length) {
           // Further occurrences of fillers, progressive... any item that can appear multiple times.
           // FIXME regression: fillers obtained while away are not skipped anymore
           const missing = networkItemsById[id].length - receivedItemsById[id].length;
-          for (let i = 0; i<receivedItemsById[id].length; i++) receiveItem(id, false);
+          for (let i = 0; i<receivedItemsById[id].length; i++) receiveItem(id, false); //Sends the same item X times if theres mutlipel items?
           for (let i = 0; i<missing; i++) receiveNewItem(networkItemsById[id][0]);
         } else {
           networkItemsById[id].forEach(i => receiveItem(id, false));
@@ -532,7 +532,7 @@ class APNotes {
       Game.UpdateAPNotes();
     }
     Game.CloseAPNote = function (id) {
-      var me = Game.APNotesById[id];
+      let me = Game.APNotesById[id];
       if (Game.tooltip.from && Game.tooltip.from.id.indexOf('apnote-') == 0) Game.tooltip.hide();
       Game.setOnCrate(0);
       Game.APNotes.splice(Game.APNotes.indexOf(me), 1);
@@ -548,12 +548,12 @@ class APNotes {
       Game.UpdateAPNotes();
     }
     Game.UpdateAPNotes = function () {
-      var str = '';
-      var remaining = Game.APNotes.length;
-      for (var i in Game.APNotes) {
+      let str = '';
+      let remaining = Game.APNotes.length;
+      for (let i in Game.APNotes) {
         if (i < 5) {
-          var me = Game.APNotes[i];
-          var pic = '';
+          let me = Game.APNotes[i];
+          let pic = '';
           if (me.pic != '') pic = '<div class="icon" style="' + writeIcon(me.pic) + '"></div>';
           str = '<div id="apnote-' + me.id + '" ' + (me.tooltip ? Game.getDynamicTooltip(me.tooltip, 'this', true) + ' ' : '') + 'class="framed note ' + (me.pic != '' ? 'haspic' : 'nopic') + ' ' + (me.desc != '' ? 'hasdesc' : 'nodesc') + '"><div class="close" onclick="PlaySound(\'snd/tick.mp3\');Game.CloseAPNote(' + me.id + ');">x</div>' + pic + '<div class="text"><h3>' + me.title + '</h3>' + (me.desc != '' ? '<div class="line"></div><h5>' + me.desc + '</h5>' : '') + '</div></div>' + str;
           remaining--;
@@ -564,27 +564,27 @@ class APNotes {
         str += '<div class="framed close sidenote" onclick="PlaySound(\'snd/tick.mp3\');Game.CloseAPNotes();">x</div>';
       }
       Game.apNoteL.innerHTML = str;
-      for (var i in Game.APNotes) {
+      for (let i in Game.APNotes) {
         me.l = 0;
         if (i < 5) {
-          var me = Game.APNotes[i];
+          let me = Game.APNotes[i];
           me.l = l('apnote-' + me.id);
         }
       }
     }
     Game.APNotesLogic = function () {
-      for (var i in Game.APNotes) {
+      for (let i in Game.APNotes) {
         if (Game.APNotes[i].quick > 0) {
-          var me = Game.APNotes[i];
+          let me = Game.APNotes[i];
           me.life--;
           if (me.life <= 0) Game.CloseAPNote(me.id);
         }
       }
     }
     Game.APNotesDraw = function () {
-      for (var i in Game.APNotes) {
+      for (let i in Game.APNotes) {
         if (Game.APNotes[i].quick > 0) {
-          var me = Game.APNotes[i];
+          let me = Game.APNotes[i];
           if (me.l) {
             if (me.life < 10) {
               me.l.style.opacity = (me.life / 10);
@@ -604,13 +604,13 @@ class APNotes {
       if (!quick) quick = 6;
     }
     desc = replaceAll('==CLOSETHIS()==', 'Game.CloseNote(' + Game.apNoteId + ');', desc);
-    if (Game.popups) new Game.APNote(title, desc, pic, quick);
+    if (Game.popups) new Game.APNote(title, desc, pic, quick); //NOSONAR (Intended Behavior and is used on creation)
     if (!noLog) Game.AddToLog('<b>' + title + '</b> | ' + desc);
   }
   APNotifyTooltip = function (content) {
     //attaches a tooltip to the last spawned note
     if (!Game.APNotesById[Game.apNoteId - 1]) return false;
-    var me = Game.APNotesById[Game.apNoteId - 1];
+    let me = Game.APNotesById[Game.apNoteId - 1];
     me.tooltip = content;
     Game.UpdateAPNotes();
   }
@@ -639,7 +639,7 @@ onApClientSettingUpdate = setting => {
 
 
 // For this game we use the Games Chat, not the default Toast
-function toast(message, {receiving, item, type} = {}) {
+function toast(message, {receiving, item, type} = {}) { //NOSONAR (To Cognitive Complex, but has to be)
 
   if (type === "error") {
     Game.APNotify("Error", message, [1, 7]); // "!" icon
@@ -749,8 +749,8 @@ const OFFSET = {
   ACHIEVEMENTS: 42069001
 }
 
-function receiveItem(itemId, firstTime) {
-  itemId = parseInt(itemId);
+function receiveItem(itemId, firstTime) { //NOSONAR (To Cognitive Complex, but has to be)
+  itemId = Number.parseInt(itemId);
 
   function receiveUpgrade(upgrade) {
     let u = upgrade || Game.UpgradesById[itemId - OFFSET.ITEMS.UPGRADES - 1];
@@ -793,6 +793,7 @@ function receiveItem(itemId, firstTime) {
         console.log("*10 Cookies");
         break;
     }
+
   }
 
   if (OFFSET.ITEMS.isBuilding(itemId)) {
@@ -806,6 +807,7 @@ function receiveItem(itemId, firstTime) {
       ? Math.max(Object.groupBy(receivedItems, x => x)[itemId]?.length || 0, 3)
       : 0;
 
+      //TODO [SELFNOTE-TEAM_LILA] Refactor this beheamoth
     switch (itemId) {
       case OFFSET.ITEMS.BUILDINGS + 0 : // Unlock Cursor
         [
@@ -950,8 +952,7 @@ function receiveItem(itemId, firstTime) {
   if (OFFSET.ITEMS.isUpgrade(itemId)) {
     if (OFFSET.ITEMS.isProgressive(itemId)) {
       const receivedCount = Object.groupBy(receivedItems, x => x)[itemId]?.length || 0;
-      switch (itemId) {
-        case OFFSET.ITEMS.PROGRESSIVE + 0 : // Heavenly upgrades
+      if (itemId === OFFSET.ITEMS.PROGRESSIVE + 0) { // Heavenly upgrades
           [
             "Heavenly chip secret",
             "Heavenly cookie stand",
@@ -1198,7 +1199,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   if (gameOptions.lump_multiplier && gameOptions.lump_multiplier > 1) applyLumpMultiplier();
 
   // Overwrite for win function CookieClicker
-  Game.Win = function (what) {
+  Game.Win = function (what) { //NOSONAR (to cognitive complex.... even if we refactor, it will just end up to complex again when More goals are added)
     if (typeof what === "string") {
       if (Game.Achievements[what]) {
         let it = Game.Achievements[what];
@@ -1246,13 +1247,13 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
 
   Game.updateShimmers = function () {
     // Run shimmer functions, kill overtimed shimmers and spawn new ones
-    for (var i in Game.shimmers) {
-      Game.shimmers[i].update();
+    for (let shimmerNum in Game.shimmers) {
+      Game.shimmers[shimmerNum].update();
     }
 
     // Cookie storm!
     if (Game.hasBuff("Cookie storm") && Math.random() < 0.5) {
-      var newShimmer = new Game.shimmer(
+      let newShimmer = new Game.shimmer(
         "golden",
         {type: "cookie storm drop"},
         1,
@@ -1264,8 +1265,8 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     }
 
     // Spawn shimmers
-    for (var i in Game.shimmerTypes) {
-      let me = Game.shimmerTypes[i];
+    for (let shimmerTypeNum in Game.shimmerTypes) {
+      let me = Game.shimmerTypes[shimmerTypeNum];
       if (me.spawnsOnTimer && me.spawnConditions()) {
         // Only run on shimmer types that work on a timer
         if (!me.spawned) {
@@ -1279,13 +1280,13 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
               5,
             )
           ) {
-            var newShimmer = new Game.shimmer(i);
+            let newShimmer = new Game.shimmer(shimmerTypeNum);
             newShimmer.spawnLead = 1;
             if (
               Game.Has("Distilled essence of redoubled luck") &&
               Math.random() < 0.01
             )
-              var newShimmer = new Game.shimmer(i);
+            newShimmer = new Game.shimmer(shimmerTypeNum); //Why?
             me.spawned = 1;
           }
         }
