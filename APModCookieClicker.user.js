@@ -754,6 +754,7 @@ function receiveItem(itemId, firstTime) {
 
   function receiveUpgrade(upgrade) {
     let u = upgrade || Game.UpgradesById[itemId - OFFSET.ITEMS.UPGRADES - 1];
+    u.unlocked = 1;
     u.basePrice = -1;
     if (u.buy?.() !== 1) {
       // If there is no buy function, set it to bought manually
