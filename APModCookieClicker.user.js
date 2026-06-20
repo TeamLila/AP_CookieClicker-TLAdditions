@@ -802,11 +802,9 @@ function receiveItem(itemId, firstTime) { //NOSONAR (To Cognitive Complex, but h
 
     /* If progressive buildings is enabled, then each additional copy unlocks a new tier (capped to tier 3)
      *    Note: 3 is an ugly magic number because at the moment ALL progressive buildings have *exactly* 3 tiers
-     * If no progressive buildings, then any additional copy will just re-unlock the building (ie do nothing)
+     * Otherwise more copy's will do nothing (except re-unlock the building again and again)
      */
-    const receivedCount = progressiveBuildingsEnabled
-      ? Math.max(Object.groupBy(receivedItems, x => x)[itemId]?.length || 0, 3) //Tecnicaly Obsoleet now
-      : 0;
+    const receivedCount = Math.max(Object.groupBy(receivedItems, x => x)[itemId]?.length || 0, 3);
 
 
       //Create the 2 Synergy Upgrade Lists (Sorted By Buildings (INCLUDING GRANDMA!))
@@ -866,7 +864,7 @@ function receiveItem(itemId, firstTime) { //NOSONAR (To Cognitive Complex, but h
         let producerInternalName = "product" + buildingID.toString;
         document.getElementById(producerInternalName).dataset.aphide = "";
       }
-      if (receivedCount >= 2) { //Synergy Unlock 1 (Progressive item T1)
+      if (receivedCount >= 2 & progressiveBuildingsEnabled) { //Synergy Unlock 1 (Progressive item T1)
         let t1UpgradeName = PROGRESSIVE_ITEMS_T1[buildingID];
 
         if (t1UpgradeName !== null) {
@@ -874,7 +872,7 @@ function receiveItem(itemId, firstTime) { //NOSONAR (To Cognitive Complex, but h
           receiveUpgrade(upgrade);
         }
       }
-      if (receivedCount >= 3) { //Synergy Unlock 2 (Progressive item T2)
+      if (receivedCount >= 3 & progressiveBuildingsEnabled) { //Synergy Unlock 2 (Progressive item T2)
         let t2UpgradeName = PROGRESSIVE_ITEMS_T2[buildingID];
 
         if (t2UpgradeName !== null) {
@@ -1147,7 +1145,7 @@ async function appendFunctions() {
   document.getElementById("wrapper").style.visibility = "visible";
 
   function fixedHardcore() {
-	  hasCookieUpgrade = Game.UpgradesByPool["cookie"].some(me => me.bought);
+	  let hasCookieUpgrade = Game.UpgradesByPool["cookie"].some(me => me.bought);
 	if (Game.cookiesEarned>=1000000000000000 && !hasCookieUpgrade && (Game.ascensionMode==1 || Game.resets==0)) Game.Win('Hardcore');
 }
 
