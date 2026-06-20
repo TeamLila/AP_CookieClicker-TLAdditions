@@ -10,7 +10,7 @@
 // @top-level-await
 // ==/UserScript==
 
-const {Client, itemsHandlingFlags} = await import(
+const {AP_CLIENT, ITEMS_HANDLING_FLAGS} = await import(
   // Switched to a fork because main repo has a bug on hint ordering
   "https://unpkg.com/@airbreather/archipelago.js@2.0.5-airbreather"
   );
@@ -37,10 +37,11 @@ cssToast.rel = "stylesheet";
 document.head.append(cssToast);
 */
 
-const scriptToast = document.createElement("script");
-scriptToast.src = "https://cdn.jsdelivr.net/npm/toastify-js";
-scriptToast.type = "text/javascript";
-document.head.append(scriptToast);
+//TODO (maybe): add a script.integrity check (assuming the remote code should never change)
+const SCRIPT_TOAST = document.createElement("script");
+SCRIPT_TOAST.src = "https://cdn.jsdelivr.net/npm/toastify-js";
+SCRIPT_TOAST.type = "text/javascript";
+document.head.append(SCRIPT_TOAST);
 
 /* Usage
     Toastify({
@@ -67,10 +68,10 @@ Game.__APGoalVerify = () => {
 }
 
 // Input fields
-const apMenuContainer = document.createElement("div");
-apMenuContainer.id = "apMenu";
+const AP_MENU_CONTAINER = document.createElement("div");
+AP_MENU_CONTAINER.id = "apMenu";
 
-apMenuContainer.innerHTML = `
+AP_MENU_CONTAINER.innerHTML = `
    <div id="apMenuArrow"> < </div>
    <form id="apConnectionForm">
     <fieldset id="apConnectionFields">
@@ -94,7 +95,7 @@ apMenuContainer.innerHTML = `
 `;
 
 
-const formStyle = `
+const FORM_STYLE = `
   #apMenu {
     margin: 0;
     padding: 15px;
@@ -129,20 +130,20 @@ const formStyle = `
   }
 `;
 
-const consoleInput = document.createElement("input")
-consoleInput.id = "apCommandInput"
-consoleInput.placeholder = "!command"
-consoleInput.disabled = true;
+const CONSOLE_INPUT = document.createElement("input")
+CONSOLE_INPUT.id = "apCommandInput"
+CONSOLE_INPUT.placeholder = "!command"
+CONSOLE_INPUT.disabled = true;
 
 // Console
-consoleInput.addEventListener("keypress", function (event) {
+CONSOLE_INPUT.addEventListener("keypress", function (event) {
   if (event.key === "Enter") {
     event.preventDefault();
-    window.client.messages.say(consoleInput.value);
-    consoleInput.value = "";
+    window.client.messages.say(CONSOLE_INPUT.value);
+    CONSOLE_INPUT.value = "";
   }
 });
-apMenuContainer.append(consoleInput);
+AP_MENU_CONTAINER.append(CONSOLE_INPUT);
 
 // Settings panel
 let apClientSettings = { // init for code completion <3
@@ -154,10 +155,10 @@ let apClientSettings = { // init for code completion <3
 apClientSettings = JSON.parse(localStorage.apClientSettings || "{}");
 let onApClientSettingUpdate = setting => {};
 
-const settingsPanel = document.createElement("div");
-settingsPanel.id = "apSettingsPanel";
+const SETTINGS_PANEL = document.createElement("div");
+SETTINGS_PANEL.id = "apSettingsPanel";
 
-settingsPanel.innerHTML = `
+SETTINGS_PANEL.innerHTML = `
 <details><summary>AP client settings</summary>
   <fieldset><legend>Notification filters</legend>
     <label><input type="checkbox" name="splitNotifications" ${apClientSettings.splitNotifications ? "checked" : ""} />Use 2 columns</label>
@@ -171,7 +172,7 @@ settingsPanel.innerHTML = `
   <button class="apDanger" onclick="if(confirm('This will reset your CC save and received AP items. Continue?')===true) {Game.APReset()}">RESET SAVE</button>
 </details>
 `
-const settingsStyle = `
+const SETTINGS_STYLE = `
   #apSettingsPanel { 
     & label {
       display: block;
@@ -185,26 +186,26 @@ const settingsStyle = `
   }
 `;
 
-settingsPanel.querySelectorAll('input').forEach(input => input.addEventListener("change", e => {
+SETTINGS_PANEL.querySelectorAll('input').forEach(input => input.addEventListener("change", e => {
   apClientSettings[e.target.name] = e.target.checked;
   onApClientSettingUpdate(e.target.name)
   localStorage.apClientSettings = JSON.stringify(apClientSettings);
 }));
 
-apMenuContainer.append(settingsPanel);
+AP_MENU_CONTAINER.append(SETTINGS_PANEL);
 
-document.body.prepend(apMenuContainer);
+document.body.prepend(AP_MENU_CONTAINER);
 
 // Injecting AP client style
-const style = document.createElement("style");
-style.textContent = `
+const STYLE = document.createElement("style");
+STYLE.textContent = `
   .hinted { opacity: 1 !important }
   .APhide { display: none !important }
-` + formStyle + settingsStyle;
-document.head.append(style);
+` + FORM_STYLE + SETTINGS_STYLE;
+document.head.append(STYLE);
 
 function typeToText(element) {
-  const id = Number(element.text);
+  let id = Number(element.text);
 
   if (element.type === "player_id" && !Number.isNaN(id)) {
     return window.client.players.findPlayer(Number.parseInt(element.text, 10))?.alias;
@@ -246,7 +247,7 @@ function sendCheckIdToAp(id) {
 function connectAP(e) {
   e.preventDefault();
   console.debug("CONNECTION ATTEMPT", e);
-  window.client = new Client();
+  window.client = new AP_CLIENT();
 
   const fields = document.getElementById("apConnectionFields");
   const apFormError = document.getElementById("apFormError");
@@ -280,7 +281,7 @@ function connectAP(e) {
   // let self = this; #UNUSED
   const connectionInfo = {
     password: password.value,
-    items_handling: itemsHandlingFlags.all,
+    items_handling: ITEMS_HANDLING_FLAGS.all,
   };
   const url = hostname.value + ":" + port.value;
 
@@ -367,7 +368,7 @@ function connectAP(e) {
     .then(() => {
       console.log("Connected to the server");
       document.getElementById("apHintFields").disabled = false;
-      consoleInput.disabled = false;
+      CONSOLE_INPUT.disabled = false;
       const itemList = document.getElementById("itemList");
       Object.keys(window.client.package.findPackage(gameName).itemTable).forEach(item => itemList.innerHTML +=`<option value="${item}">`);
     })
@@ -386,8 +387,8 @@ const hintItem = e => {
 }
 
 const toggleMenu = () => {
-  apMenuContainer.classList.toggle("isClosed");
-  document.getElementById("apMenuArrow").textContent = apMenuContainer.classList.contains("isClosed") ? ">" : "<";
+  AP_MENU_CONTAINER.classList.toggle("isClosed");
+  document.getElementById("apMenuArrow").textContent = AP_MENU_CONTAINER.classList.contains("isClosed") ? ">" : "<";
 }
 
 document.getElementById("apConnectionForm").addEventListener("submit", connectAP);
