@@ -807,7 +807,63 @@ function receiveItem(itemId, firstTime) { //NOSONAR (To Cognitive Complex, but h
       ? Math.max(Object.groupBy(receivedItems, x => x)[itemId]?.length || 0, 3)
       : 0;
 
+
       //TODO [SELFNOTE-TEAM_LILA] Refactor this beheamoth
+      //Create the 2 Synergy Upgrade Lists (Sorted By Buildings (INCLUDING GRANDMA!))
+      const PROGRESSIVE_ITEMS_T1 = [
+        "Thousand fingers",
+        null,
+        "Future almanacs",
+        "Seismic magic",
+        "Quantum electronics",
+        "Contracts from beyond",
+        "Paganism",
+        "Arcane knowledge",
+        "Fossil fuels",
+        "Primordial ores",
+        "Infernal crops",
+        "Relativistic parsec-skipping",
+        "Extra physics funding",
+        "Light magic",
+        "Gemmed talismans",
+        "Recursive mirrors",
+        "Script grannies",
+        "Perforated mille-feuille cosmos",
+        "Thoughts & prayers",
+        "Accelerated development"
+      ]
+      const PROGRESSIVE_ITEMS_T2 = [
+
+      ]
+
+      //Current Safty message, may be removed if Grandma is (intentionaly) added to the itempool
+      if (itemId === OFFSET.ITEMS.BUILDINGS + 1) {
+        console.warn("I guess we are unlocking grandma's again, someone might want to check that out");
+      }
+
+
+      let buildingID = itemId - OFFSET.ITEMS.BUILDINGS
+      if (receivedCount >= 1) { //initial Unlock
+        let producerInternalName = "product" + buildingID.toString;
+        document.getElementById(producerInternalName).dataset.aphide = "";
+      }
+      if (receivedCount >= 2) { //Synergy Unlock 1 (Progressive item T1)
+        let t1UpgradeName = PROGRESSIVE_ITEMS_T1[buildingID];
+
+        if (t1UpgradeName !== null) {
+          
+        }
+      }
+      if (receivedCount >= 3) { //Synergy Unlock 2 (Progressive item T2)
+        let t2UpgradeName = PROGRESSIVE_ITEMS_T2[buildingID];
+
+        if (t2UpgradeName !== null) {
+
+        }
+      }
+      
+
+      //OLD UNLOCK BELOW
     switch (itemId) {
       case OFFSET.ITEMS.BUILDINGS + 0 : // Unlock Cursor
         [
