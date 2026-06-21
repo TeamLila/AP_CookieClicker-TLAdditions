@@ -444,12 +444,14 @@ let receivedItems = [];
 let locationsByDisplayOrder = [];
 // Fields should be the same as Options.py
 const gameOptions = {
+  goal: null,
   advancement_goal: 1000,
   traps_percentage: 0,
   enable_hints: false,
   production_multiplier: 0,
   lump_multiplier: 0,
   enable_progressive_buildings: false,
+  plentiful_buildings: null,
 };
 
 // FIXME: form fields should be stored in a APGame object or something but too much refacto for one commit. quick compat fix and will do at later time
@@ -1197,48 +1199,105 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   if (gameOptions.production_multiplier && gameOptions.production_multiplier > 0) applyProductionMultiplier();
   if (gameOptions.lump_multiplier && gameOptions.lump_multiplier > 1) applyLumpMultiplier();
 
-  // Overwrite for win function CookieClicker
-  Game.Win = function (what) {
-    if (typeof what === "string") {
-      if (Game.Achievements[what]) {
-        let it = Game.Achievements[what];
-        if (it.won == 0) {
-          let name = it.shortName ? it.shortName : it.dname;
-          it.won = 1;
-          Game.Notify(
-            loc("Achievement unlocked"),
-            '<div class="title" style="font-size:18px;margin-top:-2px;">' +
-            name +
-            "</div>",
-            it.icon,
-          );
-          Game.NotifyTooltip(
-            "function(){return Game.crateTooltip(Game.AchievementsById[" +
-            it.id +
-            "]);}",
-          );
-          if (Game.CountsAsAchievementOwned(it.pool)) Game.AchievementsOwned++;
-          Game.recalculateGains = 1;
-          if (App && it.vanilla) App.gotAchiev(it.id);
+  // Determin Goal
+  const gameWon = window.client.items.received.some(i => i.id === 42000000);
+  if (gameOptions.goal === 0) { //Achievment goal
+    console.log("Goal Selected: Crumblor")
+    Game.Win = function (what) {
+      console.log("Win Determination: goal is Nr. " + gameOptions.goal);
+      if (typeof what === "string") {
+        
+          if (Game.Achievements[what]) {
+            console.log("Goal Selected: Achievements");
+            let it = Game.Achievements[what];
+            if (it.won == 0) {
+              let name = it.shortName ? it.shortName : it.dname;
+              it.won = 1;
+              Game.Notify(
+                loc("Achievement unlocked"),
+                '<div class="title" style="font-size:18px;margin-top:-2px;">' +
+                name +
+                "</div>",
+                it.icon,
+              );
+              Game.NotifyTooltip(
+                "function(){return Game.crateTooltip(Game.AchievementsById[" +
+                it.id +
+                "]);}",
+              );
+              if (Game.CountsAsAchievementOwned(it.pool)) Game.AchievementsOwned++;
+              Game.recalculateGains = 1;
+              if (App && it.vanilla) App.gotAchiev(it.id);
+  
+              // Send AchievementID to AP
+              sendCheckIdToAp(it.id + OFFSET.ACHIEVEMENTS);
+              if (gameOptions.enable_hints) hintAdjacentLocations(it);
+  
+              //Check if game is won
+              if (!gameWon && loadAchieveNum() >= goalAchievementCount) {
+                console.log("Win-condition met!");
+                sendCheckIdToAp(42000000);
+                window.client.goal();
+              }
+            }
+          } else {
+            for (let i in what) {
+              Game.Win(what[i]);
+            }
+          }
+        }
+  
+    };
+  } else if (gameOptions.goal === 1) { //Crumblor goal
+  console.log("Goal Selected: Crumblor")
+  Game.UpgradeDragon = function() { //Detect level up
+    originalUpgradeDragon.call(this);
+    
+    console.log("Krumblor was just upgraded! New level: " + Game.dragonLevel);
+    
+    if (!gameWon && Game.dragonLevel >= 24) {
+      console.log("Win-condition met!");
+      sendCheckIdToAp(42000000);
+      window.client.goal();
+    }
+  };
+  } else {
+    console.error("INVALID GOAL: game tried to load a goal that was not implemented (goalnum: " + gameOptions.goal.toString() + ")")
+  }
 
-          // Send AchievementID to AP
-          sendCheckIdToAp(it.id + OFFSET.ACHIEVEMENTS);
-          if (gameOptions.enable_hints) hintAdjacentLocations(it);
+  //Overrides the win function
+  if (gameOptions.goal !== 0) {
+    Game.Win = function(what) {
+      if (typeof what === "string") {
+        if (Game.Achievements[what]) {
+          let it = Game.Achievements[what];
+          if (it.won == 0) {
+            let name = it.shortName ? it.shortName : it.dname;
+            it.won = 1;
+            Game.Notify(
+              loc("Achievement unlocked"),
+              '<div class="title" style="font-size:18px;margin-top:-2px;">' +
+              name +
+              "</div>",
+              it.icon,
+            );
+            Game.NotifyTooltip(
+              "function(){return Game.crateTooltip(Game.AchievementsById[" +
+              it.id +
+              "]);}",
+            );
+            if (Game.CountsAsAchievementOwned(it.pool)) Game.AchievementsOwned++;
+            Game.recalculateGains = 1;
+            if (App && it.vanilla) App.gotAchiev(it.id);
 
-          const gameWon = window.client.items.received.some(i => i.id === 42000000)
-          if (!gameWon && loadAchieveNum() >= goalAchievementCount) {
-            console.log("Win-condition met!");
-            sendCheckIdToAp(42000000)
-            window.client.goal();
+            // Send AchievementID to AP
+            sendCheckIdToAp(it.id + OFFSET.ACHIEVEMENTS);
+            if (gameOptions.enable_hints) hintAdjacentLocations(it);
           }
         }
       }
-    } else {
-      for (let i in what) {
-        Game.Win(what[i]);
-      }
     }
-  };
+  }
 
   // Overwrite Cookies
   //10x Shimmers
