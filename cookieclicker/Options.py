@@ -2,10 +2,25 @@ import typing
 from dataclasses import dataclass
 from Options import Choice, Option, Toggle, DefaultOnToggle, Range, OptionList, DeathLink, PerGameCommonOptions
 
-class Goal(Range):
+
+class CCGoal(Choice):
+    """The Goal Of the Game
+    
+    Achievements: Get The Selected Number of achievements to win
+    Crumblor: Max Out Crumblor to win
+    """
+    display_name = "Goal"
+    option_achievements = 0
+    option_crumblor = 1
+    default = 0
+
+
+class AchievementsNeeded(Range):
     """Achievement Goal
         100 is pretty easy, 300 is average and 500 is very hard.
-        Achievement count include shadow achievements"""
+        Achievement count include shadow achievements
+        
+        (Does noting if the goal isnt "Achievements")"""
     display_name = "Achievement Goal"
     range_start = 1
     range_end = 643 # Note: there are fewer locations than achievements, but the goal is checked on *achievements* client-side
@@ -60,7 +75,8 @@ class PlentifulBuildings(Range):
 
 @dataclass
 class CCOptions(PerGameCommonOptions):
-    advancement_goal: Goal
+    goal: CCGoal
+    advancement_goal: AchievementsNeeded
     traps_percentage: Traps
     enable_hints: EnableAutoHints
     production_multiplier: ProductionMultiplier
