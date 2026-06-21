@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         AP_CookieClicker
-// @version      2026-05-26
+// @version      2026-06-21
 // @description  Archipelago client for Cookie Clicker
 // @author       SX, Charlignon
 // @homepageURL  https://github.com/Charlignon/AP_CookieClicker
