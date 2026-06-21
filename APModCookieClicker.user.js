@@ -803,7 +803,7 @@ function receiveItem(itemId, firstTime) {
      * If no progressive buildings, then any additional copy will just re-unlock the building (ie do nothing)
      */
     const receivedCount = progressiveBuildingsEnabled
-      ? Math.max(Object.groupBy(receivedItems, x => x)[itemId]?.length || 0, 3)
+      ? Math.min(Object.groupBy(receivedItems, x => x)[itemId]?.length || 0, 3)
       : 0;
 
     switch (itemId) {
