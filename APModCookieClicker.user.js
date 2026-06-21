@@ -1202,7 +1202,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   // Determin Goal
   const gameWon = window.client.items.received.some(i => i.id === 42000000);
   if (gameOptions.goal === 0) { //Achievment goal
-    console.log("Goal Selected: Crumblor")
+    console.log("Goal Selected: Achievments")
     Game.Win = function (what) {
       console.log("Win Determination: goal is Nr. " + gameOptions.goal);
       if (typeof what === "string") {
