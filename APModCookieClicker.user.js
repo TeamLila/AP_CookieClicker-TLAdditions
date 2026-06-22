@@ -1250,17 +1250,30 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     };
   } else if (gameOptions.goal === 1) { //Crumblor goal
     console.log("Goal Selected: Crumblor")
-    Game.UpgradeDragon = function() { //Detect level up
-      origenalUpgradeDragon.call(this);
-      
-      console.log("Krumblor was just upgraded! New level: " + Game.dragonLevel);
-      
-      if (!gameWon && Game.dragonLevel >= 24) {
-        console.log("Win-condition met!");
-        sendCheckIdToAp(42000000);
-        window.client.goal();
+    //First doing the normal Crumblor check
+    Game.UpgradeDragon=function() {
+			if (Game.dragonLevel<Game.dragonLevels.length-1 && Game.dragonLevels[Game.dragonLevel].cost())
+			{
+				PlaySound('snd/shimmerClick.mp3');
+				Game.dragonLevels[Game.dragonLevel].buy();
+				Game.dragonLevel=(Game.dragonLevel+1)%Game.dragonLevels.length;
+				
+				if (Game.dragonLevel>=Game.dragonLevels.length-1) Game.Win('Here be dragon');
+				Game.ToggleSpecialMenu(1);
+				if (l('specialPic')){var rect=l('specialPic').getBounds();Game.SparkleAt((rect.left+rect.right)/2,(rect.top+rect.bottom)/2)+32-TopBarOffset;}
+				Game.recalculateGains=1;
+				Game.upgradesToRebuild=1;
       }
-    };
+      
+      //Detect level up and Checks if won
+        console.log("Krumblor was just upgraded! New level: " + Game.dragonLevel);
+        
+        if (!gameWon && Game.dragonLevel >= 24) {
+          console.log("Win-condition met!");
+          sendCheckIdToAp(42000000);
+          window.client.goal();
+        }
+    }
   } else {
     console.error("INVALID GOAL: game tried to load a goal that was not implemented (goalnum: " + gameOptions.goal.toString() + ")")
   }
