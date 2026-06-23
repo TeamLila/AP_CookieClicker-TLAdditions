@@ -23,12 +23,12 @@ A new page should open (illustration below). Install or reinstall the script
 <details><summary>For ViolentMonkey</summary>
 
 ⚠️ DO NOT ENABLE "Track external edits" ! This will auto-update your script, and you don't want that happening when you have an ongoing AP game :p
-![alt Create_Script](./Manuals/ViolentMonkey.png)
+![alt Create_Script](./Images/Manuals/ViolentMonkey.png)
 
 </details>
 <details><summary>For TamperMonkey</summary>
 
-![alt Create_Script](./Manuals/TamperMonkey.png)
+![alt Create_Script](./Images/Manuals/TamperMonkey.png)
 
 </details>
 
