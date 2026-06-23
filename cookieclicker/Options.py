@@ -57,13 +57,24 @@ class PlentifulBuildings(Range):
     range_end = 5
     default = 1
 
+class CustomCookie(Choice):
+    """Changes the Design of the Big Cookie"""
+    display_name = "Big Cookie Design"
+    option_basic = 0
+    option_apcookie = 1
+    # option_archipelago_icon = 2 #Not yet implemented
+    default = 1
+    
+
 
 @dataclass
 class CCOptions(PerGameCommonOptions):
     advancement_goal: Goal
+    custom_cookie: CustomCookie
     traps_percentage: Traps
     enable_hints: EnableAutoHints
     production_multiplier: ProductionMultiplier
     lump_multiplier: LumpMultiplier
     enable_progressive_buildings: SynergyAsProgressiveBuildings
     plentiful_buildings: PlentifulBuildings
+    
