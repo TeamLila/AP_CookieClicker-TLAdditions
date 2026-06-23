@@ -58,10 +58,14 @@ class PlentifulBuildings(Range):
     default = 1
 
 class CustomCookie(Choice):
-    """Changes the Design of the Big Cookie"""
+    """Changes the Design of the Big Cookie
+    
+    Basic: Doesnt change the Cookies design
+    Archipelago Cookie: Replaces the Big Cookie with a AP-Logo Version
+    """
     display_name = "Big Cookie Design"
     option_basic = 0
-    option_apcookie = 1
+    option_archipelago_cookie = 1
     # option_archipelago_icon = 2 #Not yet implemented
     default = 1
     
