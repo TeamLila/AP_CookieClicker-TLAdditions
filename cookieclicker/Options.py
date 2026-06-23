@@ -1,6 +1,6 @@
 import typing
 from dataclasses import dataclass
-from Options import Choice, Option, Toggle, DefaultOnToggle, Range, OptionList, DeathLink, PerGameCommonOptions
+from Options import Choice, Option, Toggle, DefaultOnToggle, Range, OptionList, DeathLink, PerGameCommonOptions, OptionGroup
 
 class Goal(Range):
     """Achievement Goal
@@ -67,3 +67,7 @@ class CCOptions(PerGameCommonOptions):
     lump_multiplier: LumpMultiplier
     enable_progressive_buildings: SynergyAsProgressiveBuildings
     plentiful_buildings: PlentifulBuildings
+
+
+optionGroup_MainSettings = [Goal, SynergyAsProgressiveBuildings, EnableAutoHints]
+optionGroup_BoosterSettings = [ProductionMultiplier, LumpMultiplier, PlentifulBuildings]

@@ -1,13 +1,23 @@
 import random
 from dataclasses import asdict
 from BaseClasses import Item
-from worlds.AutoWorld import World
+from worlds.AutoWorld import World, WebWorld
 from .Items import CCItem, traps, item_table, upgrades, structures, can_become_progressive, cookie_multiplier, \
     cookie_multiplier_weights, progressive_structures, progressive_heavens
 from .Locations import CCLocation, locations, SPHERE
-from .Options import CCOptions
+from .Options import CCOptions, OptionGroup, optionGroup_BoosterSettings, optionGroup_MainSettings
 from .Rules import set_rules
 from .Regions import create_regions
+
+
+class CookieClickerWebWorld(WebWorld):
+    # Need a new catagorie? create a new list in Options.py, Import it here and make a new line below with:
+    # OptionGroup(<NameOfCatagory>, optiongroup_ListName, start_collapsed = True) (last option doesnt seam to do anything in the AP-Client but eh)
+    option_groups = [
+        OptionGroup("Main Settings", optionGroup_MainSettings, start_collapsed = False),
+        OptionGroup("Boosters", optionGroup_BoosterSettings, start_collapsed = True),
+    ]
+
 
 class CookieClicker(World):
     game = "Cookie Clicker"
@@ -15,6 +25,7 @@ class CookieClicker(World):
     location_name_to_id = locations["name_to_id"]
     options_dataclass = CCOptions
     options: CCOptions
+    web = CookieClickerWebWorld
     item_name_to_id = { name: data.code for name, data in item_table.items() }
     cookie_names = [ item.item_name for item in cookie_multiplier ]
     cookie_weights = [ cookie_multiplier_weights.get(item.item_name, 1) for item in cookie_multiplier ]
