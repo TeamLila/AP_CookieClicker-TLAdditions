@@ -804,7 +804,7 @@ function receiveItem(itemId, firstTime) {
      */
     const receivedCount = progressiveBuildingsEnabled
       ? Math.min(Object.groupBy(receivedItems, x => x)[itemId]?.length || 0, 3)
-      : 0;
+      : 1;
 
     switch (itemId) {
       case OFFSET.ITEMS.BUILDINGS + 0 : // Unlock Cursor
