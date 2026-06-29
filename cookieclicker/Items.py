@@ -522,7 +522,6 @@ can_become_progressive = [
 
 
 # Fillers/Cookie Multiplier Start ID 50000000
-# TODO Should 0.5x be removed ? Redundant with traps
 cookie_multiplier = [
     ItemData(OFFSET.FILLERS + 0, "Random Cookie Multiplier 2x", ItemClassification.filler),
     ItemData(OFFSET.FILLERS + 1, "Random Cookie Multiplier 999x", ItemClassification.filler),
@@ -531,7 +530,11 @@ cookie_multiplier = [
     # ItemData(OFFSET.FILLERS + 4, "Random Cookie Multiplier 0.5x", ItemClassification.filler), LEGACY
     ItemData(OFFSET.FILLERS + 5, "Random Cookie Multiplier 10x", ItemClassification.filler),
     # ItemData(42069649, "No Cookies for U", ItemClassification.filler)
+    ItemData(OFFSET.FILLERS + 6, "Free Sugar Lumps", ItemClassification.filler),
+    ItemData(OFFSET.FILLERS + 7, "Cookie Blessing", ItemClassification.filler)
 ]
+
+
 
 cookie_multiplier_weights = {
     "Random Cookie Multiplier 2x": 50,
