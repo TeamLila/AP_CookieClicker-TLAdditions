@@ -523,15 +523,30 @@ can_become_progressive = [
 
 # Fillers/Cookie Multiplier Start ID 50000000
 cookie_multiplier = [
+    # Current Cookie Mults
     ItemData(OFFSET.FILLERS + 0, "Random Cookie Multiplier 2x", ItemClassification.filler),
     ItemData(OFFSET.FILLERS + 1, "Random Cookie Multiplier 999x", ItemClassification.filler),
     ItemData(OFFSET.FILLERS + 2, "Random Cookie Multiplier 9999x", ItemClassification.filler),
     ItemData(OFFSET.FILLERS + 3, "Random Cookie Multiplier 9999999x", ItemClassification.filler),
-    # ItemData(OFFSET.FILLERS + 4, "Random Cookie Multiplier 0.5x", ItemClassification.filler), LEGACY
+    
+    # LEGACY, No longer Used (DO NOT REPLACE)
+    # ItemData(OFFSET.FILLERS + 4, "Random Cookie Multiplier 0.5x", ItemClassification.filler),
+    
+    # Another Cookie Mult added Later on
     ItemData(OFFSET.FILLERS + 5, "Random Cookie Multiplier 10x", ItemClassification.filler),
-    # ItemData(42069649, "No Cookies for U", ItemClassification.filler)
+    
+    # ItemData(42069649, "No Cookies for U", ItemClassification.filler) #What is/was this?
+    
+    # Free Sugar Lumps
     ItemData(OFFSET.FILLERS + 6, "Free Sugar Lumps", ItemClassification.filler),
-    ItemData(OFFSET.FILLERS + 7, "Cookie Blessing", ItemClassification.filler)
+    ItemData(OFFSET.FILLERS + 7, "3x Free Sugar Lumps", ItemClassification.filler),
+    ItemData(OFFSET.FILLERS + 8, "5x Free Sugar Lumps", ItemClassification.filler),
+    
+    # Cookie Buffs
+    ItemData(OFFSET.FILLERS + 9, "Cookie Blessing 2x", ItemClassification.filler),
+    ItemData(OFFSET.FILLERS + 10, "Cookie Blessing 7x", ItemClassification.filler),
+    ItemData(OFFSET.FILLERS + 11, "Cookie Blessing 10x", ItemClassification.filler),
+    ItemData(OFFSET.FILLERS + 12, "Cookie Blessing 77x", ItemClassification.filler),
 ]
 
 
