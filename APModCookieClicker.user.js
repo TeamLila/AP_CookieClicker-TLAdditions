@@ -769,8 +769,28 @@ function receiveItem(itemId, firstTime) {
 
   save();
 
+  function lumpGainToast(lumpsMult) {
+    lumpText = "";
+    lumpsGainedTotal = lumpsMult * gameOptions.lump_multiplier;
+
+    //If someone knows how to access What profile has sent the check, feel free to update this variable
+    personWhoSent = "Someone";
+    if (lumpsMult >= 5) {
+      lumpText = `${personWhoSent} Has sent you a Handfull of Sugarlumps! +${lumpsGainedTotal} Sugarlumps, Horray!`
+    } else {
+      lumpText = `${personWhoSent} Has sent you a few Sugarlumps! +${lumpsGainedTotal} Sugarlumps, yay!`
+    }
+    
+    Toastify({
+        text: lumpText,
+        duration: 30000
+    }).showToast();
+  }
+
   if (OFFSET.ITEMS.isFiller(itemId) && firstTime) {
+    let bufftime = 90; //time any Buffs from afar will last
     switch (itemId) {
+      //Current Cookie Mults
       case OFFSET.ITEMS.FILLERS + 0 :
         Game.Earn(Game.cookies * 2 - Game.cookies);
         console.log("*2 Cookies");
@@ -791,6 +811,42 @@ function receiveItem(itemId, firstTime) {
       case OFFSET.ITEMS.FILLERS + 5 :
         Game.Earn(Game.cookies * 10 - Game.cookies);
         console.log("*10 Cookies");
+        break;
+
+      //Gain X Lumps (times option's lumpmult)
+      //also for future readers: im sorry for the magic numbers
+      case OFFSET.ITEMS.FILLERS + 6 :
+        Game.gainLumps(gameOptions.lump_multiplier || 1)
+        lumpGainToast(1);
+        console.log("gained 1x lumps");
+        break;
+      case OFFSET.ITEMS.FILLERS + 7 :
+        Game.gainLumps(gameOptions.lump_multiplier * 3 || 1)
+        lumpGainToast(3)
+        console.log("gained 3x lumps");
+        break;
+      case OFFSET.ITEMS.FILLERS + 8 :
+        Game.gainLumps(gameOptions.lump_multiplier * 5 || 1)
+        lumpGainToast(5)
+        console.log("gained 5x lumps");
+        break;
+
+      //Cookie Production Buff
+      case OFFSET.ITEMS.FILLERS + 9 :
+        Game.gainBuff('AP Cookie Filler', bufftime, 2);
+        console.log("gained a 2x Buff from afar");
+        break;
+      case OFFSET.ITEMS.FILLERS + 10 :
+        Game.gainBuff('AP Cookie Filler', bufftime, 7);
+        console.log("gained a 7x Buff from afar");
+        break;
+      case OFFSET.ITEMS.FILLERS + 11 :
+        Game.gainBuff('AP Cookie Filler', bufftime, 10);
+        console.log("gained a 10x Buff from afar");
+        break;
+      case OFFSET.ITEMS.FILLERS + 12 :
+        Game.gainBuff('AP Cookie Filler', bufftime, 77);
+        console.log("gained a 77x Buff from afar");
         break;
     }
   }
@@ -1192,6 +1248,18 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     Game.gainBuff('AP lumps', null, gameOptions.lump_multiplier);
     Game.CCgainLumps = Game.CCgainLumps || Game.gainLumps;
     Game.gainLumps = total => Game.CCgainLumps(total * gameOptions.lump_multiplier);
+
+    new Game.buffType('AP Cookie Filler', function(timeOfBuff, pow) {
+      return {
+        name: '[AP] Blessed Gift',
+        desc: `Someone Found a Cookie God Blessing and Gave it to you! x${pow} Cookies for the next while`,
+        icon: [26, 0, icon_overridesheet], //TODO: Test (cannot test untill merged with branch "TeamLila/customBigCookie")
+        time: timeOfBuff,
+        add: false, //i belive not add but i could be wrong
+        multCpS: pow,
+        aura: 1
+      }
+    })
   }
 
   if (gameOptions.production_multiplier && gameOptions.production_multiplier > 0) applyProductionMultiplier();
