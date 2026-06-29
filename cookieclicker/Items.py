@@ -528,14 +528,13 @@ cookie_multiplier = [
     ItemData(OFFSET.FILLERS + 1, "Random Cookie Multiplier 999x", ItemClassification.filler),
     ItemData(OFFSET.FILLERS + 2, "Random Cookie Multiplier 9999x", ItemClassification.filler),
     ItemData(OFFSET.FILLERS + 3, "Random Cookie Multiplier 9999999x", ItemClassification.filler),
+    ItemData(OFFSET.FILLERS + 5, "Random Cookie Multiplier 10x", ItemClassification.filler),
     
     # LEGACY, No longer Used (DO NOT REPLACE)
     # ItemData(OFFSET.FILLERS + 4, "Random Cookie Multiplier 0.5x", ItemClassification.filler),
     
-    # Another Cookie Mult added Later on
-    ItemData(OFFSET.FILLERS + 5, "Random Cookie Multiplier 10x", ItemClassification.filler),
-    
-    # ItemData(42069649, "No Cookies for U", ItemClassification.filler) #What is/was this?
+    # #What is/was this?
+    # ItemData(42069649, "No Cookies for U", ItemClassification.filler)
     
     # Free Sugar Lumps
     ItemData(OFFSET.FILLERS + 6, "Free Sugar Lumps", ItemClassification.filler),
