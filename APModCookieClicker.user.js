@@ -372,7 +372,11 @@ function connectAP(e) {
       Object.keys(window.client.package.findPackage(gameName).itemTable).forEach(item => itemList.innerHTML +=`<option value="${item}">`);
     })
     .catch(handleError);
-
+  
+  //sets Bakery name to slotname
+  Game.bakeryName = slot.value;
+  Game.bakeryNameRefresh();
+  
   // Disconnect from the server when unloading window
   window.addEventListener("beforeunload", () => {
     window.client.socket.disconnect();
