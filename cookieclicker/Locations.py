@@ -13,6 +13,14 @@ class CCAchievement:
         self.building = BUILDING(building).value
         self.sphere = SPHERE(sphere).value
 
+class CCUpgradeCheck:
+    OFFSET = 4306900
+    
+    def __init__(self, id, name, sphere):
+        self.id = self.OFFSET + id
+        self.name = name
+        self.sphere = SPHERE(sphere).value
+
 class SPHERE(Enum):
     EXCLUDED = -1
 
@@ -717,6 +725,10 @@ achievements = [
     CCAchievement(637, "Debt evasion", 5, 2),
     CCAchievement(133, "You win a cookie", -1, 2),
     CCAchievement(639, "Cookie Clicker", 19, 5),
+]
+
+upgrades = [
+    
 ]
 ###
 # End of generated section

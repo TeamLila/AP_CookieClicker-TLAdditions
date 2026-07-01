@@ -38,6 +38,10 @@ class LumpMultiplier(Range):
     range_end = 10
     default = 1
 
+class UpgradeSanity(Toggle):
+    """Makes Every Upgrade a Check (NOT RECOMENDED FOR PUBLIC SYNCS)"""
+    display_name = "Upgrade Sanity"
+
 class EnableAutoHints(Toggle):
     """Enable revealing the items in adjacent locations when completing an achievement"""
     display_name = "Enable Auto Hints"
@@ -63,6 +67,7 @@ class CCOptions(PerGameCommonOptions):
     advancement_goal: Goal
     traps_percentage: Traps
     enable_hints: EnableAutoHints
+    upgrade_sanity: UpgradeSanity
     production_multiplier: ProductionMultiplier
     lump_multiplier: LumpMultiplier
     enable_progressive_buildings: SynergyAsProgressiveBuildings
