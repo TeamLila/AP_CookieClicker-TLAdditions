@@ -3,7 +3,8 @@ from dataclasses import asdict
 from BaseClasses import Item
 from worlds.AutoWorld import World
 from .Items import CCItem, traps, item_table, upgrades, structures, can_become_progressive, cookie_multiplier, \
-    cookie_multiplier_weights, progressive_structures, progressive_heavens
+    cookie_multiplier_weights, progressive_structures, progressive_heavens, filler_sugar_lumps, \
+    filler_sugar_lumps_weights, filler_cookie_buffs, filler_cookie_buffs_weights
 from .Locations import CCLocation, locations, SPHERE
 from .Options import CCOptions
 from .Rules import set_rules
@@ -16,10 +17,19 @@ class CookieClicker(World):
     options_dataclass = CCOptions
     options: CCOptions
     item_name_to_id = { name: data.code for name, data in item_table.items() }
-    cookie_names = [ item.item_name for item in cookie_multiplier ]
-    cookie_weights = [ cookie_multiplier_weights.get(item.item_name, 1) for item in cookie_multiplier ]
     start_inventory = {}
     trashitems = 0
+    
+    #fillers
+    cookie_names = [ item.item_name for item in cookie_multiplier ]
+    cookie_weights = [ cookie_multiplier_weights.get(item.item_name, 1) for item in cookie_multiplier ]
+    lump_names = [ item.item_name for item in filler_sugar_lumps]
+    lump_weights = [ filler_sugar_lumps_weights.get(item.item_name, 1) for item in filler_sugar_lumps]
+    buff_names = [ item.item_name for item in filler_cookie_buffs]
+    buff_weights = [ filler_cookie_buffs_weights.get(item.item_name, 1) for item in filler_cookie_buffs]
+    #Turn into 2 Big filler list
+    filler_list = cookie_names + lump_names + buff_names
+    filler_weight_list = cookie_weights + lump_weights + buff_weights
 
     print("ℹ️🍪 This Cookie Clicker apworld does not include a manifest file, and will not until this issue is resolved > https://github.com/ArchipelagoMW/Archipelago/issues/5585")
 
@@ -81,7 +91,7 @@ class CookieClicker(World):
             self.multiworld.itempool.append(self.create_item(trap_name))
 
         for _ in range(filler_count):
-            name = random.choices(self.cookie_names, weights = self.cookie_weights, k = 1)[0]
+            name = random.choices(self.filler_list, weights = self.filler_weight_list, k = 1)[0]
             self.multiworld.itempool.append(self.create_item(name))
 
     # We got some games which leave some locations unfilled, so we need to fill them with some filler items
