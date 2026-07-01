@@ -535,20 +535,7 @@ cookie_multiplier = [
     
     # #What is/was this?
     # ItemData(42069649, "No Cookies for U", ItemClassification.filler)
-    
-    # Free Sugar Lumps
-    ItemData(OFFSET.FILLERS + 6, "Free Sugar Lumps", ItemClassification.filler),
-    ItemData(OFFSET.FILLERS + 7, "3x Free Sugar Lumps", ItemClassification.filler),
-    ItemData(OFFSET.FILLERS + 8, "5x Free Sugar Lumps", ItemClassification.filler),
-    
-    # Cookie Buffs
-    ItemData(OFFSET.FILLERS + 9, "Cookie Blessing 2x", ItemClassification.filler),
-    ItemData(OFFSET.FILLERS + 10, "Cookie Blessing 7x", ItemClassification.filler),
-    ItemData(OFFSET.FILLERS + 11, "Cookie Blessing 10x", ItemClassification.filler),
-    ItemData(OFFSET.FILLERS + 12, "Cookie Blessing 77x", ItemClassification.filler),
 ]
-
-
 
 cookie_multiplier_weights = {
     "Random Cookie Multiplier 2x": 50,
@@ -558,6 +545,34 @@ cookie_multiplier_weights = {
     "Random Cookie Multiplier 9999999x": 5,
     # "Random Cookie Multiplier 0.5x": 10,
     # "No Cookies for U": 50
+}
+
+sugar_lumps = [
+    # Free Sugar Lumps
+    ItemData(OFFSET.FILLERS + 6, "Free Sugar Lumps", ItemClassification.filler),
+    ItemData(OFFSET.FILLERS + 7, "3x Free Sugar Lumps", ItemClassification.filler),
+    ItemData(OFFSET.FILLERS + 8, "5x Free Sugar Lumps", ItemClassification.filler),
+]
+
+sugar_lumps_weights = {
+    "Free Sugar Lumps"    : 30,
+    "3x Free Sugar Lumps" : 10,
+    "5x Free Sugar Lumps" : 5
+}
+
+cookie_buffs = [
+    # Cookie Buffs
+    ItemData(OFFSET.FILLERS + 9,  "Cookie Blessing 2x", ItemClassification.filler),
+    ItemData(OFFSET.FILLERS + 10, "Cookie Blessing 7x", ItemClassification.filler),
+    ItemData(OFFSET.FILLERS + 11, "Cookie Blessing 10x", ItemClassification.filler),
+    ItemData(OFFSET.FILLERS + 12, "Cookie Blessing 77x", ItemClassification.filler),
+]
+
+cookie_buffs_weights = {
+    "Cookie Blessing 2x"  : 60,
+    "Cookie Blessing 7x"  : 40,
+    "Cookie Blessing 10x" : 10, 
+    "Cookie Blessing 77x" : 5,
 }
 
 # Traps start ID 60000000
