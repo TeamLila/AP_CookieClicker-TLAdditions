@@ -547,20 +547,20 @@ cookie_multiplier_weights = {
     # "No Cookies for U": 50
 }
 
-sugar_lumps = [
+filler_sugar_lumps = [
     # Free Sugar Lumps
     ItemData(OFFSET.FILLERS + 6, "Free Sugar Lumps", ItemClassification.filler),
     ItemData(OFFSET.FILLERS + 7, "3x Free Sugar Lumps", ItemClassification.filler),
     ItemData(OFFSET.FILLERS + 8, "5x Free Sugar Lumps", ItemClassification.filler),
 ]
 
-sugar_lumps_weights = {
+filler_sugar_lumps_weights = {
     "Free Sugar Lumps"    : 30,
     "3x Free Sugar Lumps" : 10,
     "5x Free Sugar Lumps" : 5
 }
 
-cookie_buffs = [
+filler_cookie_buffs = [
     # Cookie Buffs
     ItemData(OFFSET.FILLERS + 9,  "Cookie Blessing 2x", ItemClassification.filler),
     ItemData(OFFSET.FILLERS + 10, "Cookie Blessing 7x", ItemClassification.filler),
@@ -568,7 +568,7 @@ cookie_buffs = [
     ItemData(OFFSET.FILLERS + 12, "Cookie Blessing 77x", ItemClassification.filler),
 ]
 
-cookie_buffs_weights = {
+filler_cookie_buffs_weights = {
     "Cookie Blessing 2x"  : 60,
     "Cookie Blessing 7x"  : 40,
     "Cookie Blessing 10x" : 10, 
