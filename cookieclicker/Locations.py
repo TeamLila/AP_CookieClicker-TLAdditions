@@ -1199,6 +1199,12 @@ upgrades = [
 # End of generated section
 ###
 
+# Used to append later
+upgrade_location_table = {
+    f"{upgrade.name}": upgrade.id for upgrade in upgrades
+}
+
+
 victory_achievement = CCAchievement(0, "Victory Location", -1, -1)
 victory_achievement.id = 42000000
 victory_achievement.sphere = 42000000
@@ -1218,5 +1224,7 @@ locations = {
     
     'name_to_id_upgrades': { f"{location.name}": location.id for location in upgrades},
     'id_to_name_upgrades': { location.id: location.name for location in upgrades},
+    
+    'upgrade_location_table': upgrade_location_table,
 }
 

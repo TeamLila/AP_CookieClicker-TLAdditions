@@ -25,9 +25,6 @@ class CookieClicker(World):
 
 
     def create_regions(self):
-        #This errors due to invalid checksum
-        if self.options.upgrade_sanity.value:
-            self.location_name_to_id.update(locations["name_to_id_upgrades"])
         create_regions(self)
 
     def create_item(self, name: str) -> CCItem:
