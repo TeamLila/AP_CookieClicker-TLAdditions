@@ -23,12 +23,10 @@ class CookieClicker(World):
 
     print("ℹ️🍪 This Cookie Clicker apworld does not include a manifest file, and will not until this issue is resolved > https://github.com/ArchipelagoMW/Archipelago/issues/5585")
 
-    def __init__(self):
-        if self.options.upgrade_sanity.value:
-            # pass
-            self.location_name_to_id.extend(locations["name_to_id_upgrades"])
 
     def create_regions(self):
+        if self.options.upgrade_sanity.value:
+            self.location_name_to_id.extend(locations["name_to_id_upgrades"])
         create_regions(self)
 
     def create_item(self, name: str) -> CCItem:
