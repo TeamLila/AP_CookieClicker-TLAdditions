@@ -1209,10 +1209,14 @@ valid_locations = list(filter(lambda achv: achv.sphere != SPHERE.EXCLUDED.value,
 locations = {
     'all': achievements,
     'valid': valid_locations,
+    'upgrades': upgrades.copy(),
     'by_building': { building: list(filter( lambda achv: achv.building == building.value, valid_locations )) for building in BUILDING },
     'by_sphere': { sphere: list(filter( lambda achv: achv.sphere == sphere.value, valid_locations )) for sphere in SPHERE },
 
-    'name_to_id': { f"{location.name}": location.id for location in achievements },
-    'id_to_name': { location.id: location.name for location in achievements },
+    'name_to_id': { f"{location.name}": location.id for location in achievements},
+    'id_to_name': { location.id: location.name for location in achievements},
+    
+    'name_to_id_upgrades': { f"{location.name}": location.id for location in upgrades},
+    'id_to_name_upgrades': { location.id: location.name for location in upgrades},
 }
 
