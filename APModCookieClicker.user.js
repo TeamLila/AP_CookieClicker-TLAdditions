@@ -1387,6 +1387,82 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     CCUnlock(what)
   }
 
+  //AP-Shop
+  const UPGRADE_CHECK_OFFSET = 4306900
+  function createAPupgrade(upg) {
+    return {
+        id: upg.id,
+        name: upg.name,
+        desc: upg.desc,
+        requiredBuilding: upg.buildingTie,
+        icon: [25, 0, icon_overridesheet],
+        basePrice: upg.basePrice,
+        tier: upg.tier,
+        
+
+        canBuy: () => {
+          let available = true
+          if (requiredBuilding != 0) {
+            let building = "product" + this.requiredBuilding.toString() 
+            if (document.getElementById(building).dataset.aphide != "") {
+              available = false
+            }
+          }
+          //TODO add logic to check if previous tier is bought
+
+
+          return available;
+        },
+
+        buy: () => {
+            upg.bought = true;
+            upg.unlock?.(); 
+            upg.earn?.();   
+
+            client.check(this.id + UPGRADE_CHECK_OFFSET)
+        }
+    };
+}
+  let allUpgrades = Game.Upgrades
+  let allPoollessAPUpgrades = []
+  for (let item in allUpgrades) {
+    if (item.pool == "") {
+      allPoollessAPUpgrades.append(createAPupgrade(item))
+    }
+  }
+
+  //check if check was already sent
+  let unsentAPUpgrade = []
+  let sentChecks = new Set()
+  client.room.on("locationsChecked", locations => {
+    for (let id of locations) {
+      sentChecks.add(id)
+    }
+  });
+  
+  for (let item in allPoollessAPUpgrades) {
+    let checkID = item.id + UPGRADE_CHECK_OFFSET
+    if (!sentChecks.has(checkID)){
+      unsentAPUpgrade.append(item)
+    }
+  }
+
+  //Add items to shop (for now just all)
+  let apShop = document.getElementById("apUpgrades")
+  for (let item in unsentAPUpgrade) {
+    let apCheck = document.createElement("div")
+    apCheck.className = "crate upgrade"
+    apCheck.textContent = item.name
+
+    //TODO REWORK THIS IS NOT FUNCTIONAL AT ALL!
+    apShop.appendChild(apCheck)
+  }
+
+
+
+
+  // for upgrade in allUpgrades >> if upgrade.pool != "" continue (aka skip)
+
   // Disable buying upgrades that are in the item pool.
   // Must stay after Game.Unlock override to prevent re-unlock happening during init
   Object.values(window.client.package.findPackage(gameName).itemTable)
