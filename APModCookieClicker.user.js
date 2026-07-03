@@ -195,13 +195,29 @@ apMenuContainer.append(settingsPanel);
 
 document.body.prepend(apMenuContainer);
 
+//appends the AP-Shop
+const apShop = document.createElement("div");
+apShop.id = "apUpgrades";
+apShop.className = "storeSection upgradeBox";
+
+let upgradeShop = document.getElementById("upgrades");
+
+upgradeShop.before(apShop);
+
+
+
 // Injecting AP client style
+//#apUpgrades:before adds styling to the AP Shop
 const style = document.createElement("style");
 style.textContent = `
   .hinted { opacity: 1 !important }
   .APhide { display: none !important }
+  #apUpgrades:before{content: 'AP Shop'} 
 ` + formStyle + settingsStyle;
 document.head.append(style);
+
+
+
 
 function typeToText(element) {
   const id = Number(element.text);
