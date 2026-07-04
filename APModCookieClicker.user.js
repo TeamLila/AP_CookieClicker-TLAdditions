@@ -1388,6 +1388,10 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   }
 
   //AP-Shop
+  //adds a list to the game to hold all items
+  Game.apCheckShopItem = []
+
+  //Create the AP items
   const UPGRADE_CHECK_OFFSET = 4306900
   function createAPupgrade(upg) {
     return {
@@ -1395,7 +1399,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
         name: upg.name,
         desc: upg.desc,
         requiredBuilding: upg.buildingTie,
-        icon: [25, 0, icon_overridesheet],
+        icon: [0,0], //icon: [25, 0, icon_overridesheet], //overridden untill custom sheet is added
         basePrice: upg.basePrice,
         tier: upg.tier,
         
@@ -1415,19 +1419,32 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
         },
 
         buy: () => {
-            upg.bought = true;
-            upg.unlock?.(); 
-            upg.earn?.();   
+          if (Game.cookies >= this.basePrice) {
+            Game.PlaySound('snd/tick.mp3')
+            Game.cookies -= this.basePrice
+            this.bought = true;
+            this.unlock?.(); 
+            this.earn?.();   
 
-            client.check(this.id + UPGRADE_CHECK_OFFSET)
+            client.check(this.id + UPGRADE_CHECK_OFFSET);
+            let thisDiv = document.getElementById(this.id + UPGRADE_CHECK_OFFSET);
+            thisDiv.remove();
+          }
         }
     };
-}
-  let allUpgrades = Game.Upgrades
+  }
+
+  //get a list of all upgrade object
+  let allUpgrades = []
+  for (let upg of Object.values(Game.Upgrades)) {
+    allUpgrades.push(upg)
+  }
+
+  //Filter out any non-poolless upgrades
   let allPoollessAPUpgrades = []
-  for (let item in allUpgrades) {
+  for (let item of allUpgrades) {
     if (item.pool == "") {
-      allPoollessAPUpgrades.append(createAPupgrade(item))
+      allPoollessAPUpgrades.push(createAPupgrade(item))
     }
   }
 
@@ -1440,19 +1457,22 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     }
   });
   
-  for (let item in allPoollessAPUpgrades) {
+  for (let item of allPoollessAPUpgrades) {
     let checkID = item.id + UPGRADE_CHECK_OFFSET
     if (!sentChecks.has(checkID)){
-      unsentAPUpgrade.append(item)
+      unsentAPUpgrade.push(item)
     }
   }
 
   //Add items to shop (for now just all)
   let apShop = document.getElementById("apUpgrades")
-  for (let item in unsentAPUpgrade) {
+  for (let item of unsentAPUpgrade) {
+    Game.apCheckShopItem.push(item)
+    let itemIDinList = Game.apCheckShopItem.length - 1
     let apCheck = document.createElement("div")
+    apCheck.id = item.id + UPGRADE_CHECK_OFFSET
     apCheck.className = "crate upgrade"
-    apCheck.textContent = item.name
+    apCheck.setAttribute("onclick", `Game.apCheckShopItem[${itemIDinList}].buy()`)
 
     //TODO REWORK THIS IS NOT FUNCTIONAL AT ALL!
     apShop.appendChild(apCheck)
