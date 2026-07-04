@@ -1481,7 +1481,6 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
 
 
 
-  // for upgrade in allUpgrades >> if upgrade.pool != "" continue (aka skip)
 
   // Disable buying upgrades that are in the item pool.
   // Must stay after Game.Unlock override to prevent re-unlock happening during init
