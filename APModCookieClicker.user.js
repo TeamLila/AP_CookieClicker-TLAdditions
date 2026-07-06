@@ -1402,35 +1402,8 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
         icon: [0,0], //icon: [25, 0, icon_overridesheet], //overridden untill custom sheet is added
         basePrice: upg.basePrice,
         tier: upg.tier,
-        
 
-        canBuy: () => {
-          let available = true
-          if (requiredBuilding != 0) {
-            let building = "product" + this.requiredBuilding.toString() 
-            if (document.getElementById(building).dataset.aphide != "") {
-              available = false
-            }
-          }
-          //TODO add logic to check if previous tier is bought
-
-
-          return available;
-        },
-
-        buy: () => {
-          if (Game.cookies >= this.basePrice) {
-            Game.PlaySound('snd/tick.mp3')
-            Game.cookies -= this.basePrice
-            this.bought = true;
-            this.unlock?.(); 
-            this.earn?.();   
-
-            client.check(this.id + UPGRADE_CHECK_OFFSET);
-            let thisDiv = document.getElementById(this.id + UPGRADE_CHECK_OFFSET);
-            thisDiv.remove();
-          }
-        }
+        idWithOffset: upg.id + UPGRADE_CHECK_OFFSET
     };
   }
 
@@ -1451,33 +1424,48 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   //check if check was already sent
   let unsentAPUpgrade = []
   let sentChecks = new Set()
-  client.room.on("locationsChecked", locations => {
+  Client.room.on("locationsChecked", locations => {
     for (let id of locations) {
       sentChecks.add(id)
     }
   });
   
   for (let item of allPoollessAPUpgrades) {
-    let checkID = item.id + UPGRADE_CHECK_OFFSET
+    let checkID = item.idWithOffset
     if (!sentChecks.has(checkID)){
       unsentAPUpgrade.push(item)
     }
   }
 
-  //Add items to shop (for now just all)
-  let apShop = document.getElementById("apUpgrades")
-  for (let item of unsentAPUpgrade) {
-    Game.apCheckShopItem.push(item)
-    let itemIDinList = Game.apCheckShopItem.length - 1
-    let apCheck = document.createElement("div")
-    apCheck.id = item.id + UPGRADE_CHECK_OFFSET
-    apCheck.className = "crate upgrade"
-    apCheck.setAttribute("onclick", `Game.apCheckShopItem[${itemIDinList}].buy()`)
+  //Scouts all locations & links them to their id
+  let scoutResult = Client.scoutLocations(unsentAPUpgrade)
+  let location_Scout_corelation ={}
 
-    //TODO REWORK THIS IS NOT FUNCTIONAL AT ALL!
-    apShop.appendChild(apCheck)
+  for (let scout of scoutResult) {
+    location_Scout_corelation[scout.location] = scout
   }
+  /* Selfnote, please remove future-me
+   * item.location: locationID
+   * item.item: the object (test what it means)
+   * item.player: who gets it
+   * item.flags: filler, progressive etc.
+  */
 
+  //Create the upgrades
+  const BASIC_DESCRIPT_TEXT = "A Upgrade For " //user gets appended
+  const APUPGRADE_DESCRIPT_BASICS = [
+    ""
+  ]
+  for (item of unsentAPUpgrade) {
+    let apItem = location_Scout_corelation[item.idWithOffset]
+    let description = BASIC_DESCRIPT_TEXT + apItem.player
+    let apItemFlags = apItem.flags
+    console.log("TESTING FLAGS: " + apItemFlags)
+
+    if (apItem.flags)
+
+    Game.RegisterUpgrade(apItem.item.name, description)
+  }
 
 
 
