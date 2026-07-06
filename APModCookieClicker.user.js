@@ -1136,7 +1136,8 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     goalAchievementCount = slotData.advancement_goal;
     Object.keys(gameOptions).forEach(optionName => gameOptions[optionName] = slotData[optionName]);
     console.log("Game options:", gameOptions);
-    console.log("slot data = " + slotData);
+    nameOfSlot = slotData.player_name
+    console.log(slotData);
   });
 
   // Build a list of achievements ordered by their order field (ie. their display order)
@@ -1422,29 +1423,18 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     }
   }
 
-  //check if check was already sent
+  //check if check was already sent 
   let unsentAPUpgrade = []
-  let sentChecks = new Set()
-  Client.room.on("locationsChecked", locations => {
-    for (let id of locations) {
-      sentChecks.add(id)
-    }
-  });
+  let missingChecks = client.room.missingLocations
   
   for (let item of allPoollessAPUpgrades) {
     let checkID = item.idWithOffset
-    if (!sentChecks.has(checkID)){
+    if (missingChecks.includes(checkID)){
       unsentAPUpgrade.push(item)
     }
-  }
+  } 
+//  let unsentAPUpgrade = allPoollessAPUpgrades //i gib up for now. TODO fix
 
-  //Scouts all locations & links them to their id
-  let scoutResult = Client.scoutLocations(unsentAPUpgrade)
-  let location_Scout_corelation ={}
-
-  for (let scout of scoutResult) {
-    location_Scout_corelation[scout.location] = scout
-  }
   /* Selfnote, please remove future-me
    * item.location: locationID
    * item.item: the object (test what it means)
@@ -1454,6 +1444,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
 
   //Create the upgrades
   const BASIC_DESCRIPT_TEXT = "A Upgrade For " //user gets appended
+  const FELLOW_CCAP_PLAYER_DESCRIPT_TEXT = "A Upgrade for our Fellow Cookie Clicker enthusiast " //user gets appended
   const APUPGRADE_DESCRIPT_BASICS = [
     "\n\nThey didnt seam to intrested in this item",                              //filler
     "\n\nThey Seamed Intrested in this item",                                     //usefull
@@ -1467,26 +1458,24 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     "This will make your life a Whole lot easier",                //progression
     "oh wait... its a trap... well thats a waste of shop space",  //trap
   ]
-  for (apItem of unsentAPUpgrade) {
+  for (let apItem of unsentAPUpgrade) {
     //set some starting vars i need
-    let apItemScout = location_Scout_corelation[item.idWithOffset]
     let description = ""
-    let apItemFlags = apItemScout.flags
     let flagCase = 0
 
-    //if you see this, then TEAM_LILA forgot to remove a testing print before making the PR
-    console.log("TESTING FLAGS: " + apItemFlags)
+
 
     //sets description based on if random or yourself (planned: if a fellow CC player)
-    if (apItemScout.player == "InsertOwnPlayerHereFutureMe") {
+    //TODO Make functional
+    if ("NOT YET FUNCTIONAL" == "NAME OF SLOT VARIABLE") { 
       description = APUPGRADE_DESCRIPT_SELF[flagCase]
     } else {
-      description = BASIC_DESCRIPT_TEXT + apItemScout.player + APUPGRADE_DESCRIPT_BASICS[flagCase]
+      description = BASIC_DESCRIPT_TEXT + /*reciverName*/ "a Fellow AP-Player" + APUPGRADE_DESCRIPT_BASICS[flagCase]
     }
 
     //adds the upgrade
-    Game.RegisterUpgrade(apItemScout.item.name, description, apItem.basePrice, apItem.icon, function(){
-      client.check(apItem.idWithOffset);
+    Game.RegisterUpgrade(/*itemName*/ "AP ITEM", description, apItem.basePrice, apItem.icon, function(){
+      window.client.check(apItem.idWithOffset);
     })
 
     //adds the relative building tie {NOT FUNCTIONAL AT THE TIME OF WRITING THIS}
@@ -1555,9 +1544,6 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
         console.warn("Failed to add Building Tie for " + apItem.name + ": Invalid Building tie id (expected number from range -1 to 19, got " + apItem.requiredBuilding + ")")
     } 
   }
-
-
-
 
   // Disable buying upgrades that are in the item pool.
   // Must stay after Game.Unlock override to prevent re-unlock happening during init
