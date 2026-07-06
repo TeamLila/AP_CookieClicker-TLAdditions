@@ -1458,7 +1458,11 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     "This will make your life a Whole lot easier",                //progression
     "oh wait... its a trap... well thats a waste of shop space",  //trap
   ]
+
+  let apItemCount = 0 //replaced in the future i hope
   for (let apItem of unsentAPUpgrade) {
+    apItemCount++
+
     //set some starting vars i need
     let description = ""
     let flagCase = 0
@@ -1474,75 +1478,9 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     }
 
     //adds the upgrade
-    Game.RegisterUpgrade(/*itemName*/ "AP ITEM", description, apItem.basePrice, apItem.icon, function(){
+    new Game.Upgrade(/*itemName*/ "AP ITEM " + apItemCount.toString(), description, apItem.basePrice, apItem.icon, function(){
       window.client.check(apItem.idWithOffset);
     })
-
-    //adds the relative building tie {NOT FUNCTIONAL AT THE TIME OF WRITING THIS}
-    switch(apItem.requiredBuilding) {
-      case 0:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Cursor"];
-        break;
-      case 1:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Grandma"];
-        break;
-      case 2:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Farm"];
-        break;
-      case 3:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Mine"];
-        break;
-      case 4:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Factory"];
-        break;
-      case 5:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Bank"];
-        break;
-      case 6:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Temple"];
-        break;
-      case 7:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Wizard tower"];
-        break;
-      case 8:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Shipment"];
-        break;
-      case 9:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Alchemy lab"];
-        break;
-      case 10:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Portal"];
-        break;
-      case 11:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Time machiene"];
-        break;
-      case 12:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Antimatter condenser"];
-        break;
-      case 13:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Prism"];
-        break;
-      case 14:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Chancemaker"];
-        break;
-      case 15:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Fractal engine"];
-        break;
-      case 16:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Javascript console"];
-        break;
-      case 17:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Idleverse"];
-        break;
-      case 18:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Cortex baker"];
-        break;
-      case 19:
-        Game.Upgrade[apItemScout.item.name].building = Game.Objects["You"];
-        break;
-      default:
-        console.warn("Failed to add Building Tie for " + apItem.name + ": Invalid Building tie id (expected number from range -1 to 19, got " + apItem.requiredBuilding + ")")
-    } 
   }
 
   // Disable buying upgrades that are in the item pool.
