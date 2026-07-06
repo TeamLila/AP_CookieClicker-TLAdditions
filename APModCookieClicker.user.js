@@ -1474,13 +1474,18 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     if ("NOT YET FUNCTIONAL" == "NAME OF SLOT VARIABLE") { 
       description = APUPGRADE_DESCRIPT_SELF[flagCase]
     } else {
-      description = BASIC_DESCRIPT_TEXT + /*reciverName*/ "a Fellow AP-Player" + APUPGRADE_DESCRIPT_BASICS[flagCase]
+      //description = BASIC_DESCRIPT_TEXT + /*reciverName*/ "a Fellow AP-Player" + APUPGRADE_DESCRIPT_BASICS[flagCase]
+      description = "I Honestly dont know if they want it, the server is being quite to me"
     }
 
     //adds the upgrade
     new Game.Upgrade(/*itemName*/ "AP ITEM " + apItemCount.toString(), description, apItem.basePrice, apItem.icon, function(){
       window.client.check(apItem.idWithOffset);
     })
+
+    let upg = Game.Upgrades["AP ITEM " + apItemCount.toString()]
+    upg.unlocked = 1
+    upg.ddesc = description
   }
 
   // Disable buying upgrades that are in the item pool.
