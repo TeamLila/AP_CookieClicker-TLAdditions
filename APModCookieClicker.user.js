@@ -1136,6 +1136,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     goalAchievementCount = slotData.advancement_goal;
     Object.keys(gameOptions).forEach(optionName => gameOptions[optionName] = slotData[optionName]);
     console.log("Game options:", gameOptions);
+    console.log("slot data = " + slotData);
   });
 
   // Build a list of achievements ordered by their order field (ie. their display order)
@@ -1398,7 +1399,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
         id: upg.id,
         name: upg.name,
         desc: upg.desc,
-        requiredBuilding: upg.buildingTie,
+        requiredBuilding: -1, //TODO Update to hold the building tie as upg.buildingTie seamms to be unused in the normal game
         icon: [0,0], //icon: [25, 0, icon_overridesheet], //overridden untill custom sheet is added
         basePrice: upg.basePrice,
         tier: upg.tier,
@@ -1454,17 +1455,105 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   //Create the upgrades
   const BASIC_DESCRIPT_TEXT = "A Upgrade For " //user gets appended
   const APUPGRADE_DESCRIPT_BASICS = [
-    ""
+    "\n\nThey didnt seam to intrested in this item",                              //filler
+    "\n\nThey Seamed Intrested in this item",                                     //usefull
+    "\n\nThey Were Eager for you to get it to them",                              //progression
+    "\n\nThey Do Not want this... but a little troll never hurt anyone, right?"   //trap
   ]
-  for (item of unsentAPUpgrade) {
-    let apItem = location_Scout_corelation[item.idWithOffset]
-    let description = BASIC_DESCRIPT_TEXT + apItem.player
-    let apItemFlags = apItem.flags
+  const SELF_DESCRIPT_TEXT = "Its Your Own Upgrade!\n\n"
+  const APUPGRADE_DESCRIPT_SELF = [
+    "This could Come in handy!",                                  //filler
+    "This Seams Quite usefull!",                                  //usefull
+    "This will make your life a Whole lot easier",                //progression
+    "oh wait... its a trap... well thats a waste of shop space",  //trap
+  ]
+  for (apItem of unsentAPUpgrade) {
+    //set some starting vars i need
+    let apItemScout = location_Scout_corelation[item.idWithOffset]
+    let description = ""
+    let apItemFlags = apItemScout.flags
+    let flagCase = 0
+
+    //if you see this, then TEAM_LILA forgot to remove a testing print before making the PR
     console.log("TESTING FLAGS: " + apItemFlags)
 
-    if (apItem.flags)
+    //sets description based on if random or yourself (planned: if a fellow CC player)
+    if (apItemScout.player == "InsertOwnPlayerHereFutureMe") {
+      description = APUPGRADE_DESCRIPT_SELF[flagCase]
+    } else {
+      description = BASIC_DESCRIPT_TEXT + apItemScout.player + APUPGRADE_DESCRIPT_BASICS[flagCase]
+    }
 
-    Game.RegisterUpgrade(apItem.item.name, description)
+    //adds the upgrade
+    Game.RegisterUpgrade(apItemScout.item.name, description, apItem.basePrice, apItem.icon, function(){
+      client.check(apItem.idWithOffset);
+    })
+
+    //adds the relative building tie {NOT FUNCTIONAL AT THE TIME OF WRITING THIS}
+    switch(apItem.requiredBuilding) {
+      case 0:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Cursor"];
+        break;
+      case 1:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Grandma"];
+        break;
+      case 2:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Farm"];
+        break;
+      case 3:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Mine"];
+        break;
+      case 4:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Factory"];
+        break;
+      case 5:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Bank"];
+        break;
+      case 6:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Temple"];
+        break;
+      case 7:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Wizard tower"];
+        break;
+      case 8:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Shipment"];
+        break;
+      case 9:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Alchemy lab"];
+        break;
+      case 10:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Portal"];
+        break;
+      case 11:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Time machiene"];
+        break;
+      case 12:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Antimatter condenser"];
+        break;
+      case 13:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Prism"];
+        break;
+      case 14:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Chancemaker"];
+        break;
+      case 15:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Fractal engine"];
+        break;
+      case 16:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Javascript console"];
+        break;
+      case 17:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Idleverse"];
+        break;
+      case 18:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["Cortex baker"];
+        break;
+      case 19:
+        Game.Upgrade[apItemScout.item.name].building = Game.Objects["You"];
+        break;
+      default:
+        console.warn("Failed to add Building Tie for " + apItem.name + ": Invalid Building tie id (expected number from range -1 to 19, got " + apItem.requiredBuilding + ")")
+    } 
   }
 
 
