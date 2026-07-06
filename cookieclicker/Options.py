@@ -39,7 +39,9 @@ class LumpMultiplier(Range):
     default = 1
 
 class UpgradeSanity(Toggle):
-    """Makes Every Upgrade a Check (NOT RECOMENDED FOR PUBLIC SYNCS)"""
+    """Makes Every Upgrade a Check (NOT RECOMENDED FOR PUBLIC SYNCS)
+    
+    Note: Current version is Functional, but buggy"""
     display_name = "Upgrade Sanity"
 
 class EnableAutoHints(Toggle):
