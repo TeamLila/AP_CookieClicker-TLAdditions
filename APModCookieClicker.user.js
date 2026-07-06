@@ -195,16 +195,6 @@ apMenuContainer.append(settingsPanel);
 
 document.body.prepend(apMenuContainer);
 
-//appends the AP-Shop
-const apShop = document.createElement("div");
-apShop.id = "apUpgrades";
-apShop.className = "storeSection upgradeBox";
-
-let upgradeShop = document.getElementById("upgrades");
-
-upgradeShop.before(apShop);
-
-
 
 // Injecting AP client style
 //#apUpgrades:before adds styling to the AP Shop
@@ -212,7 +202,6 @@ const style = document.createElement("style");
 style.textContent = `
   .hinted { opacity: 1 !important }
   .APhide { display: none !important }
-  #apUpgrades:before{content: 'AP Shop'} 
 ` + formStyle + settingsStyle;
 document.head.append(style);
 
@@ -1136,6 +1125,8 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     goalAchievementCount = slotData.advancement_goal;
     Object.keys(gameOptions).forEach(optionName => gameOptions[optionName] = slotData[optionName]);
     console.log("Game options:", gameOptions);
+    nameOfSlot = slotData.player_name
+    console.log(slotData);
   });
 
   // Build a list of achievements ordered by their order field (ie. their display order)
@@ -1398,39 +1389,12 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
         id: upg.id,
         name: upg.name,
         desc: upg.desc,
-        requiredBuilding: upg.buildingTie,
+        requiredBuilding: -1, //TODO Update to hold the building tie as upg.buildingTie seamms to be unused in the normal game
         icon: [0,0], //icon: [25, 0, icon_overridesheet], //overridden untill custom sheet is added
         basePrice: upg.basePrice,
         tier: upg.tier,
-        
 
-        canBuy: () => {
-          let available = true
-          if (requiredBuilding != 0) {
-            let building = "product" + this.requiredBuilding.toString() 
-            if (document.getElementById(building).dataset.aphide != "") {
-              available = false
-            }
-          }
-          //TODO add logic to check if previous tier is bought
-
-
-          return available;
-        },
-
-        buy: () => {
-          if (Game.cookies >= this.basePrice) {
-            Game.PlaySound('snd/tick.mp3')
-            Game.cookies -= this.basePrice
-            this.bought = true;
-            this.unlock?.(); 
-            this.earn?.();   
-
-            client.check(this.id + UPGRADE_CHECK_OFFSET);
-            let thisDiv = document.getElementById(this.id + UPGRADE_CHECK_OFFSET);
-            thisDiv.remove();
-          }
-        }
+        idWithOffset: upg.id + UPGRADE_CHECK_OFFSET
     };
   }
 
@@ -1448,39 +1412,70 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     }
   }
 
-  //check if check was already sent
+  //check if check was already sent 
   let unsentAPUpgrade = []
-  let sentChecks = new Set()
-  client.room.on("locationsChecked", locations => {
-    for (let id of locations) {
-      sentChecks.add(id)
-    }
-  });
+  let missingChecks = client.room.missingLocations
   
   for (let item of allPoollessAPUpgrades) {
-    let checkID = item.id + UPGRADE_CHECK_OFFSET
-    if (!sentChecks.has(checkID)){
+    let checkID = item.idWithOffset
+    if (missingChecks.includes(checkID)){
       unsentAPUpgrade.push(item)
     }
+  } 
+//  let unsentAPUpgrade = allPoollessAPUpgrades //i gib up for now. TODO fix
+
+  /* Selfnote, please remove future-me
+   * item.location: locationID
+   * item.item: the object (test what it means)
+   * item.player: who gets it
+   * item.flags: filler, progressive etc.
+  */
+
+  //Create the upgrades
+  const BASIC_DESCRIPT_TEXT = "A Upgrade For " //user gets appended
+  const FELLOW_CCAP_PLAYER_DESCRIPT_TEXT = "A Upgrade for our Fellow Cookie Clicker enthusiast " //user gets appended
+  const APUPGRADE_DESCRIPT_BASICS = [
+    "\n\nThey didnt seam to intrested in this item",                              //filler
+    "\n\nThey Seamed Intrested in this item",                                     //usefull
+    "\n\nThey Were Eager for you to get it to them",                              //progression
+    "\n\nThey Do Not want this... but a little troll never hurt anyone, right?"   //trap
+  ]
+  const SELF_DESCRIPT_TEXT = "Its Your Own Upgrade!\n\n"
+  const APUPGRADE_DESCRIPT_SELF = [
+    "This could Come in handy!",                                  //filler
+    "This Seams Quite usefull!",                                  //usefull
+    "This will make your life a Whole lot easier",                //progression
+    "oh wait... its a trap... well thats a waste of shop space",  //trap
+  ]
+
+  let apItemCount = 0 //replaced in the future i hope
+  for (let apItem of unsentAPUpgrade) {
+    apItemCount++
+
+    //set some starting vars i need
+    let description = ""
+    let flagCase = 0
+
+
+
+    //sets description based on if random or yourself (planned: if a fellow CC player)
+    //TODO Make functional
+    if ("NOT YET FUNCTIONAL" == "NAME OF SLOT VARIABLE") { 
+      description = APUPGRADE_DESCRIPT_SELF[flagCase]
+    } else {
+      //description = BASIC_DESCRIPT_TEXT + /*reciverName*/ "a Fellow AP-Player" + APUPGRADE_DESCRIPT_BASICS[flagCase]
+      description = "I Honestly dont know if they want it, the server is being quite to me"
+    }
+
+    //adds the upgrade
+    new Game.Upgrade(/*itemName*/ "AP ITEM " + apItemCount.toString(), description, apItem.basePrice, apItem.icon, function(){
+      window.client.check(apItem.idWithOffset);
+    })
+
+    let upg = Game.Upgrades["AP ITEM " + apItemCount.toString()]
+    upg.unlocked = 1
+    upg.ddesc = description
   }
-
-  //Add items to shop (for now just all)
-  let apShop = document.getElementById("apUpgrades")
-  for (let item of unsentAPUpgrade) {
-    Game.apCheckShopItem.push(item)
-    let itemIDinList = Game.apCheckShopItem.length - 1
-    let apCheck = document.createElement("div")
-    apCheck.id = item.id + UPGRADE_CHECK_OFFSET
-    apCheck.className = "crate upgrade"
-    apCheck.setAttribute("onclick", `Game.apCheckShopItem[${itemIDinList}].buy()`)
-
-    //TODO REWORK THIS IS NOT FUNCTIONAL AT ALL!
-    apShop.appendChild(apCheck)
-  }
-
-
-
-
 
   // Disable buying upgrades that are in the item pool.
   // Must stay after Game.Unlock override to prevent re-unlock happening during init
