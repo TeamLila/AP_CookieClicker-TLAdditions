@@ -1379,6 +1379,25 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   }
 
   //AP-Shop
+  //Quick-sort algorythim ("borrowed" from medium.com)
+  function quickSort(arr) {
+    if (arr.length <= 1) return arr;
+
+    const p = arr.pop();
+    const leftArr = [];
+    const rightArr = [];
+
+    for (const item of arr) {
+      if (item.basePrice <= p.basePrice) {
+        leftArr.push(item);
+      } else {
+        rightArr.push(item);
+      }
+    }
+
+    return [...quickSort(leftArr), p, ...quickSort(rightArr)];
+  }
+
   //adds a list to the game to hold all items
   Game.apCheckShopItem = []
 
@@ -1422,14 +1441,9 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
       unsentAPUpgrade.push(item)
     }
   } 
-//  let unsentAPUpgrade = allPoollessAPUpgrades //i gib up for now. TODO fix
 
-  /* Selfnote, please remove future-me
-   * item.location: locationID
-   * item.item: the object (test what it means)
-   * item.player: who gets it
-   * item.flags: filler, progressive etc.
-  */
+  //sort by price
+  unsentAPUpgradeByPrice = quickSort(unsentAPUpgrade)
 
   //Create the upgrades
   const BASIC_DESCRIPT_TEXT = "A Upgrade For " //user gets appended
@@ -1449,7 +1463,8 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   ]
 
   let apItemCount = 0 //replaced in the future i hope
-  for (let apItem of unsentAPUpgrade) {
+  let nextItemToUnlock = 6 //used for unlocking the next upgrade due to... jank
+  for (let apItem of unsentAPUpgradeByPrice) {
     apItemCount++
 
     //set some starting vars i need
@@ -1468,13 +1483,31 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     }
 
     //adds the upgrade
-    new Game.Upgrade(/*itemName*/ "AP ITEM " + apItemCount.toString(), description, apItem.basePrice, apItem.icon, function(){
+    new Game.Upgrade(/*itemName*/ "AP ITEM " + apItemCount.toString(), description, apItem.basePrice, apItem.icon, function(){ //NOSONAR (Non-used Object initiation, but its used in a different way)
+      //send check
       window.client.check(apItem.idWithOffset);
+      
+      //Unlock next item
+      //if someone knows how to make this prettier, feel free to do so
+      try {
+        console.log("Unlocking AP ITEM " + nextItemToUnlock.toString() + " Inside the shop")
+        Game.Upgrades["AP ITEM " + nextItemToUnlock.toString()].unlocked = 1
+        nextItemToUnlock++
+      } catch (caughtError) { 
+        console.log("No New Upgrade Unlocked: Max Reached")
+        console.log("PRINTING CAUGHT ERROR BELOW:")
+        console.log(caughtError)
+      }
     })
 
+    //gets the upgrade to modify it (as it doesnt properly create it)
     let upg = Game.Upgrades["AP ITEM " + apItemCount.toString()]
-    upg.unlocked = 1
+    
+    //fixes description
     upg.ddesc = description
+
+    //unlocks the first 5 Upgrades (by price)
+    if (apItemCount <= 5) {upg.unlocked = 1}
   }
 
   // Disable buying upgrades that are in the item pool.
