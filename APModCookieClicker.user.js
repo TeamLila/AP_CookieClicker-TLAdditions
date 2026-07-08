@@ -292,6 +292,7 @@ function connectAP(e) {
     console.log("Connected to server: ", packet);
     await appendFunctions();
     save();
+    toggleMenu()
   });
 
   window.client.socket.on("roomUpdate", (packet) => {
