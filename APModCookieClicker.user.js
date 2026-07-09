@@ -1446,7 +1446,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   const BASIC_DESCRIPT_TEXT = "A Upgrade For " //user gets appended
   const FELLOW_CCAP_PLAYER_DESCRIPT_TEXT = "A Upgrade for our Fellow Cookie Clicker enthusiast " //user gets appended
   const APUPGRADE_DESCRIPT_BASICS = [
-    "\n\nThey didnt seam to intrested in this item",                              //filler
+    "\n\nThey didnt seam too intrested in this item",                              //filler
     "\n\nThey Seamed Intrested in this item",                                     //usefull
     "\n\nThey Were Eager for you to get it to them",                              //progression
     "\n\nThey Do Not want this... but a little troll never hurt anyone, right?"   //trap
