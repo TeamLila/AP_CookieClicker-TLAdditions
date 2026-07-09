@@ -1474,11 +1474,11 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     //basic descript
     let desc = ""
     if (type === 0) {
-      desc = "A \"<b>" + item + "</b>\" For <b>" + forPlayer + "</b>\n\n"
+      desc = "A <b>" + item + "</b> For <b>" + forPlayer + "</b>\n\n"
     } else if (type === 1) {
-      desc = "Its \"<b>" + item + "</b>\" For Yourself, How Fun!\n\n"
+      desc = "Its <b>" + item + "</b> For Yourself, How Fun!\n\n"
     } else if (type === 2) {
-      desc = "A \"<b>" + item + "</b>\" For Our Fellow Cookie Clicker enthusiast <b>" + forPlayer + "</b>!\n\n" 
+      desc = "A <b>" + item + "</b> For Our Fellow Cookie Clicker enthusiast <b>" + forPlayer + "</b>!\n\n" 
     } else {
       throw new RangeError("Failed to Create Description: Excpeted a num for type, got one out of range of available types (got " + type.toString() + ")")
     }
