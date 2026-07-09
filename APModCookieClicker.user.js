@@ -1474,7 +1474,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     //basic descript
     let desc = ""
     if (type === 0) {
-      desc = "A \"" + item + "\" For " + forPlayer + "\n\n"
+      desc = "A \"<b>" + item + "</b>\" For <b>" + forPlayer + "</b>\n\n"
     } else if (type === 1) {
       desc = "Its \"" + item + "\" For Yourself, How Fun!\n\n"
     } else if (type === 2) {
@@ -1484,6 +1484,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     }
 
     //Info descript for how usefull
+    desc = desc + "<q>"
     if (type === 0 || type === 2) {
       desc = desc + APUPGRADE_DESCRIPT_BASICS[flagCase]
     } else if (type === 1) {
@@ -1491,6 +1492,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     } else {
       throw new RangeError("Failed to Create Description: Used a Valid num for type to start creating description, however there is no valid info-description to add to it")
     }
+    desc = desc + "</q>"
     /*
     For those who want to add their own situations with type:
     1. make a const list[] above with 5 strings (1 for each flagCase)
@@ -1520,7 +1522,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
 
     //scout the location
     let locationItemScout = apShopScouts[apItemCount-1]
-    let locationItemScout_Game = locationItemScout.reciver.game
+    let locationItemScout_Game = locationItemScout.receiver.game
     let locationItemScout_ItemName = locationItemScout.name
     let locationItemScout_PlayerName = locationItemScout.receiver.name
 
