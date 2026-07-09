@@ -1379,7 +1379,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   }
 
   //AP-Shop
-  //Quick-sort algorythim ("borrowed" from medium.com)
+  //Quick-sort algorythim ("borrowed" from medium.com) that sorts by baseprice
   function quickSort(arr) {
     if (arr.length <= 1) return arr;
 
@@ -1398,9 +1398,6 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     return [...quickSort(leftArr), p, ...quickSort(rightArr)];
   }
 
-  //adds a list to the game to hold all items
-  Game.apCheckShopItem = []
-
   //Create the AP items
   const UPGRADE_CHECK_OFFSET = 4306900
   function createAPupgrade(upg) {
@@ -1408,8 +1405,8 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
         id: upg.id,
         name: upg.name,
         desc: upg.desc,
-        requiredBuilding: -1, //TODO Update to hold the building tie as upg.buildingTie seamms to be unused in the normal game
-        icon: [0,0], //icon: [25, 0, icon_overridesheet], //overridden untill custom sheet is added
+        requiredBuilding: -1, //if someone wants to update this to be building-lock based, feel free to use this unused var
+        icon: [0,0], //icon: [25, 0, icon_overridesheet], //overridden untill custom sheet is added to main
         basePrice: upg.basePrice,
         tier: upg.tier,
 
@@ -1443,7 +1440,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   } 
 
   //sort by price
-  unsentAPUpgradeByPrice = quickSort(unsentAPUpgrade)
+  let unsentAPUpgradeByPrice = quickSort(unsentAPUpgrade)
 
   //Create the upgrades
   const BASIC_DESCRIPT_TEXT = "A Upgrade For " //user gets appended
