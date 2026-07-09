@@ -1514,7 +1514,6 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   let apItemCount = 0 //replaced in the future i hope
   let nextItemToUnlock = 6 //used for unlocking the next upgrade due to... jank
   let apShopScouts = await client.scout(apItemIDS, 0) //scouts locations to properly name everything
-  console.log("All Scouts from shop below:\n", apShopScouts)
 
   for (let apItem of unsentAPUpgradeByPrice) {
     apItemCount++
@@ -1553,7 +1552,62 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
 
 
     //sets the icon based on what it is
-    //TODO: Add this feature
+    //For any future devs: to add custom icons, get a custom icon sprite sheet, import it, then set the 3rd item in the list to the Modded spritesheet
+    /*
+     * list of all added possibilitys so far:
+     * - all CC Buildings [Not always 100% of the name so will also hit non-CC items]
+     * - Cat/kitten
+     * - egg
+     * - banner
+    */
+    let itemLower = locationItemScout_ItemName.toLowerCase()
+    if (itemLower.includes("cursor")) {
+      apItem.icon = [0, 27]
+    } else if (itemLower.includes("grandma")) {
+      apItem.icon = [1, 27]
+    } else if (itemLower.includes("farm")) {
+      apItem.icon = [2, 27]
+    } else if (itemLower.includes("mine")) {
+      apItem.icon = [3, 27]
+    } else if (itemLower.includes("factory")) {
+      apItem.icon = [4, 27]
+    } else if (itemLower.includes("shipment")) {
+      apItem.icon = [5, 27]
+    } else if (itemLower.includes("lab")) {
+      apItem.icon = [6, 27]
+    } else if (itemLower.includes("portal")) {
+      apItem.icon = [7, 27]
+    } else if (itemLower.includes("time machine")) {
+      apItem.icon = [8, 27]
+    } else if (itemLower.includes("antimatter condenser")) {
+      apItem.icon = [12, 27]
+    } else if (itemLower.includes("prism")) {
+      apItem.icon = [13, 27]
+    } else if (itemLower.includes("bank")) {
+      apItem.icon = [14, 27]
+    } else if (itemLower.includes("temple")) {
+      apItem.icon = [15, 27]
+    } else if (itemLower.includes("wizard tower")) {
+      apItem.icon = [16, 27]
+    } else if (itemLower.includes("cat") || itemLower.includes("kitten")) {
+      apItem.icon = [17, 27]
+    } else if (itemLower.includes("chance maker")) {
+      apItem.icon = [18, 27]
+    } else if (itemLower.includes("fractal engine")) {
+      apItem.icon = [19, 27]
+    } else if (itemLower.includes("console")) {
+      apItem.icon = [31, 27]
+    } else if (itemLower.includes("idleverse")) {
+      apItem.icon = [32, 27]
+    } else if (itemLower.includes("cortex baker")) {
+      apItem.icon = [33, 27]
+    } else if (itemLower.includes("you")) {
+      apItem.icon = [34, 27]
+    } else if (itemLower.includes("egg")) {
+      apItem.icon = [21, 12]
+    } else if (itemLower.includes("banner")) {
+      apItem.icon = [21, 29]
+    }
 
     //adds the upgrade
     new Game.Upgrade("AP ITEM " + apItemCount.toString(), description, apItem.basePrice, apItem.icon, function(){ //NOSONAR (Non-used Object initiation, but its used in a different way)
