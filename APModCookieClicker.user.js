@@ -1468,7 +1468,9 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
    * @returns {string} The Finished Description string
   */
   function createShopDescription(forPlayer, item, flagCase, type) {
-    
+    if (type === -1) {throw new RangeError("Hey dev, you broke the WHOLE description creator... The type should NEVER be at -1... you removed the else... didnt you?")}
+
+
     //basic descript
     let desc = ""
     if (type === 0) {
@@ -1521,9 +1523,9 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     let locationItemScout = apShopScouts[apItemCount-1]
     let locationItemScout_Game = locationItemScout.reciver.game
     let locationItemScout_ItemName = locationItemScout.name
-    let locationItemScout_Player = locationItemScout.receiver.name
+    let locationItemScout_PlayerName = locationItemScout.receiver.name
 
-    //Determin its type
+    //Determin its flagCase
     let flagCase = -1
     if (locationItemScout.filler) {
       flagCase = 0
@@ -1538,20 +1540,20 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
       flagCase = 4
     }
 
-    //set some starting vars i need
-    let description = ""
-
-
-
-    //sets description based on if random or yourself (planned: if a fellow CC player)
-    //TODO Make functional
-    if (locationItemScout_Player == nameOfSlot) { 
-      description = SELF_DESCRIPT_TEXT + APUPGRADE_DESCRIPT_SELF[flagCase]
+    //determin its type
+    let typeOfDescription = -1
+    if (locationItemScout_PlayerName == nameOfSlot) { 
+      typeOfDescription = 1
     } else if (locationItemScout_Game == gameName) {
-      description = FELLOW_CCAP_PLAYER_DESCRIPT_TEXT + locationItemScout_Player + APUPGRADE_DESCRIPT_BASICS[flagCase]
+      typeOfDescription = 2
     } else {
-      description = BASIC_DESCRIPT_TEXT + locationItemScout_Player + APUPGRADE_DESCRIPT_BASICS[flagCase]
+      typeOfDescription = 0
     }
+    let description = createShopDescription(locationItemScout_PlayerName, locationItemScout_ItemName, flagCase, typeOfDescription)
+
+
+    //sets the icon based on what it is
+    //TODO: Add this feature
 
     //adds the upgrade
     new Game.Upgrade("AP ITEM " + apItemCount.toString(), description, apItem.basePrice, apItem.icon, function(){ //NOSONAR (Non-used Object initiation, but its used in a different way)
