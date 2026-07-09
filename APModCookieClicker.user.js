@@ -22,6 +22,7 @@ const {Client, itemsHandlingFlags} = await import(
 // Configs for Shimmer
 // Put all the agnostic stuff into a big object and export it as a lib
 
+let nameOfSlot = ""
 console.log("AP CookieClicker loaded");
 
 //this started as Cookieclicker, but should work as a template for all browser games
@@ -1439,48 +1440,121 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     }
   } 
 
-  //sort by price
+  
+  
+  const APUPGRADE_DESCRIPT_BASICS = [
+    "They didnt seam too intrested in this item",                              //filler
+    "They Seamed Intrested in this item",                                     //usefull
+    "They Were Eager for you to get it to them",                              //progression
+    "They Do Not want this... but a little troll never hurt anyone, right?",  //trap
+    "I However could not tell you if they are intrested in it or not"         //backup incase something fails
+  ]
+
+  const APUPGRADE_DESCRIPT_SELF = [
+    "This could Come in handy!",                                                        //filler
+    "This Seams Quite usefull!",                                                        //usefull
+    "This will make your life a Whole lot easier",                                      //progression
+    "oh wait... its a trap... well thats a waste of shop space",                        //trap
+    "But uhh... i dont know if this is usefull or not, server is being awfully quiet",  //backup incase something fails
+  ]
+  /**
+   * Create descriptions for the items
+   * 
+   * @param {string} forPlayer - Who will be reciving the item
+   * @param {string} item - What will be sent (ONLY THE NAME HERE, NOT A OBJECT)
+   * @param {number} flagCase - What flagCase it is (0: filler, 1: usefull, 2: progression, 3: trap, 4: backup if undetermined) 
+   * @param {number} type - What description type it is {Feel free to expand} (0: Basic, 1: your own item, 2: Item for a fellow CCAP player) 
+   * 
+   * @returns {string} The Finished Description string
+  */
+  function createShopDescription(forPlayer, item, flagCase, type) {
+    
+    //basic descript
+    let desc = ""
+    if (type === 0) {
+      desc = "A \"" + item + "\" For " + forPlayer + "\n\n"
+    } else if (type === 1) {
+      desc = "Its \"" + item + "\" For Yourself, How Fun!\n\n"
+    } else if (type === 2) {
+      desc = "A \"" + item + "\" For Our Fellow Cookie Clicker enthusiast " + forPlayer + "!\n\n" 
+    } else {
+      throw new RangeError("Failed to Create Description: Excpeted a num for type, got one out of range of available types (got " + type.toString() + ")")
+    }
+
+    //Info descript for how usefull
+    if (type === 0 || type === 2) {
+      desc = desc + APUPGRADE_DESCRIPT_BASICS[flagCase]
+    } else if (type === 1) {
+      desc = desc + APUPGRADE_DESCRIPT_SELF[flagCase]
+    } else {
+      throw new RangeError("Failed to Create Description: Used a Valid num for type to start creating description, however there is no valid info-description to add to it")
+    }
+    /*
+    For those who want to add their own situations with type:
+    1. make a const list[] above with 5 strings (1 for each flagCase)
+    2. Add a else-if here (BEFORE THE end-else) calling that Description const with index flagCase
+    3. profit idk
+    */
+
+    return desc
+  }
+
+  //sort all items by price
   let unsentAPUpgradeByPrice = quickSort(unsentAPUpgrade)
 
-  //Create the upgrades
-  const BASIC_DESCRIPT_TEXT = "A Upgrade For " //user gets appended
-  const FELLOW_CCAP_PLAYER_DESCRIPT_TEXT = "A Upgrade for our Fellow Cookie Clicker enthusiast " //user gets appended
-  const APUPGRADE_DESCRIPT_BASICS = [
-    "\n\nThey didnt seam too intrested in this item",                              //filler
-    "\n\nThey Seamed Intrested in this item",                                     //usefull
-    "\n\nThey Were Eager for you to get it to them",                              //progression
-    "\n\nThey Do Not want this... but a little troll never hurt anyone, right?"   //trap
-  ]
-  const SELF_DESCRIPT_TEXT = "Its Your Own Upgrade!\n\n"
-  const APUPGRADE_DESCRIPT_SELF = [
-    "This could Come in handy!",                                  //filler
-    "This Seams Quite usefull!",                                  //usefull
-    "This will make your life a Whole lot easier",                //progression
-    "oh wait... its a trap... well thats a waste of shop space",  //trap
-  ]
+  //seperate list with only id's for scouting
+  let apItemIDS = []
+  for (let apItem of unsentAPUpgradeByPrice) {
+    apItemIDS.push(apItem.idWithOffset)
+  }
 
+  //adding the upgrades to shop
   let apItemCount = 0 //replaced in the future i hope
   let nextItemToUnlock = 6 //used for unlocking the next upgrade due to... jank
+  let apShopScouts = await client.scout(apItemIDS, 0) //scouts locations to properly name everything
+  console.log("All Scouts from shop below:\n", apShopScouts)
+
   for (let apItem of unsentAPUpgradeByPrice) {
     apItemCount++
 
+    //scout the location
+    let locationItemScout = apShopScouts[apItemCount-1]
+    let locationItemScout_Game = locationItemScout.reciver.game
+    let locationItemScout_ItemName = locationItemScout.name
+    let locationItemScout_Player = locationItemScout.receiver.name
+
+    //Determin its type
+    let flagCase = -1
+    if (locationItemScout.filler) {
+      flagCase = 0
+    } else if (locationItemScout.useful) {
+      flagCase = 1
+    } else if (locationItemScout.progression) {
+      flagCase = 2
+    } else if (locationItemScout.trap) {
+      flagCase = 3
+    } else {
+      console.warn("could not determin flag of following location:\n", locationItemScout)
+      flagCase = 4
+    }
+
     //set some starting vars i need
     let description = ""
-    let flagCase = 0
 
 
 
     //sets description based on if random or yourself (planned: if a fellow CC player)
     //TODO Make functional
-    if ("NOT YET FUNCTIONAL" == "NAME OF SLOT VARIABLE") { 
-      description = APUPGRADE_DESCRIPT_SELF[flagCase]
+    if (locationItemScout_Player == nameOfSlot) { 
+      description = SELF_DESCRIPT_TEXT + APUPGRADE_DESCRIPT_SELF[flagCase]
+    } else if (locationItemScout_Game == gameName) {
+      description = FELLOW_CCAP_PLAYER_DESCRIPT_TEXT + locationItemScout_Player + APUPGRADE_DESCRIPT_BASICS[flagCase]
     } else {
-      //description = BASIC_DESCRIPT_TEXT + /*reciverName*/ "a Fellow AP-Player" + APUPGRADE_DESCRIPT_BASICS[flagCase]
-      description = "I Honestly dont know if they want it, the server is being quite to me"
+      description = BASIC_DESCRIPT_TEXT + locationItemScout_Player + APUPGRADE_DESCRIPT_BASICS[flagCase]
     }
 
     //adds the upgrade
-    new Game.Upgrade(/*itemName*/ "AP ITEM " + apItemCount.toString(), description, apItem.basePrice, apItem.icon, function(){ //NOSONAR (Non-used Object initiation, but its used in a different way)
+    new Game.Upgrade("AP ITEM " + apItemCount.toString(), description, apItem.basePrice, apItem.icon, function(){ //NOSONAR (Non-used Object initiation, but its used in a different way)
       //send check
       window.client.check(apItem.idWithOffset);
       
