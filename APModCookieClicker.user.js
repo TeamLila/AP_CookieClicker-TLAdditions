@@ -1384,13 +1384,13 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   function quickSort(arr) {
     if (arr.length <= 1) return arr;
 
-    const p = arr.pop()[0];
+    const p = arr.pop();
     const leftArr = [];
     const rightArr = [];
 
     for (const itemArr of arr) {
       let item = itemArr[0]
-      if (item.basePrice <= p.basePrice) {
+      if (item.basePrice <= p[0].basePrice) {
         leftArr.push(itemArr);
       } else {
         rightArr.push(itemArr);
@@ -1595,6 +1595,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   let apItemIDS = []
   for (let apItemArr of apUpgradeByPrice) {
     let apItem = apItemArr[0]
+    console.log(apItem)
     apItemIDS.push(apItem.idWithOffset)
   }
 
