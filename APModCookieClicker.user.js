@@ -1598,7 +1598,6 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   let apItemIDS = []
   for (let apItemArr of apUpgradeByPrice) {
     let apItem = apItemArr[0]
-    console.log(apItem)
     apItemIDS.push(apItem.idWithOffset)
   }
 
