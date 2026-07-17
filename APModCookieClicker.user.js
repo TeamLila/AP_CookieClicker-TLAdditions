@@ -1380,7 +1380,8 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   }
 
   //AP-Shop
-  //Quick-sort algorythim ("borrowed" from medium.com) that sorts by baseprice
+  //Quick-sort algorythim ("borrowed" from medium.com, slightly modified) that sorts by baseprice
+  //WARNING: ONLY WORKS FOR SHOP DUE TO HOW ITS SET UP
   function quickSort(arr) {
     if (arr.length <= 1) return arr;
 
