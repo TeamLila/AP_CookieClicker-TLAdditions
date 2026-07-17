@@ -1602,7 +1602,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
 
   //adding the upgrades to shop
   let apShopScouts = await client.scout(apItemIDS, 0) //scouts locations to properly name everything
-
+  let scoutCounter = 0
 
   let firstUnlockCounter = 5 //0 >> all 5 starting upgrades unlocked
   for (let apItemArr of apUpgradeByPrice) {
@@ -1610,7 +1610,8 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
 
 
     //scout the location
-    let locationItemScout = apShopScouts[UNDEFINED-VALUE-1]
+    let locationItemScout = apShopScouts[scoutCounter]
+    scoutCounter++
     let locationItemScout_Game = locationItemScout.receiver.game
     let locationItemScout_ItemName = locationItemScout.name
     let locationItemScout_PlayerName = locationItemScout.receiver.name
