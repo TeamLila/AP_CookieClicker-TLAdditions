@@ -1534,8 +1534,10 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     let itemLower = itemname.toLowerCase()
     if (itemLower.includes("cursor")) {
       icon = [0, 27]
-    } else if (itemLower.includes("grandma")) {
+    } else if (itemLower.includes("progressive grandma")) {
       icon = [1, 27]
+    } else if (itemLower.includes("grandma")) {
+      icon = [10, 9]
     } else if (itemLower.includes("farm")) {
       icon = [2, 27]
     } else if (itemLower.includes("mine")) {
