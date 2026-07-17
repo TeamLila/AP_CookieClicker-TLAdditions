@@ -1577,8 +1577,12 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
       icon = [21, 12]
     } else if (itemLower.includes("banner")) {
       icon = [21, 29]
-    } else {
-      icon = [0, 0] //TODO Replace with custom AP Icon
+    } else { //DO NOT ADD ANY NEW ICONS BELOW HERE, ONLY ABOVE
+      try {
+        icon = Game.Upgrades[itemname].icon
+      } catch (_) {
+        icon = [0, 0] //TODO Replace with custom AP Icon
+      }
     }
 
     return icon
