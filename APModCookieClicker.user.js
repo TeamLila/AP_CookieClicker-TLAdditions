@@ -1679,7 +1679,10 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
       upg.bought = 1
       continue
     }
-    if (firstUnlockCounter > 0) {upg.unlocked = 1}
+    if (firstUnlockCounter > 0) {
+      upg.unlocked = 1
+      firstUnlockCounter--
+    }
   }
 
   // Disable buying upgrades that are in the item pool.
