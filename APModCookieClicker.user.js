@@ -1384,15 +1384,16 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   function quickSort(arr) {
     if (arr.length <= 1) return arr;
 
-    const p = arr.pop();
+    const p = arr.pop()[0];
     const leftArr = [];
     const rightArr = [];
 
-    for (const item of arr) {
+    for (const itemArr of arr) {
+      let item = itemArr[0]
       if (item.basePrice <= p.basePrice) {
-        leftArr.push(item);
+        leftArr.push(itemArr);
       } else {
-        rightArr.push(item);
+        rightArr.push(itemArr);
       }
     }
 
@@ -1409,9 +1410,9 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
         requiredBuilding: -1, //if someone wants to update this to be building-lock based, feel free to use this unused var
         icon: [0,0], //Gets overridden later anyways
         basePrice: upg.basePrice,
-        tier: upg.tier,
+        tier: upg.tier, //Unused as of writing this
 
-        idWithOffset: upg.id + UPGRADE_CHECK_OFFSET
+        idWithOffset: upg.id + UPGRADE_CHECK_OFFSET,
     };
   }
 
@@ -1430,13 +1431,15 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   }
 
   //check if check was already sent 
-  let unsentAPUpgrade = []
+  let apUpgradeWithSentStatus = [] //true >> sent, false >> not sent [item, sentBool]
   let missingChecks = client.room.missingLocations
   
   for (let item of allPoollessAPUpgrades) {
     let checkID = item.idWithOffset
     if (missingChecks.includes(checkID)){
-      unsentAPUpgrade.push(item)
+      apUpgradeWithSentStatus.push([item, false])
+    } else {
+      apUpgradeWithSentStatus.push([item, true])
     }
   } 
 
@@ -1582,27 +1585,26 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   }
 
   //sort all items by price
-  let unsentAPUpgradeByPrice = quickSort(unsentAPUpgrade)
+  let apUpgradeByPrice = quickSort(apUpgradeWithSentStatus)
 
   //seperate list with only id's for scouting
   let apItemIDS = []
-  for (let apItem of unsentAPUpgradeByPrice) {
+  for (let apItemArr of apUpgradeByPrice) {
+    let apItem = apItemArr[0]
     apItemIDS.push(apItem.idWithOffset)
   }
 
   //adding the upgrades to shop
-  let apItemCount = 0 //replaced in the future i hope
-  let nextItemToUnlock = 6 //used for unlocking the next upgrade due to... jank
   let apShopScouts = await client.scout(apItemIDS, 0) //scouts locations to properly name everything
 
 
+  let firstUnlockCounter = 5 //0 >> all 5 starting upgrades unlocked
+  for (let apItemArr of apUpgradeByPrice) {
+    let apItem = apItemArr[0]
 
-
-  for (let apItem of unsentAPUpgradeByPrice) {
-    apItemCount++
 
     //scout the location
-    let locationItemScout = apShopScouts[apItemCount-1]
+    let locationItemScout = apShopScouts[UNDEFINED-VALUE-1]
     let locationItemScout_Game = locationItemScout.receiver.game
     let locationItemScout_ItemName = locationItemScout.name
     let locationItemScout_PlayerName = locationItemScout.receiver.name
@@ -1637,16 +1639,19 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     apItem.icon = getIconFromIconsheet(locationItemScout_ItemName)
 
     //adds the upgrade
-    new Game.Upgrade("AP ITEM " + apItemCount.toString(), description, apItem.basePrice, apItem.icon, function(){ //NOSONAR (Non-used Object initiation, but its used in a different way)
+    new Game.Upgrade("[AP] " + apItem.name, description, apItem.basePrice, apItem.icon, function(){ //NOSONAR (Non-used Object initiation, but its used in a different way)
       //send check
       window.client.check(apItem.idWithOffset);
       
       //Unlock next item
       //if someone knows how to make this prettier, feel free to do so
       try {
-        console.log("Unlocking AP ITEM " + nextItemToUnlock.toString() + " Inside the shop")
-        Game.Upgrades["AP ITEM " + nextItemToUnlock.toString()].unlocked = 1
-        nextItemToUnlock++
+        console.log("Unlocking Next APITEM Inside the shop")
+        let nextUnlockId = this.id + 1
+        while (Game.UpgradesById[nextUnlockId].unlocked == 1 || Game.UpgradesById[nextUnlockId].bought == 1) {
+          nextUnlockId++
+        }
+        Game.Upgrades[Game.UpgradesById[nextUnlockId].name].unlocked = 1
       } catch (caughtError) { 
         console.log("No New Upgrade Unlocked: Max Reached")
         console.log("PRINTING CAUGHT ERROR BELOW:")
@@ -1655,13 +1660,17 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     })
 
     //gets the upgrade to modify it (as it doesnt properly create it)
-    let upg = Game.Upgrades["AP ITEM " + apItemCount.toString()]
+    let upg = Game.Upgrades["[AP] " + apItem.name]
     
     //fixes description
     upg.ddesc = description
 
-    //unlocks the first 5 Upgrades (by price)
-    if (apItemCount <= 5) {upg.unlocked = 1}
+    //unlocks the first 5 Upgrades (by price) && ensure the already sent checks are ignored
+    if (apItemArr[1]) {
+      upg.bought = 1
+      continue
+    }
+    if (firstUnlockCounter > 0) {upg.unlocked = 1}
   }
 
   // Disable buying upgrades that are in the item pool.
