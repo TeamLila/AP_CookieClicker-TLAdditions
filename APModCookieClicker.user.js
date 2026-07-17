@@ -1553,29 +1553,29 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     } else if (itemLower.includes("time machine")) {
       icon = [8, 27]
     } else if (itemLower.includes("antimatter condenser")) {
-      icon = [12, 27]
-    } else if (itemLower.includes("prism")) {
       icon = [13, 27]
-    } else if (itemLower.includes("bank")) {
+    } else if (itemLower.includes("prism")) {
       icon = [14, 27]
-    } else if (itemLower.includes("temple")) {
+    } else if (itemLower.includes("bank")) {
       icon = [15, 27]
-    } else if (itemLower.includes("wizard tower")) {
+    } else if (itemLower.includes("temple")) {
       icon = [16, 27]
-    } else if (itemLower.includes("cat") || itemLower.includes("kitten")) {
+    } else if (itemLower.includes("wizard tower")) {
       icon = [17, 27]
-    } else if (itemLower.includes("chance maker")) {
+    } else if (itemLower.includes("cat") || itemLower.includes("kitten")) {
       icon = [18, 27]
-    } else if (itemLower.includes("fractal engine")) {
+    } else if (itemLower.includes("chance maker")) {
       icon = [19, 27]
+    } else if (itemLower.includes("fractal engine")) {
+      icon = [20, 27]
     } else if (itemLower.includes("console")) {
-      icon = [31, 27]
-    } else if (itemLower.includes("idleverse")) {
       icon = [32, 27]
-    } else if (itemLower.includes("cortex baker")) {
+    } else if (itemLower.includes("idleverse")) {
       icon = [33, 27]
-    } else if (itemLower.includes("you")) {
+    } else if (itemLower.includes("cortex baker")) {
       icon = [34, 27]
+    } else if (itemLower.includes("you")) {
+      icon = [35, 27]
     } else if (itemLower.includes("egg")) {
       icon = [21, 12]
     } else if (itemLower.includes("banner")) {
