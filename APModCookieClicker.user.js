@@ -1523,6 +1523,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
      * - Cat/kitten
      * - egg
      * - banner
+	 * - Default CC Icon (Last resort if nothing else fits && its a CC Upgrade)
     */
     
     //SECTION FOR CUSTOM SPRITESHEETS (remember: 1 icon is 48x48 big)
