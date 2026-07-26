@@ -44,6 +44,19 @@ class UpgradeSanity(Toggle):
     Note: Current version is Functional, but buggy"""
     display_name = "Upgrade Sanity"
 
+class ShopTooltipDetail(Choice):
+    """How Detailed the Shop items will be
+    
+    Minimal: Shows Thats its a AP upgrade
+    Basic: Shows Who Will get the Upgrade And the Flavortext for How Important it is
+    Full: Shows Who Will be getting What With Flavortext for How Imporant it is
+    (Does nothing Without UpgradeSanity)"""
+    display_name = "Shop Tooltip Detail"
+    option_minimal = 0
+    option_basic = 1
+    option_full = 2
+    default = 2
+
 class EnableAutoHints(Toggle):
     """Enable revealing the items in adjacent locations when completing an achievement"""
     display_name = "Enable Auto Hints"
@@ -70,6 +83,7 @@ class CCOptions(PerGameCommonOptions):
     traps_percentage: Traps
     enable_hints: EnableAutoHints
     upgrade_sanity: UpgradeSanity
+    shop_tooltip_detail: ShopTooltipDetail
     production_multiplier: ProductionMultiplier
     lump_multiplier: LumpMultiplier
     enable_progressive_buildings: SynergyAsProgressiveBuildings
