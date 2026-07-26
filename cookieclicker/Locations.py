@@ -14,7 +14,7 @@ class CCAchievement:
         self.sphere = SPHERE(sphere).value
 
 class CCUpgradeCheck:
-    OFFSET = 4306900
+    OFFSET = 43069000
     
     def __init__(self, id, name, sphere):
         self.id = self.OFFSET + id
