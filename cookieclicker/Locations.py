@@ -52,6 +52,13 @@ class BUILDING(Enum):
     CORTEX_BAKER = 18
     YOU = 19
 
+class CCKrumblor:
+    OFFSET = 42077000
+    
+    def __init__(self, id, name, sphere):
+        self.id = self.OFFSET + id
+        self.name = name
+        self.sphere = sphere
 ###
 # This list of achievements is generated from the Cookie Clicker data sheet (see cell I2)
 # > https://docs.google.com/spreadsheets/d/1HYuVLp_hS5lWVtr4BB9W804vrGcqpTBCUhjOf4bIq9g/edit?usp=sharing
@@ -721,6 +728,42 @@ achievements = [
 ###
 # End of generated section
 ###
+
+###
+# List of Krumblor Related Checks
+# TODO Someone update the logic for this guy to be better
+###
+krumblorLocations = [
+    CCKrumblor(0, "Chip Dragon Egg 1", 1),
+    CCKrumblor(1, "Chip Dragon Egg 2", 1),
+    CCKrumblor(2, "Chip Dragon Egg 3", 1),
+    CCKrumblor(3, "Hatch Dragon Egg", 1),
+    CCKrumblor(4, "Train Breath of Milk", 1),
+    CCKrumblor(5, "Train Dragon Cursor", 2),
+    CCKrumblor(6, "Train Elder Battalion", 2),
+    CCKrumblor(7, "Train Reaper of Fields", 2),
+    CCKrumblor(8, "Train Earth Shatterer", 2),
+    CCKrumblor(9, "Train Master of the Armory", 2),
+    CCKrumblor(10, "Train Fierce Hoarder", 3),
+    CCKrumblor(11, "Train Dragon God", 3),
+    CCKrumblor(12, "Train Arcane Aura", 3),
+    CCKrumblor(13, "Train Dragonflight", 3),
+    CCKrumblor(14, "Train Ancestral Metamorphosis", 3),
+    CCKrumblor(15, "Train Unholy Dominion", 4),
+    CCKrumblor(16, "Train Epoch Manipulator", 4),
+    CCKrumblor(17, "Train Mind Over Matter", 4),
+    CCKrumblor(18, "Train Radiant Appetite", 4),
+    CCKrumblor(19, "Train Dragon's Fortune", 4),
+    CCKrumblor(20, "Train Dragon's Curve", 5),
+    CCKrumblor(21, "Train Reality Bending", 5),
+    CCKrumblor(22, "Train Dragon Orbs", 5),
+    CCKrumblor(23, "Train Supreme Intellect", 5),
+    CCKrumblor(24, "Train Dragon Guts", 6),
+    CCKrumblor(25, "Bake dragon cookie", 6),
+    CCKrumblor(26, "Train secondary aura", 6),
+    CCKrumblor(27, "Compleated Krumblors Training", 6)
+]
+
 
 victory_achievement = CCAchievement(0, "Victory Location", -1, -1)
 victory_achievement.id = 42000000
