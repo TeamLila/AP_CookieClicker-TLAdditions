@@ -453,6 +453,7 @@ const gameOptions = {
   advancement_goal: 1000,
   traps_percentage: 0,
   enable_hints: false,
+  shop_tooltip_detail: -1,
   production_multiplier: 0,
   lump_multiplier: 0,
   enable_progressive_buildings: false,
@@ -1463,6 +1464,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   ]
   /**
    * Create descriptions for the items
+   * TODO: Refactor to be more dynamic and less hardcoded
    * 
    * @param {string} forPlayer - Who will be reciving the item
    * @param {string} item - What will be sent (ONLY THE NAME HERE, NOT A OBJECT)
@@ -1474,17 +1476,39 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   function createShopDescription(forPlayer, item, flagCase, type) {
     if (type === -1) {throw new RangeError("Hey dev, you broke the WHOLE description creator... The type should NEVER be at -1... you removed the else... didnt you?")}
 
-
-    //basic descript
+    //defines What Type of description is needed based on settings
     let desc = ""
-    if (type === 0) {
-      desc = "A <b>" + item + "</b> For <b>" + forPlayer + "</b>\n\n"
-    } else if (type === 1) {
-      desc = "Its <b>" + item + "</b> For Yourself, How Fun!\n\n"
-    } else if (type === 2) {
-      desc = "A <b>" + item + "</b> For Our Fellow Cookie Clicker enthusiast <b>" + forPlayer + "</b>!\n\n" 
-    } else {
-      throw new RangeError("Failed to Create Description: Excpeted a num for type, got one out of range of available types (got " + type.toString() + ")")
+    let detail = gameOptions.shop_tooltip_detail
+    if (detail == 0) { //minimal
+      desc  = "A Item From Another World\n\n" 
+      desc += "<q> I Wonder What it could be...</q>"
+      return desc //this is intentional as its not meant to get a Flavortext
+    } else if (detail == 1) { //basic
+      switch (type) {
+        case 0:
+          desc = "A Item From <b>" + forPlayer + "</b>'s World\n\n"
+          break
+        case 1:
+          desc = "Its Something for <b>Yourself</b>!\n\n"
+          break
+        case 2:
+          desc = "A Item For Yourse- Wait no, its for <b>" + forPlayer + "</b>, Our Fellow Cookie Clicker enthusiast\n\n"
+          break
+        default:
+          throw new RangeError("Failed to Create Description: Excpeted a num for type, got one out of range of available types (got " + type.toString() + ")")
+      }
+    } else if (detail == 2) { //full
+      if (type === 0) {
+        desc = "A <b>" + item + "</b> For <b>" + forPlayer + "</b>\n\n"
+      } else if (type === 1) {
+        desc = "Its <b>" + item + "</b> For Yourself, How Fun!\n\n"
+      } else if (type === 2) {
+        desc = "A <b>" + item + "</b> For Our Fellow Cookie Clicker enthusiast <b>" + forPlayer + "</b>!\n\n" 
+      } else {
+        throw new RangeError("Failed to Create Description: Excpeted a num for type, got one out of range of available types (got " + type.toString() + ")")
+      }
+    } else { //error
+      throw new RangeError("Failed to Create Description: Excpeted a num for detail, got one out of range of available detail-levels (got " + type.toString() + ")")
     }
 
     //Info descript for how usefull
