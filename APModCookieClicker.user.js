@@ -1447,11 +1447,11 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
   
   
   const APUPGRADE_DESCRIPT_BASICS = [
-    "They didnt seam too intrested in this item",                              //filler
-    "They Seamed Intrested in this item",                                     //usefull
-    "They Were Eager for you to get it to them",                              //progression
-    "They Do Not want this... but a little troll never hurt anyone, right?",  //trap
-    "I However could not tell you if they are intrested in it or not"         //backup incase something fails
+    "They didnt seam too intrested in this item",                             								//filler
+    "They Seamed Intrested in this item",                                     								//usefull
+    "They Were Eager for you to get it to them",                              								//progression
+    "Someone is going to have questions about this one... but a little troll never hurt anyone, right?",  	//trap
+    "I However could not tell you if they are intrested in it or not"         								//backup incase something fails
   ]
 
   const APUPGRADE_DESCRIPT_SELF = [
@@ -1523,6 +1523,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
      * - Cat/kitten
      * - egg
      * - banner
+	 * - Default CC Icon (Last resort if nothing else fits && its a CC Upgrade)
     */
     
     //SECTION FOR CUSTOM SPRITESHEETS (remember: 1 icon is 48x48 big)
