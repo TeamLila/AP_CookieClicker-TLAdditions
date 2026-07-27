@@ -55,9 +55,10 @@ class BUILDING(Enum):
 class CCKrumblor:
     OFFSET = 42077000
     
-    def __init__(self, id, name, sphere):
+    def __init__(self, id, name, building, sphere):
         self.id = self.OFFSET + id
         self.name = name
+        self.building = BUILDING(building).value
         self.sphere = sphere
 ###
 # This list of achievements is generated from the Cookie Clicker data sheet (see cell I2)
@@ -734,34 +735,34 @@ achievements = [
 # TODO Someone update the logic for this guy to be better
 ###
 krumblorLocations = [
-    CCKrumblor(0, "Chip Dragon Egg 1", 1),
-    CCKrumblor(1, "Chip Dragon Egg 2", 1),
-    CCKrumblor(2, "Chip Dragon Egg 3", 1),
-    CCKrumblor(3, "Hatch Dragon Egg", 1),
-    CCKrumblor(4, "Train Breath of Milk", 1),
-    CCKrumblor(5, "Train Dragon Cursor", 2),
-    CCKrumblor(6, "Train Elder Battalion", 2),
-    CCKrumblor(7, "Train Reaper of Fields", 2),
-    CCKrumblor(8, "Train Earth Shatterer", 2),
-    CCKrumblor(9, "Train Master of the Armory", 2),
-    CCKrumblor(10, "Train Fierce Hoarder", 3),
-    CCKrumblor(11, "Train Dragon God", 3),
-    CCKrumblor(12, "Train Arcane Aura", 3),
-    CCKrumblor(13, "Train Dragonflight", 3),
-    CCKrumblor(14, "Train Ancestral Metamorphosis", 3),
-    CCKrumblor(15, "Train Unholy Dominion", 4),
-    CCKrumblor(16, "Train Epoch Manipulator", 4),
-    CCKrumblor(17, "Train Mind Over Matter", 4),
-    CCKrumblor(18, "Train Radiant Appetite", 4),
-    CCKrumblor(19, "Train Dragon's Fortune", 4),
-    CCKrumblor(20, "Train Dragon's Curve", 5),
-    CCKrumblor(21, "Train Reality Bending", 5),
-    CCKrumblor(22, "Train Dragon Orbs", 5),
-    CCKrumblor(23, "Train Supreme Intellect", 5),
-    CCKrumblor(24, "Train Dragon Guts", 6),
-    CCKrumblor(25, "Bake dragon cookie", 6),
-    CCKrumblor(26, "Train secondary aura", 6),
-    CCKrumblor(27, "Compleated Krumblors Training", 6)
+    CCKrumblor(0, "Chip Dragon Egg 1", -1,  1),
+    CCKrumblor(1, "Chip Dragon Egg 2", -1, 1),
+    CCKrumblor(2, "Chip Dragon Egg 3", -1, 1),
+    CCKrumblor(3, "Hatch Dragon Egg", -1, 1),
+    CCKrumblor(4, "Train Breath of Milk", -1, 1),
+    CCKrumblor(5, "Train Dragon Cursor", 0, 2),
+    CCKrumblor(6, "Train Elder Battalion", 1, 2),
+    CCKrumblor(7, "Train Reaper of Fields", 2, 2),
+    CCKrumblor(8, "Train Earth Shatterer", 3, 2),
+    CCKrumblor(9, "Train Master of the Armory", 4, 2),
+    CCKrumblor(10, "Train Fierce Hoarder", 5, 3),
+    CCKrumblor(11, "Train Dragon God", 6, 3),
+    CCKrumblor(12, "Train Arcane Aura", 7, 3),
+    CCKrumblor(13, "Train Dragonflight", 8, 3),
+    CCKrumblor(14, "Train Ancestral Metamorphosis", 9, 3),
+    CCKrumblor(15, "Train Unholy Dominion", 10, 4),
+    CCKrumblor(16, "Train Epoch Manipulator", 11, 4),
+    CCKrumblor(17, "Train Mind Over Matter", 12, 4),
+    CCKrumblor(18, "Train Radiant Appetite", 13, 4),
+    CCKrumblor(19, "Train Dragon's Fortune", 14, 4),
+    CCKrumblor(20, "Train Dragon's Curve", 15, 5),
+    CCKrumblor(21, "Train Reality Bending", 16, 5),
+    CCKrumblor(22, "Train Dragon Orbs", 17, 5),
+    CCKrumblor(23, "Train Supreme Intellect", 18, 5),
+    CCKrumblor(24, "Train Dragon Guts", 19, 6),
+    CCKrumblor(25, "Bake dragon cookie", -1, 6),
+    CCKrumblor(26, "Train secondary aura", -1, 6),
+    CCKrumblor(27, "Compleated Krumblors Training", -1, 6)
 ]
 
 
