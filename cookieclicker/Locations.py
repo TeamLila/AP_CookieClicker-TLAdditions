@@ -4,6 +4,18 @@ from BaseClasses import Location
 class CCLocation(Location):
     game = "Cookie Clicker"
 
+#NEVER CREATE A CHECK WITH THIS, USE A CUSTOM CLASS, APPEND WHATS NEEDED
+class CCCheck:
+    def __init__(self, locationClassItem):
+        #Room for expansion if a classtype doesnt include all so it can be set
+        check = locationClassItem
+        
+        
+        self.id = locationClassItem.id
+        self.name = locationClassItem.name
+        self.building = locationClassItem.building
+        self.sphere = locationClassItem.sphere
+
 class CCAchievement:
     OFFSET = 42069000 + 1 # TODO remove +1 offset to prevent errors
 
@@ -771,11 +783,16 @@ victory_achievement.id = 42000000
 victory_achievement.sphere = 42000000
 achievements += [victory_achievement]
 
-valid_locations = list(filter(lambda achv: achv.sphere != SPHERE.EXCLUDED.value, achievements))
+valid_locations = []
+#Adding achievement locations
+for achv in achievements:
+    if achv.sphere == SPHERE.EXCLUDED.value:
+        continue
+    valid_locations.append(CCCheck(achv))
 
-#adding crumblor locations
-for loc in krumblorLocations:
-    valid_locations.append(CCAchievement(loc.id, loc.name, loc.building, loc.sphere)) #TODO Someone Update this because either CCAchievement is named wrong or im implementing it wrong
+#adding crumblor locations (no sphere -1 so all are added)
+for krumb in krumblorLocations:
+    valid_locations.append(CCCheck(krumb))
 
 locations = {
     'all': achievements,
