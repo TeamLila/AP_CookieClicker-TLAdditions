@@ -774,7 +774,8 @@ achievements += [victory_achievement]
 valid_locations = list(filter(lambda achv: achv.sphere != SPHERE.EXCLUDED.value, achievements))
 
 #adding crumblor locations
-valid_locations.append(krumblorLocations)
+for loc in krumblorLocations:
+    valid_locations.append(CCAchievement(loc.id, loc.name, loc.building, loc.sphere)) #TODO Someone Update this because either CCAchievement is named wrong or im implementing it wrong
 
 locations = {
     'all': achievements,
