@@ -1255,7 +1255,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
       const KRUMBLOR_LOCATION_OFFSET = 42077000
 			if (Game.dragonLevel<Game.dragonLevels.length-1 && Game.dragonLevels[Game.dragonLevel].cost())
 			{
-        console.log("Krumblor was just upgraded! New level: " + Game.dragonLevel); //for debug
+        console.log("Krumblor was just upgraded! New level: " + Game.dragonLevel + 1); //for debug
         sendCheckIdToAp(KRUMBLOR_LOCATION_OFFSET + Game.dragonLevel)
 				PlaySound('snd/shimmerClick.mp3');
 				Game.dragonLevels[Game.dragonLevel].buy();
