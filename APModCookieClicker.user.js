@@ -1255,7 +1255,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
       const KRUMBLOR_LOCATION_OFFSET = 42077000
 			if (Game.dragonLevel<Game.dragonLevels.length-1 && Game.dragonLevels[Game.dragonLevel].cost())
 			{
-        console.log("Krumblor was just upgraded! New level: " + Game.dragonLevel + 1); //for debug
+        console.log("Krumblor was just upgraded! New level: " + (Game.dragonLevel + 1)); //for debug
         sendCheckIdToAp(KRUMBLOR_LOCATION_OFFSET + Game.dragonLevel)
 				PlaySound('snd/shimmerClick.mp3');
 				Game.dragonLevels[Game.dragonLevel].buy();
@@ -1264,6 +1264,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
         //Hyjacked: Now also sends victory!
 				if (Game.dragonLevel>=Game.dragonLevels.length-1) {
           Game.Win('Here be dragon');
+          sendCheckIdToAp(KRUMBLOR_LOCATION_OFFSET + 27)
 
           console.log("Win-condition met!");
           sendCheckIdToAp(42000000);
@@ -1284,7 +1285,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
       const KRUMBLOR_LOCATION_OFFSET = 42077000
 			if (Game.dragonLevel<Game.dragonLevels.length-1 && Game.dragonLevels[Game.dragonLevel].cost())
 			{
-        console.log("Krumblor was just upgraded! New level: " + Game.dragonLevel); //for debug
+        console.log("Krumblor was just upgraded! New level: " + (Game.dragonLevel + 1)); //for debug
         sendCheckIdToAp(KRUMBLOR_LOCATION_OFFSET + Game.dragonLevel)
 				PlaySound('snd/shimmerClick.mp3');
 				Game.dragonLevels[Game.dragonLevel].buy();
@@ -1293,6 +1294,7 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
         //Hyjacked: Now also sends victory!
 				if (Game.dragonLevel>=Game.dragonLevels.length-1) {
           Game.Win('Here be dragon');
+          sendCheckIdToAp(KRUMBLOR_LOCATION_OFFSET + 27)
         }
 				Game.ToggleSpecialMenu(1);
 				if (l('specialPic')){var rect=l('specialPic').getBounds();Game.SparkleAt((rect.left+rect.right)/2,(rect.top+rect.bottom)/2)+32-TopBarOffset;}
