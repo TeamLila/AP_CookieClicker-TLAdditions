@@ -772,6 +772,9 @@ achievements += [victory_achievement]
 
 valid_locations = list(filter(lambda achv: achv.sphere != SPHERE.EXCLUDED.value, achievements))
 
+#adding crumblor locations
+valid_locations.append(krumblorLocations)
+
 locations = {
     'all': achievements,
     'valid': valid_locations,
