@@ -1252,9 +1252,11 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     console.log("Goal Selected: Crumblor")
 
     Game.UpgradeDragon=function() {
+      const KRUMBLOR_LOCATION_OFFSET = 42077000
 			if (Game.dragonLevel<Game.dragonLevels.length-1 && Game.dragonLevels[Game.dragonLevel].cost())
 			{
         console.log("Krumblor was just upgraded! New level: " + Game.dragonLevel); //for debug
+        sendCheckIdToAp(KRUMBLOR_LOCATION_OFFSET + Game.dragonLevel)
 				PlaySound('snd/shimmerClick.mp3');
 				Game.dragonLevels[Game.dragonLevel].buy();
 				Game.dragonLevel=(Game.dragonLevel+1)%Game.dragonLevels.length;
@@ -1275,6 +1277,29 @@ Game.Achievements['Hardcore'].ddesc = 'Get to <b>1 quadrillion cookies</b> baked
     }
   } else {
     console.error("INVALID GOAL: game tried to load a goal that was not implemented (goalnum: " + gameOptions.goal.toString() + ")")
+  }
+
+  if (gameOptions.goal !== 1) { //Overriding Krumblor, only if not already overridden
+    Game.UpgradeDragon=function() {
+      const KRUMBLOR_LOCATION_OFFSET = 42077000
+			if (Game.dragonLevel<Game.dragonLevels.length-1 && Game.dragonLevels[Game.dragonLevel].cost())
+			{
+        console.log("Krumblor was just upgraded! New level: " + Game.dragonLevel); //for debug
+        sendCheckIdToAp(KRUMBLOR_LOCATION_OFFSET + Game.dragonLevel)
+				PlaySound('snd/shimmerClick.mp3');
+				Game.dragonLevels[Game.dragonLevel].buy();
+				Game.dragonLevel=(Game.dragonLevel+1)%Game.dragonLevels.length;
+				
+        //Hyjacked: Now also sends victory!
+				if (Game.dragonLevel>=Game.dragonLevels.length-1) {
+          Game.Win('Here be dragon');
+        }
+				Game.ToggleSpecialMenu(1);
+				if (l('specialPic')){var rect=l('specialPic').getBounds();Game.SparkleAt((rect.left+rect.right)/2,(rect.top+rect.bottom)/2)+32-TopBarOffset;}
+				Game.recalculateGains=1;
+				Game.upgradesToRebuild=1;
+      }
+    }
   }
 
   //Overrides the win function

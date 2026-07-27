@@ -1,6 +1,6 @@
 from BaseClasses import Region, ItemClassification
 
-from .Locations import (SPHERE, CCLocation, locations)
+from .Locations import (SPHERE, CCLocation, locations, krumblorLocations)
 from .Rules import RULES
 from .Items import CCItem
 
@@ -21,9 +21,10 @@ def create_regions(world: "CookieClicker "):
         previous = region
         region = Region(sphere.name, player, multiworld)
 
+        # All valid Locations
         for location in locations["by_sphere"][sphere]:
             region.add_locations({ f"{location.name}":location.id}, CCLocation)
-
+        
         if sphere == SPHERE.ENDGAME:
             # Special virtual item (event) to check victory. Think of it as a flag item
             event_location = CCLocation(player, "Victory location", 42000000, region)
