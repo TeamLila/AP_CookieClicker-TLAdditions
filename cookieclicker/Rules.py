@@ -55,14 +55,14 @@ def set_rules(world: "CookieClicker"):
 
     #Basic Crumblor Logic
     for checkNum, buildingEnum in enumerate(BUILDING_NAME, start=5):
-        cclocation = multiworld.get_location(krumblorLocations[checkNum], player)
+        cclocation = multiworld.get_location(krumblorLocations[checkNum].name, player)
         world.set_rule(cclocation, HasAny(buildingEnum.unlock_item(), buildingEnum.progressive_item()))
         forbid_item(cclocation, building.unlock_item(), player)
         forbid_item(cclocation, building.progressive_item(), player)
     #Ensure that the game only considers lvl 3 in logic if lvl 2 is reachable etc.
     for i in range(1, len(krumblorLocations)):
-        prev = world.get_location(krumblorLocations[i - 1])
-        curr = world.get_location(krumblorLocations[i])
+        prev = multiworld.get_location(krumblorLocations[i - 1].name, player)
+        curr = multiworld.get_location(krumblorLocations[i].name, player)
 
         world.set_rule(
             curr,
