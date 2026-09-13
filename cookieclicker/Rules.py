@@ -67,5 +67,5 @@ RULES = {
     SPHERE.ENDGAME: Has("A crumbly egg") &
                     (HasAll(*[b.unlock_item() for b in BUILDING_NAME])
                      | HasAll(*[b.progressive_item() for b in BUILDING_NAME])),
-    SPHERE.GRANDMAPO: HasAny("One Mind", "Communal brainsweep", "Elder Pact")
+    SPHERE.GRANDMAPO: HasAny("One mind", "Communal brainsweep", "Elder Pact")
 }

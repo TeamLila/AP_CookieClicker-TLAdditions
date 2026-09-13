@@ -32,7 +32,12 @@ def create_regions(world: "CookieClicker "):
 
         sphere_rules = RULES[sphere]
         if sphere == SPHERE.GRANDMAPO:
-            menu.connect(region, rule=sphere_rules)
+            entrance = menu.connect(region)
         else:
-            previous.connect(region, rule=sphere_rules)
+            entrance = previous.connect(region)
+
+        # Rule-builder rules must be assigned through World.set_rule() so
+        # Archipelago resolves them for this player before evaluation.
+        world.set_rule(entrance, sphere_rules)
+
         multiworld.regions.append(region)
