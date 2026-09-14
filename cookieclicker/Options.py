@@ -53,7 +53,7 @@ class PlentifulBuildings(Range):
     """Add additional copies of the Buildings into the item pool, allowing you to more easily find and unlock them
     Stacks with Progressive Buildings"""
     display_name = "Plentiful buildings"
-    rage_start = 0
+    range_start = 0
     range_end = 5
     default = 1
 
